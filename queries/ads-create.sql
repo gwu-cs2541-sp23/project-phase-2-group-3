@@ -35,11 +35,6 @@ CREATE TABLE degree_requirements (
   other_req varchar(50) not null
 );
 
-DROP TABLE IF EXISTS suspension_check;
-CREATE TABLE suspension_check (
-  grade_check varchar(50) not null
-);
-
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
@@ -64,6 +59,7 @@ CREATE TABLE student_courses (
  	FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
+-- move this into student
 DROP TABLE IF EXISTS student_advisors;
 CREATE TABLE student_advisors (
 	studentID int(8) not NULL,
@@ -97,6 +93,8 @@ CREATE TABLE application (
 	FOREIGN KEY (student_id) REFERENCES user(user_id)
 );
 
+
+-- move this into student
 DROP TABLE IF EXISTS student_status;
 CREATE TABLE student_status (
 	student_id int(8) NOT NULL,
@@ -104,17 +102,20 @@ CREATE TABLE student_status (
    FOREIGN KEY (student_id) REFERENCES user(user_id)
 );
 
-
+-- move into student 
 DROP TABLE IF EXISTS phd_req;
 CREATE TABLE phd_req (
 	student_id int(8) NOT NULL PRIMARY KEY,
 	thesisapproved varchar(5) NOT NULL
 );
 
+
+-- delete this and replace logic with if advisor in student is null
 DROP TABLE IF EXISTS need_advisor;
 CREATE TABLE need_advisor (
 	student_id int(8) NOT NULL
 );
+
 
 DROP TABLE IF EXISTS applied_grad;
 CREATE TABLE applied_grad (
