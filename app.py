@@ -75,3 +75,5 @@ def Shome():
 @app.route("/Ahome")
 def Ahome():
   return render_template('Ahome.html')
+
+app.run(host='0.0.0.0', port=8080)
