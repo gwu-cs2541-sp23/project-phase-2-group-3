@@ -1,8 +1,9 @@
-from flask import Flask, session, render_template, redirect, url_for, request
 import mysql.connector
+from flask import Flask, session, render_template, redirect, url_for, request
 
 app = Flask('app')
 app.secret_key = 'this is super secret'
+app.config["SESSION_PERMANENT"] = False
 
 mydb = mysql.connector.connect(
   host = "group3phase2-taylor23.c71jatiazsww.us-east-1.rds.amazonaws.com",
@@ -18,27 +19,35 @@ def login():
   session['error'] = ''
 
   if request.method == 'POST':
-    password = request.form['password']
-    session['uid'] = request.form['username']
-    
-    cursor.execute('SELECT * FROM users WHERE uid = %s', (session['uid'], ))
-    user_info = cursor.fetchone()
-    mydb.commit()
-    cursor.close()
+        name = request.form["username"]
+        password = request.form["password"]
 
-    if user_info is None:
-      session['error'] = 'That username is not valid'
-    elif user_info['password_hash'] == password:
-      session['uid'] = str(user_info['uid'])
-      session['first_name'] = user_info['first_name']
-      session['middle_initial'] = user_info['middle_initial']
-      session['last_name'] = user_info['last_name']
-      session['address'] = user_info['address']
-      session['birthday'] = user_info['birthday']
-      session['user_type'] = user_info['user_type']
-      return redirect('/Portal')
-    else:
-      session['error'] = 'That\'s the wrong password you silly goose'
+        cursor.execute("SELECT * FROM users WHERE username = %s AND userpass = %s", (name, password))
+        x = cursor.fetchone()
+        
+        if x:
+            session['username'] = name
+            session['password'] = password
+            session['type'] = x['usertype']
+            session['uid'] = x['uid']
+
+            if x['usertype'] == "Systems Administrator":
+               return redirect(url_for('SAhome'))
+               
+            if x['usertype'] == "Graduate Secretary":
+               return redirect(url_for('GShome'))
+
+            if x['usertype'] == "Faculty":
+               return redirect(url_for('Fhome'))
+
+            if x['usertype'] == "Student":
+               return redirect(url_for('Shome'))
+
+            if x['usertype'] == "Applicant":
+               return redirect(url_for('Ahome'))
+
+        else:
+          session['error'] = 'That username or password is not valid'
 
   return render_template('Login.html')
 
@@ -46,3 +55,23 @@ def login():
 def logout():
   session.clear()
   return redirect(url_for("login"))
+
+@app.route("/SAhome")
+def SAhome():
+  return render_template('SAhome.html')
+
+@app.route("/GShome")
+def GShome():
+  return render_template('GShome.html')
+
+@app.route("/Fhome")
+def Fhome():
+  return render_template('Fhome.html')
+
+@app.route("/Shome")
+def Shome():
+  return render_template('Shome.html')
+
+@app.route("/Ahome")
+def Ahome():
+  return render_template('Ahome.html')
