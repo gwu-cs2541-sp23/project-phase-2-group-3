@@ -172,8 +172,8 @@ CREATE TABLE applicationForm (
    PRIMARY KEY (startDate, uid)
 );
 
-DROP TABLE IF EXISTS reviewForm;
-CREATE TABLE reviewForm (
+DROP TABLE IF EXISTS review_form;
+CREATE TABLE review_form (
    student_uid CHAR(8) NOT NULL,
    reviewer_uid CHAR(8) NOT NULL,
    r1rating INT(1) NOT NULL,
