@@ -1,5 +1,6 @@
 import mysql.connector
 from flask import Flask, session, render_template, redirect, url_for, request
+import random
 
 app = Flask('app')
 app.secret_key = 'this is super secret'
@@ -50,6 +51,37 @@ def login():
           session['error'] = 'That username or password is not valid'
 
   return render_template('Login.html')
+
+# Account Registration Page 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  cursor = mydb.cursor(dictionary=True)
+
+  session['error_account_creation'] = ''
+  if request.method == 'POST':
+    if 'username' in request.form and 'password' in request.form and 'first_name' in request.form and 'last_name' in request.form and 'ssn' in request.form and 'address' in request.form:
+      uid = random.randrange(10000000, 99999999)
+      val = (
+          uid,
+          request.form['username'],
+          request.form['password'],
+          request.form['first_name'],
+          request.form['last_name'],
+          request.form['ssn'],
+          request.form['address'],
+          'applicant')
+      
+      cursor.execute(
+          'INSERT INTO users (uid, username, password, first_name, last_name, ssn, address, user_type) values (%s, %s, %s, %s, %s, %s, %s, %s);', val)
+      cursor.execute(
+         'INSERT INTO applicant (uid, appStatus, decision) values (%s, %s, %s);', (uid, 'Application Incomplete', 'Pending'))
+      mydb.commit()
+
+      return redirect('/')
+    else:
+      session['error_account_creation'] = 'Please fill fields before clicking submit'
+
+  return render_template('register.html')
 
 @app.route("/logout")
 def logout():
