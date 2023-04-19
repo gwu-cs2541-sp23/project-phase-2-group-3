@@ -1,5 +1,6 @@
 -- Active: 1681927449683@@group3phase2-taylor23.c71jatiazsww.us-east-1.rds.amazonaws.com@3306@university
-
+use university;
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     uid CHAR(8),
@@ -200,3 +201,6 @@ CREATE TABLE review_form (
    FOREIGN KEY (reviewer_uid) 
         REFERENCES employee(uid) ON DELETE CASCADE
 );
+
+
+SET FOREIGN_KEY_CHECKS = 1;
