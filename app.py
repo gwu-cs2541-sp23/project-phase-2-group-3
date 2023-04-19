@@ -22,28 +22,28 @@ def login():
         name = request.form["username"]
         password = request.form["password"]
 
-        cursor.execute("SELECT * FROM users WHERE username = %s AND userpass = %s", (name, password))
+        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (name, password))
         x = cursor.fetchone()
         
         if x:
             session['username'] = name
             session['password'] = password
-            session['type'] = x['usertype']
+            session['type'] = x['user_type']
             session['uid'] = x['uid']
 
-            if x['usertype'] == "Systems Administrator":
+            if x['user_type'] == "sysadmin":
                return redirect(url_for('SAhome'))
                
-            if x['usertype'] == "Graduate Secretary":
+            if x['user_type'] == "gradsec":
                return redirect(url_for('GShome'))
 
-            if x['usertype'] == "Faculty":
+            if x['user_type'] == "employee":
                return redirect(url_for('Fhome'))
 
-            if x['usertype'] == "Student":
+            if x['user_type'] == "student":
                return redirect(url_for('Shome'))
 
-            if x['usertype'] == "Applicant":
+            if x['user_type'] == "applicant":
                return redirect(url_for('Ahome'))
 
         else:
