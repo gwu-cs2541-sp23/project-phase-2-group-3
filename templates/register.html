@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> signup </title>
+</head>
+
+<body>
+  {% include "navbar.html" %}
+
+  <div class="main">
+
+    Thank you for applying to James Taylor University <br>
+    Please provide all of the following information <br><br>
+
+    <form action="/register" method="POST">
+      Username: <input type="text" name="username" required maxlength="64"><br><br>
+      Password: <input type="text" name="password" required minlength="8" maxlength="64"><br><br>
+      First Name: <input type="text" name="first_name" required maxlength="32"><br><br>
+      Last Name: <input type="text" name="last_name" required maxlength="32"><br><br>
+      SSN: <input type="text" name="ssn" required maxlength="16"><br><br>
+      Current Address: <input type="text" name="address" required maxlength="64"><br><br>
+      <br><br>
+      <error>{{ session['error_account_creation'] }}</error> <br><br>
+      <input type="submit" value="submit"> <br><br>
+    </form>
+    
+  </div>
+</body>
+
+</html>
