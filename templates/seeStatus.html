@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Status</title>
+    </head>
+    <body>
+        {%include "navbar.html"%}
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> Student ID: {{session['uid'] }}</h2>
+
+        <table>
+            <tr>
+              <th>Application Status</th>
+              <th>Rec Letter 1 Status</th> 
+              <th>Rec letter 2 Status</th>
+              <th>Rec Letter 3 Status</th>
+              <th>Transcript Status</th> 
+              <th>Final Decision</th>
+            </tr>
+            <tr>
+              <td>{{status}}</td>
+              <td>{{r1status}}</td> 
+              <td>{{r2status}}</td>
+              <td>{{r3status}}</td>
+              <td>{{transcriptstatus}}</td> 
+              <td>{{decision}}</td>
+            </tr>
+          </table>
+
+    </body>
+</html>
