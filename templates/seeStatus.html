@@ -5,7 +5,19 @@
     <body>
         {%include "navbar.html"%}
         <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
-        <h2> Student ID: {{session['uid'] }}</h2>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        {% if status['appStatus'] == "Application Incomplete" %}
+
+        <table>
+          <tr>
+            <th>Application Status</th>
+          <tr>
+            <td>{{status['appStatus']}}</td>
+          </tr>
+        </table>
+
+        {%else%}
 
         <table>
             <tr>
@@ -17,14 +29,16 @@
               <th>Final Decision</th>
             </tr>
             <tr>
-              <td>{{status}}</td>
-              <td>{{r1status}}</td> 
-              <td>{{r2status}}</td>
-              <td>{{r3status}}</td>
-              <td>{{transcriptstatus}}</td> 
-              <td>{{decision}}</td>
+              <td>{{status['appStatus']}}</td>
+              <td>{{r1status['r1status']}}</td> 
+              <td>{{r2status['r2status']}}</td>
+              <td>{{r3status['r3status']}}</td>
+              <td>{{transcriptstatus['transcriptStatus']}}</td> 
+              <td>{{decision['decision']}}</td>
             </tr>
           </table>
+
+          {%endif%}
 
     </body>
 </html>
