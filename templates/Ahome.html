@@ -1,0 +1,50 @@
+<html>
+  <head>
+     <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <title>Alumni Logged In</title>
+ 
+  </head>
+  <body>
+ <center>
+    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
+ </center>
+
+ <div class="buttons">
+
+    <form action = "/updateinfo" method = "POST"> 
+    <h3>University ID: {{ '{:08d}'.format(session['user_id']) }}</h3>
+    
+    <h4>Last Name: 
+        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
+    </h4>
+
+    <h4> First Name: 
+        <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
+    </h4>
+
+    <h4>Email Address: 
+        <input type="text" placeholder="{{data['email']}}" name= "email">
+    </h4>
+
+    <h4>Address: 
+        <input type="text" placeholder="{{data['address']}}" name= "address">
+    </h4>
+
+</div>
+
+
+ <div class = "buttons">
+
+    <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
+    <button type="submit">View Transcript</button>
+    </form>
+    
+    <form action = "/logout"> 
+    <button type="submit">Log Out</button>
+    </form>
+
+    </div>
+
+
+</body>
+</html>

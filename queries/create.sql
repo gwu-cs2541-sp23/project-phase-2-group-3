@@ -200,3 +200,9 @@ CREATE TABLE review_form (
    FOREIGN KEY (reviewer_uid) 
         REFERENCES employee(uid) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS form1_answer;
+CREATE TABLE form1_answer (
+  student_uid int(8) NOT NULL,
+  cid INTEGER NOT NULL
+);

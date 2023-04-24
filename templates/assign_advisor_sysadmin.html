@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Assign Advisor/Advisee</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+<body>
+
+ <center>
+    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
+</center>
+
+<center>
+Create Advisor/Advisee pairings
+</center>
+
+<form action = "/assigned" method = "POST">
+
+<label for= "student">Select a Student:</label>
+<select name= "student" id= "student" required>
+    {% for s in mstudents: %}
+  <option value="{{s['uid']}}">{{s['first_name']}} {{s['last_name']}}</option>
+  {% endfor %}
+
+  {% for p in pstudents: %}
+  <option value="{{p['uid']}}">{{p['first_name']}} {{p['last_name']}}</option>
+  {% endfor %}
+</select>
+<br><br>
+
+<label for= "advisor">Select an Advisor:</label>
+<select name= "advisor" id= "advisor" required>
+    {% for a in advisors: %}
+  <option value="{{a['uid']}}">{{a['first name']}} {{a['last_name']}}</option>
+  {% endfor %}
+</select>
+<br><br>
+ 
+<button type="submit">Assign</button>
+</form>
+
+<form action = "/SAhome"> 
+    <button type="submit">System Admin Home Page</button>
+   </form>
+</body>
+</html>

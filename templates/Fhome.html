@@ -1,0 +1,19 @@
+<html>
+    <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
+    <title> Employee Homepage </title>
+    <h1> Welcome, {{ data['first_name'] }} {{ data['last_name'] }} </h1>
+
+    <body>
+        {% if employee_types[0]['is_advisor'] == 1 %}
+        Advisor Functionality
+        <form action="/faculty/advisees/phd"> 
+            <button type="submit">PhD Advisees</button>
+        </form>
+        <form action="/faculty/advisees/masters"> 
+            <button type="submit">Master's Advisees</button>
+        </form>
+
+        {% endif %}
+    </body>
+
+</html>

@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title> Need Advisor </title>
+  </head>
+  <body>
+    <h1> Assign advisor for {{student[0]['first_name']}} {{student[0]['last_name']}} </h1> 
+
+    <label for= "advisor">Select an Advisor:</label>
+    <select name= "advisor" id= "advisor" required>
+        {% for a in advisors: %}
+        <option value="{{a['uid']}}">{{a['first_name']}} {{a['last_name']}}</option>
+        {% endfor %}
+    </select>
+
+      <hr color=#3F000F;>
+
+    <form action="/student/{{student[0]['uid']}}"> 
+      <button type="submit">Student Data</button>
+    </form>
+
+    <form action="/gradsec"> 
+      <button type="submit">All students</button>
+    </form>
+
+    <form action="/logout"> 
+      <button type="submit">Log Out</button>
+    </form>
+    
+  </body>
+</html>
