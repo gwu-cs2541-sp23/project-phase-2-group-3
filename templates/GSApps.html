@@ -1,0 +1,86 @@
+<html>
+  
+  <head>
+    
+    <title>Login Page</title>
+    
+  </head>
+
+  <body>
+
+    {%include "navbar.html"%}
+    <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+    <h2> universityID: {{session['uid']}}</h2>
+
+    <ul>
+
+      {%for person in applicants%}
+
+        <li>Student ID: {{person.uid}}
+
+          <ul>
+
+            <li>Status: {{person.appStatus}}</li>
+            <li>Update Status: <form action = "/GSapps" method = "POST">
+
+              <select id="status" name="status">
+
+                <option value="Application Incomplete">Application Incomplete</option>
+                <option value="Application Awaiting Materials">Application Awaiting Materials</option>
+                <option value="Application Under Review">Application Under Review</option>
+                <option value="Decision Pending">Decision Pending</option>
+                <option value="Decision Delivered">Decision Delivered</option>
+
+              </select>
+
+              <input type="submit" name="Update" value = "Update">
+              <input type="hidden" name="id" value="{{person.uid}}">
+              <input type="hidden" name="type" value="updatestat">
+
+            </form></li>
+
+            <li>Decision: {{person.decision}}</li>
+            <li>Update Decision: <form action = "/GSapps" method = "POST">
+
+              <select id="decision" name="decision">
+
+                <option value="Pending">Pending</option>
+                <option value="Admit">Admit</option>
+                <option value="Admit With Aid">Admit With Aid</option>
+                <option value="Reject">Reject</option>
+
+              </select>
+
+              <input type="submit" name="Update" value = "Update">
+              <input type="hidden" name="id" value="{{person.uid}}">
+              <input type="hidden" name="type" value="updatedecision">
+
+            </form></li>
+
+            <li><form action = "/GSapps" method = "POST">
+
+              <input type="submit" name="View Application" value = "View Application">
+              <input type="hidden" name="id" value="{{person.uid}}">
+              <input type="hidden" name="type" value="app">
+
+            </form></li>
+
+            <li><form action = "/GSapps" method = "POST">
+
+              <input type="submit" name="View Reviews" value = "View Reviews">
+              <input type="hidden" name="id" value="{{person.uid}}">
+              <input type="hidden" name="type" value="review">
+
+            </form></li>
+
+          </ul>
+
+        </li>
+
+      {%endfor%}
+
+    </ul>
+    
+  </body>
+  
+</html>
