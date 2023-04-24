@@ -30,6 +30,8 @@ def login():
             session['password'] = password
             session['type'] = x['user_type']
             session['uid'] = x['uid']
+            session['first_name'] = x['first_name']
+            session['last_name'] = x['last_name']
 
             if x['user_type'] == "sysadmin":
                return redirect(url_for('SAhome'))
@@ -74,6 +76,42 @@ def Shome():
 
 @app.route("/Ahome")
 def Ahome():
-  return render_template('Ahome.html')
+
+  cursor = mydb.cursor(dictionary=True)
+
+  if(session['type'] != "applicant"):
+      return redirect(url_for('logout'))
+  
+  if request.method == 'POST':
+     if request.form['button'] == "fill":
+        return redirect(url_for('applicationFillout'))
+    
+     if request.form['button'] == "status":
+        return redirect(url_for('seeStatus'))
+
+  return render_template("Ahome.html")
+
+@app.route('/seeStatus', methods=['GET', 'POST'])
+def seeStatus():
+
+  if(session['type'] != "applicant"):
+    return redirect(url_for('logout'))
+
+  cursor = mydb.cursor(dictionary=True)
+
+  cursor.execute("SELECT appStatus FROM applicant WHERE uid = %s", (session["uid"],))
+  status = cursor.fetchone()
+  cursor.execute("SELECT transcriptStatus FROM applicationForm WHERE uid = %s", (session["uid"],))
+  transcriptstatus = cursor.fetchone()
+  cursor.execute("SELECT r1status FROM applicationForm WHERE uid = %s", (session["uid"],))
+  r1status = cursor.fetchone()
+  cursor.execute("SELECT r2status FROM applicationForm WHERE uid = %s", (session["uid"],))
+  r2status = cursor.fetchone()
+  cursor.execute("SELECT r3status FROM applicationForm WHERE uid = %s", (session["uid"],))
+  r3status = cursor.fetchone()
+  cursor.execute("SELECT decision FROM applicant WHERE uid = %s", (session["uid"],))
+  decision = cursor.fetchone()
+
+  return render_template ("seeStatus.html", status = status, transcriptstatus = transcriptstatus, r1status = r1status, r2status = r2status, r3status = r3status, decision = decision)
 
 app.run(host='0.0.0.0', port=8080)

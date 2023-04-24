@@ -61,8 +61,8 @@ CREATE TABLE advisor_assignments (
 DROP TABLE IF EXISTS applicant;
 CREATE TABLE applicant (   
    uid CHAR(8) NOT NULL,
-   appStatus VARCHAR(32) NOT NULL,
-   decision VARCHAR(32) NOT NULL,
+   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Under Review, Decision Pending
+   decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
    PRIMARY KEY (uid),
    FOREIGN KEY (uid) REFERENCES users(uid) 
 );

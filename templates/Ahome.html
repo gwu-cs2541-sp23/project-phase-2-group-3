@@ -1,0 +1,22 @@
+<title> Applicant Home Page </title>
+
+<body>
+    {%include "navbar.html"%}
+  <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+  <h2> Student ID: {{session['uid'] }}</h2>
+  <br>
+  <form action = "/Ahome" method = "POST">
+
+    <input type="submit" value="Fill Out An Application">
+    <input type="hidden" name="button" value="fill">
+
+
+  </form>
+  <br>
+  <form action = "/Ahome" method = "POST">
+
+    <input type="submit" value="See Your Status">
+    <input type="hidden" name="button" value="status">
+
+  </form>
+</body>
