@@ -22,7 +22,7 @@ CREATE TABLE students (
     thesis_approved BOOLEAN,
     PRIMARY KEY(uid),
     FOREIGN KEY(uid)
-        REFERENCES users(uid)
+        REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS employee;
@@ -34,7 +34,7 @@ CREATE TABLE employee (
     is_reviewer BOOLEAN,
     PRIMARY KEY(uid),
     FOREIGN KEY(uid)
-        REFERENCES users(uid)
+        REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS reviewers;
@@ -43,9 +43,9 @@ CREATE TABLE reviewer_assignments (
     applicant_uid CHAR(8),
     PRIMARY KEY(reviewer_uid, applicant_uid),
     FOREIGN KEY(reviewer_uid)
-        REFERENCES employee(uid),
+        REFERENCES employee(uid) ON DELETE CASCADE, 
     FOREIGN KEY(applicant_uid)
-        REFERENCES users(uid)
+        REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS advisors;
@@ -54,9 +54,9 @@ CREATE TABLE advisor_assignments (
     student_uid CHAR(8),
     PRIMARY KEY(advisor_uid, student_uid),
     FOREIGN KEY(advisor_uid)
-        REFERENCES employee(uid),
+        REFERENCES employee(uid) ON DELETE CASCADE,
     FOREIGN KEY(student_uid)
-        REFERENCES users(uid)
+        REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS applicant;
@@ -65,7 +65,7 @@ CREATE TABLE applicant (
    appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered
    decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
    PRIMARY KEY (uid),
-   FOREIGN KEY (uid) REFERENCES users(uid) 
+   FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS alumni;
@@ -74,7 +74,7 @@ CREATE TABLE alumni ( --student is deleted from students when they become an alu
 	grad_year int(4) NOT NULL,
     PRIMARY KEY(uid),
 	FOREIGN KEY (uid)
-        REFERENCES users(uid)
+        REFERENCES users(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS classes;
@@ -98,9 +98,9 @@ CREATE TABLE current_sections (
     timeslot INTEGER,
     PRIMARY KEY(cid, section_id),
     FOREIGN KEY(cid) 
-        REFERENCES classes(cid),
+        REFERENCES classes(cid) ON DELETE CASCADE,
     FOREIGN KEY(professor_uid)
-        REFERENCES employee(uid)
+        REFERENCES employee(uid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS prerequisites;
@@ -109,9 +109,9 @@ CREATE TABLE prerequisites (
     prereq_cid INTEGER,
     PRIMARY KEY(class_cid, prereq_cid),
     FOREIGN KEY(class_cid) 
-        REFERENCES classes(cid),
+        REFERENCES classes(cid) ON DELETE CASCADE,
     FOREIGN KEY(prereq_cid) 
-        REFERENCES classes(cid)
+        REFERENCES classes(cid) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS student_classes;
@@ -123,9 +123,9 @@ CREATE TABLE student_classes (
     finalized BOOL,
     PRIMARY KEY(student_uid, cid, section_id),
     FOREIGN KEY(student_uid) 
-        REFERENCES students(uid),
+        REFERENCES students(uid) ON DELETE CASCADE,
     FOREIGN KEY(cid, section_id) 
-        REFERENCES current_sections(cid, section_id)
+        REFERENCES current_sections(cid, section_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS applicationForm;
