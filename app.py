@@ -176,8 +176,6 @@ def Fhome():
   cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
   booleans = cursor.fetchone()
 
-  print(booleans)
-
   return render_template('Fhome.html', booleans=booleans)
 
 @app.route('/FRhome', methods=['GET', 'POST'])
@@ -193,12 +191,26 @@ def FRhome():
         return redirect(url_for('fillReviewForm'))
       
       if request.form['button'] == "view":
-        return redirect(url_for('?????'))
+        id = request.form['id']
+        return redirect(url_for('viewApplication',studentID = id))
 
     cursor.execute("SELECT * FROM applicant WHERE appStatus = %s", ("Application Under Review",))
     applicants = cursor.fetchall()
 
     return render_template("FRhome.html", applicants = applicants)
+
+@app.route('/viewApplication/<studentID>', methods=['GET','POST'])
+def viewApplication(studentID):
+
+    if(session['user_type'] == "employee"):
+
+        cursor = mydb.cursor(dictionary = True)
+        cursor.execute("SELECT * FROM applicationForm WHERE uid = %s", (studentID,))
+        form = cursor.fetchone()
+        return render_template("viewApplication.html", form = form)
+    
+    else:
+        return redirect("/")
 
 @app.route('/fillReviewForm', methods=['GET','POST'])
 def fillReviewForm():
@@ -237,10 +249,10 @@ def submitReviewForm():
         semesterApplied = request.form["semesterApplied"]
         decision = "pending"
 
-        cursor.execute("INSERT INTO reviewForm (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
+        cursor.execute("INSERT INTO reviewForm (uid,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
         mydb.commit()
 
-        cursor.execute("UPDATE applicant SET appStatus = %s WHERE studentID = %s", ("application reviewed",studentID))
+        cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", ("Decision Pending",studentID))
         mydb.commit()
 
         return redirect('/FRhome')
