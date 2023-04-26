@@ -1,0 +1,68 @@
+<html>
+
+<title> Employee Home Page </title>
+
+    <body>
+
+        {%include "navbar.html"%}
+
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+    
+        {% if booleans['is_professor'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Professor Homepage">
+                <input type="hidden" name="button" value="professor">
+            
+            
+            </form>
+
+            <br>
+
+        {%endif%}
+
+        {% if booleans['is_advisor'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Advisor Homepage">
+                <input type="hidden" name="button" value="advisor">
+            
+            
+            </form>
+
+            <br>
+
+        {%endif%}
+
+        {% if booleans['is_review_chair'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Review Chair Homepage">
+                <input type="hidden" name="button" value="chair">
+            
+            
+            </form>
+
+            <br>
+
+        {% elif booleans['is_reviewer'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Reviewer Homepage">
+                <input type="hidden" name="button" value="reviewer">
+            
+            
+            </form>
+
+        {%endif%}
+
+    </body>
+
+</html>

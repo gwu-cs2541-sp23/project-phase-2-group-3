@@ -152,9 +152,101 @@ def GSapps():
 
   return render_template("GSApps.html", applicants=applicants)
 
-@app.route("/Fhome")
+@app.route("/Fhome", methods=['GET', 'POST'])
 def Fhome():
-  return render_template('Fhome.html')
+
+  if(session['user_type'] != "employee"):
+        return redirect("/")
+  
+  if request.method == 'POST':
+    if request.form['button'] == "professor":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "advisor":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "chair":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "reviewer":
+      return redirect(url_for('FRhome'))
+  
+  cursor = mydb.cursor(dictionary = True)
+
+  cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+  booleans = cursor.fetchone()
+
+  print(booleans)
+
+  return render_template('Fhome.html', booleans=booleans)
+
+@app.route('/FRhome', methods=['GET', 'POST'])
+def FRhome():
+
+    if(session['user_type'] != "employee"):
+        return redirect("/")
+
+    cursor = mydb.cursor(dictionary = True)
+
+    if request.method == 'POST':
+      if request.form['button'] == "fill":
+        return redirect(url_for('fillReviewForm'))
+      
+      if request.form['button'] == "view":
+        return redirect(url_for('?????'))
+
+    cursor.execute("SELECT * FROM applicant WHERE appStatus = %s", ("Application Under Review",))
+    applicants = cursor.fetchall()
+
+    return render_template("FRhome.html", applicants = applicants)
+
+@app.route('/fillReviewForm', methods=['GET','POST'])
+def fillReviewForm():
+
+    if(session['user_type'] == "employee"):
+    
+        return render_template("fillReviewForm.html")
+    
+    else:
+        return redirect("/")
+
+@app.route('/submitReviewForm', methods=['GET','POST'])
+def submitReviewForm():
+
+    if(session['user_type'] == "employee"):
+
+        cursor = mydb.cursor(dictionary = True)
+        studentID = request.form["studentID"]
+        reviewer = request.form["reviewer"]
+        r1rating = request.form["r1rating"]
+        r1generic = request.form["r1generic"]
+        r1credible = request.form["r1credible"]
+        r1from = request.form["r1from"]
+        r2rating = request.form["r2rating"]
+        r2generic = request.form["r2generic"]
+        r2credible = request.form["r2credible"]
+        r2from = request.form["r2from"]
+        r3rating = request.form["r3rating"]
+        r3generic = request.form["r3generic"]
+        r3credible = request.form["r3credible"]
+        r3from = request.form["r3from"]
+        GASrating = request.form["GASrating"]
+        deficiencies = request.form["deficiencies"]
+        rejectReason = request.form["rejectReason"]
+        thoughts = request.form["thoughts"]
+        semesterApplied = request.form["semesterApplied"]
+        decision = "pending"
+
+        cursor.execute("INSERT INTO reviewForm (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
+        mydb.commit()
+
+        cursor.execute("UPDATE applicant SET appStatus = %s WHERE studentID = %s", ("application reviewed",studentID))
+        mydb.commit()
+
+        return redirect('/FRhome')
+    
+    else:
+        return redirect("/")
 
 @app.route("/Shome")
 def Shome():
