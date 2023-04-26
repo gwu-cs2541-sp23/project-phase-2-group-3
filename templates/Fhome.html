@@ -1,20 +1,68 @@
 <html>
-    <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
-    <title> Employee Homepage </title>
-    <h1> Welcome, {{ data['first_name'] }} {{ data['last_name'] }} </h1>
+
+<title> Employee Home Page </title>
 
     <body>
-        {%include "navbar.html"%}
-        {% if employee_types[0]['is_advisor'] == 1 %}
-        <form action="/advisor_home"> 
-            <button type="submit">Advisor Functionality</button>
-        </form>
-        {% endif %}
-    </body>
 
-    <br>
-    <form action="/logout"> 
-        <button type="submit">Log Out</button>
-    </form>
+        {%include "navbar.html"%}
+
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+    
+        {% if booleans['is_professor'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Professor Homepage">
+                <input type="hidden" name="button" value="professor">
+            
+            
+            </form>
+
+            <br>
+
+        {%endif%}
+
+        {% if booleans['is_advisor'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Advisor Homepage">
+                <input type="hidden" name="button" value="advisor">
+            
+            
+            </form>
+
+            <br>
+
+        {%endif%}
+
+        {% if booleans['is_review_chair'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Review Chair Homepage">
+                <input type="hidden" name="button" value="chair">
+            
+            
+            </form>
+
+            <br>
+
+        {% elif booleans['is_reviewer'] == 1 %}
+
+            <form action = "/Fhome" method = "POST">
+
+                <input type="submit" value="Go To Your Reviewer Homepage">
+                <input type="hidden" name="button" value="reviewer">
+            
+            
+            </form>
+
+        {%endif%}
+
+    </body>
 
 </html>

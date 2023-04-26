@@ -1,5 +1,6 @@
 import mysql.connector
 from flask import Flask, session, render_template, redirect, url_for, request
+
 import time, random, datetime
 
 app = Flask('app')
@@ -55,11 +56,11 @@ def login():
 
   return render_template('Login.html')
 
-# Account Registration Page (only for applicants)
+# Account Registration Page 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   cursor = mydb.cursor(dictionary=True)
-
+  
   session['error_account_creation'] = ''
   if request.method == 'POST':
     if 'username' in request.form and 'password' in request.form and 'first_name' in request.form and 'last_name' in request.form and 'ssn' in request.form and 'address' in request.form:
@@ -90,8 +91,6 @@ def register():
 def logout():
   session.clear()
   return redirect(url_for("login"))
-
-
 # update personal information
 @app.route('/updateinfo', methods=['GET', 'POST'])
 def updateinfo():
@@ -141,8 +140,7 @@ def updateuserinfo(id):
       mydb.commit()
     
     return redirect('/')
-
-# graduate secretary
+ 
 @app.route("/GShome", methods=['GET', 'POST'])
 def GShome():
 
@@ -157,20 +155,6 @@ def GShome():
       return redirect(url_for('GSapps'))
 
   return render_template('GShome.html')
-
-student_info = list()
-
-@app.route("/GSstudents", methods=['GET', 'POST'])
-def GSstudents():
-  # get name, id, courses, and grades for all current students
-  if session['user_type'] == 'gradsec':
-    cur = mydb.cursor(dictionary = True)
-    students = list()
-
-    cur.execute("SELECT first_name, last_name, uid FROM users WHERE user_type = %s", ('student', ))
-    students = cur.fetchall()
-    
-  return render_template('GSstudents.html', students=students)
 
 @app.route("/GSapps", methods=['GET', 'POST'])
 def GSapps():
@@ -214,6 +198,21 @@ def GSapps():
   applicants = cursor.fetchall()
 
   return render_template("GSApps.html", applicants=applicants)
+  
+student_info = list()
+
+@app.route("/GSstudents", methods=['GET', 'POST'])
+def GSstudents():
+  # get name, id, courses, and grades for all current students
+  if session['user_type'] == 'gradsec':
+    cur = mydb.cursor(dictionary = True)
+    students = list()
+
+    cur.execute("SELECT first_name, last_name, uid FROM users WHERE user_type = %s", ('student', ))
+    students = cur.fetchall()
+    
+  return render_template('GSstudents.html', students=students)
+
 
 @app.route('/student/<uid>', methods=['GET', 'POST'])
 def gs_student_data(uid):
@@ -582,6 +581,102 @@ def m_students():
       cursor = mydb.cursor(dictionary=True)
       cursor.execute("SELECT uid FROM students WHERE degree_type = %s", ('MS', ))
       m_students = cursor.fetchall()
+=======
+@app.route("/Fhome", methods=['GET', 'POST'])
+def Fhome():
+
+  if(session['user_type'] != "employee"):
+        return redirect("/")
+  
+  if request.method == 'POST':
+    if request.form['button'] == "professor":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "advisor":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "chair":
+      return redirect(url_for('?????'))
+    
+    if request.form['button'] == "reviewer":
+      return redirect(url_for('FRhome'))
+  
+  cursor = mydb.cursor(dictionary = True)
+
+  cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+  booleans = cursor.fetchone()
+
+  print(booleans)
+
+  return render_template('Fhome.html', booleans=booleans)
+
+@app.route('/FRhome', methods=['GET', 'POST'])
+def FRhome():
+
+    if(session['user_type'] != "employee"):
+        return redirect("/")
+
+    cursor = mydb.cursor(dictionary = True)
+
+    if request.method == 'POST':
+      if request.form['button'] == "fill":
+        return redirect(url_for('fillReviewForm'))
+      
+      if request.form['button'] == "view":
+        return redirect(url_for('?????'))
+
+    cursor.execute("SELECT * FROM applicant WHERE appStatus = %s", ("Application Under Review",))
+    applicants = cursor.fetchall()
+
+    return render_template("FRhome.html", applicants = applicants)
+
+@app.route('/fillReviewForm', methods=['GET','POST'])
+def fillReviewForm():
+
+    if(session['user_type'] == "employee"):
+    
+        return render_template("fillReviewForm.html")
+    
+    else:
+        return redirect("/")
+
+@app.route('/submitReviewForm', methods=['GET','POST'])
+def submitReviewForm():
+
+    if(session['user_type'] == "employee"):
+
+        cursor = mydb.cursor(dictionary = True)
+        studentID = request.form["studentID"]
+        reviewer = request.form["reviewer"]
+        r1rating = request.form["r1rating"]
+        r1generic = request.form["r1generic"]
+        r1credible = request.form["r1credible"]
+        r1from = request.form["r1from"]
+        r2rating = request.form["r2rating"]
+        r2generic = request.form["r2generic"]
+        r2credible = request.form["r2credible"]
+        r2from = request.form["r2from"]
+        r3rating = request.form["r3rating"]
+        r3generic = request.form["r3generic"]
+        r3credible = request.form["r3credible"]
+        r3from = request.form["r3from"]
+        GASrating = request.form["GASrating"]
+        deficiencies = request.form["deficiencies"]
+        rejectReason = request.form["rejectReason"]
+        thoughts = request.form["thoughts"]
+        semesterApplied = request.form["semesterApplied"]
+        decision = "pending"
+
+        cursor.execute("INSERT INTO reviewForm (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
+        mydb.commit()
+
+        cursor.execute("UPDATE applicant SET appStatus = %s WHERE studentID = %s", ("application reviewed",studentID))
+        mydb.commit()
+
+        return redirect('/FRhome')
+    
+    else:
+        return redirect("/")
 
       m_advisees = list()
 
@@ -892,6 +987,153 @@ def coursehist(id):
 # home page
 @app.route("/Ahome", methods=['GET', 'POST'])
 def Ahome():
+=======
+@app.route("/Ahome", methods=['GET', 'POST'])
+def Ahome():
+
+  if(session['user_type'] != "applicant"):
+      return redirect(url_for('logout'))
+  
+  if request.method == 'POST':
+     if request.form['button'] == "fill":
+        return redirect(url_for('applicationFillout'))
+    
+     if request.form['button'] == "status":
+        return redirect(url_for('seeStatus'))
+     
+  cursor = mydb.cursor(dictionary=True)
+
+  cursor.execute("SELECT appStatus FROM applicant WHERE uid = %s", (session["uid"],))
+  status = cursor.fetchone()
+
+  return render_template("Ahome.html", status=status)
+
+@app.route('/email', methods = ['GET', 'POST'])
+def email():
+    return render_template("email.html")
+
+@app.route("/applicationFillout", methods=['GET', 'POST'])
+def applicationFillout():
+
+    if(session['user_type'] != "applicant"):
+        return redirect("/")
+    
+    return render_template("fillApp.html")
+
+@app.route ("/postSubmittingApp", methods=['GET', 'POST'])
+def postSubmittingApp():
+
+    if(session['user_type'] != "applicant"):
+        return redirect("/")
+
+    if request.method == 'POST':
+                
+        degreeSeeking = request.form["degreeSeeking"]
+        MScheck = request.form["MScheck"]
+        MSmajor = request.form["MSmajor"]
+        MSuniversity = request.form["MSuniversity"]
+        if(request.form["MSgpa"] == ""):
+            MSgpa = 0
+        else:
+            MSgpa = float(request.form["MSgpa"])
+
+        if(request.form["MSyear"] == ""):
+            MSyear = 0
+        else:
+            MSyear = int(request.form["MSyear"])
+        BAcheck = request.form["BAcheck"]
+        BAmajor = request.form["BAmajor"]
+        if(request.form["BAyear"] == ""):
+            BAyear = 0
+        else:
+            BAyear = int(request.form["BAyear"])
+        BAuniversity = request.form["BAuniversity"]
+        if(request.form["BAgpa"] == ""):
+            BAgpa = 0
+        else:
+            BAgpa = float(request.form["BAgpa"])
+        if(request.form["GREverbal"] == ""):
+            GREverbal = 0
+        else:
+            GREverbal = int(request.form["GREverbal"])
+        if(request.form["GREquantitative"] == ""):
+            GREquantitative = 0
+        else:
+            GREquantitative = int(request.form["GREquantitative"])
+        if(request.form["GREyear"] == ""):
+            GREyear = 0
+        else:
+            GREyear = int(request.form["GREyear"])
+        if(request.form["GREadvancedScore"] == ""):
+            GREadvancedScore = 0
+        else:
+            GREadvancedScore = int(request.form["GREadvancedScore"])
+        GREadvancedSubject = request.form["GREadvancedSubject"]
+        if(request.form["TOEFLscore"] == ""):
+            TOEFLscore = 0
+        else:
+            TOEFLscore = int(request.form["TOEFLscore"])
+        TOEFLdata = request.form["TOEFLdata"]
+        priorWork = request.form["priorWork"]
+        startDate = request.form["startDate"]
+        transcriptStatus = "Not Received"
+        r1status = "Not Recieved"
+        r1writer = request.form["r1writer"]
+        r1email = request.form["r1email"]
+        r1title = request.form["r1title"]
+        r1affiliation = request.form["r1affiliation"]
+        r1letter = "Fill When Recieved"
+        r2status = "Not Recieved"
+        r2writer = request.form["r2writer"]
+        r2email = request.form["r2email"]
+        r2title = request.form["r2title"]
+        r2affiliation = request.form["r2affiliation"]
+        r2letter =  "Fill When Recieved"
+        r3status = "Not Recieved"
+        r3writer =  request.form["r3writer"]
+        r3email = request.form["r3email"]
+        r3title = request.form["r3title"]
+        r3affiliation = request.form["r3affiliation"]
+        r3letter =   "Fill When Recieved"
+        cursor = mydb.cursor(dictionary= True)
+        cursor.execute (
+            "INSERT INTO applicationForm (uid, degreeSeeking,MScheck,MSmajor,MSyear,MSuniversity,MSgpa,BAcheck,BAmajor,BAyear,BAuniversity,BAgpa,GREverbal,GREquantitative,GREyear,GREadvancedScore,GREadvancedSubject,TOEFLscore,TOEFLdate,priorWork,startDate,transcriptStatus,r1status,r1writer,r1email,r1title,r1affiliation,r1letter,r2status,r2writer,r2email,r2title,r2affiliation,r2letter,r3status,r3writer,r3email,r3title,r3affiliation,r3letter) VALUES (%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s)", (session['uid'], degreeSeeking,MScheck,MSmajor,MSyear,MSuniversity,MSgpa,BAcheck,BAmajor,BAyear,BAuniversity,BAgpa,GREverbal,GREquantitative,GREyear,GREadvancedScore,GREadvancedSubject,TOEFLscore,TOEFLdata,priorWork,startDate,transcriptStatus,r1status,r1writer,r1email,r1title,r1affiliation,r1letter,r2status,r2writer,r2email,r2title,r2affiliation,r2letter,r3status,r3writer,r3email,r3title,r3affiliation,r3letter)
+        )
+        mydb.commit()
+
+        decision = "Application Awaiting Materials"
+        cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", (decision,session['uid']))
+        mydb.commit()
+
+        return render_template("Ahome.html")
+    
+    return redirect ('/')
+
+@app.route('/seeStatus', methods=['GET', 'POST'])
+def seeStatus():
+
+  if(session['user_type'] != "applicant"):
+    return redirect(url_for('logout'))
+
+  cursor = mydb.cursor(dictionary=True)
+
+  cursor.execute("SELECT appStatus FROM applicant WHERE uid = %s", (session["uid"],))
+  status = cursor.fetchone()
+
+  if status != "Application Incomplete":
+
+    cursor.execute("SELECT transcriptStatus FROM applicationForm WHERE uid = %s", (session["uid"],))
+    transcriptstatus = cursor.fetchone()
+    cursor.execute("SELECT r1status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r1status = cursor.fetchone()
+    cursor.execute("SELECT r2status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r2status = cursor.fetchone()
+    cursor.execute("SELECT r3status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r3status = cursor.fetchone()
+    cursor.execute("SELECT decision FROM applicant WHERE uid = %s", (session["uid"],))
+    decision = cursor.fetchone()
+
+  return render_template ("seeStatus.html", status = status, transcriptstatus = transcriptstatus, r1status = r1status, r2status = r2status, r3status = r3status, decision = decision)
 
   if(session['user_type'] != "applicant"):
       return redirect(url_for('logout'))
