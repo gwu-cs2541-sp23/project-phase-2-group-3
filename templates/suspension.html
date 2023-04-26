@@ -4,6 +4,7 @@
     <title> Suspension </title>
   </head>
   <body>
+    {%include "navbar.html"%}
     <h1 style="text-align:center;"> All Students Under Academic Suspension </h1>
     <p> {% for student in suspended_students_names %}
         <li> {{student[0]['first_name']}} {{student[0]['last_name']}}</li>
@@ -12,8 +13,8 @@
 
     <hr color=#3F000F;>
     
-    <form action="/gradsec"> 
-      <button type="submit">All students</button>
+    <form action="/GShome"> 
+      <button type="submit">Graduate Secretary Home Page</button>
     </form>
 
     <form action="/logout"> 

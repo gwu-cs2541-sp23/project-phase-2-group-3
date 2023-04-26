@@ -5,6 +5,7 @@
  
   </head>
   <body>
+    {%include "navbar.html"%}
  <center>
     <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
  </center>
@@ -12,7 +13,14 @@
     <div class="buttons">
 
     <form action = "/updateinfo" method = "POST"> 
-      <h3>University ID: {{ '{:08d}'.format(session['user_id']) }}</h3>
+      <h3>University ID: {{ session['uid'] }}</h3>
+      {% if degree[0]['degree_type'] == 'ms' %}
+        <h3> Degree: Master's </h3>
+      {% endif %}
+      {% if degree[0]['degree_type'] == 'phd' %}
+      <h3> Degree: PhD </h3>
+    {% endif %}
+    
       <h4>Last Name: 
         <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
       </h4>

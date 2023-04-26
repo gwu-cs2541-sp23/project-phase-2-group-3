@@ -4,16 +4,17 @@
     <h1> Welcome, {{ data['first_name'] }} {{ data['last_name'] }} </h1>
 
     <body>
+        {%include "navbar.html"%}
         {% if employee_types[0]['is_advisor'] == 1 %}
-        Advisor Functionality
-        <form action="/faculty/advisees/phd"> 
-            <button type="submit">PhD Advisees</button>
+        <form action="/advisor_home"> 
+            <button type="submit">Advisor Functionality</button>
         </form>
-        <form action="/faculty/advisees/masters"> 
-            <button type="submit">Master's Advisees</button>
-        </form>
-
         {% endif %}
     </body>
+
+    <br>
+    <form action="/logout"> 
+        <button type="submit">Log Out</button>
+    </form>
 
 </html>

@@ -17,7 +17,7 @@ def sessionStatus():
     return session['uid']
 
 def sessionType():
-    return session['type']
+    return session['user_type']
 
 # login page for all users 
 @app.route('/', methods = ['GET', 'POST'])
@@ -36,7 +36,7 @@ def login():
         if x:
             session['username'] = name
             session['password'] = password
-            session['type'] = x['user_type']
+            session['user_type'] = x['user_type']
             session['uid'] = x['uid']
             session['first_name'] = x['first_name']
             session['last_name'] = x['last_name']
@@ -61,10 +61,42 @@ def login():
 
   return render_template('Login.html')
 
+# Account Registration Page (only for applicants)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  cursor = mydb.cursor(dictionary=True)
+
+  session['error_account_creation'] = ''
+  if request.method == 'POST':
+    if 'username' in request.form and 'password' in request.form and 'first_name' in request.form and 'last_name' in request.form and 'ssn' in request.form and 'address' in request.form:
+      uid = random.randrange(10000000, 99999999)
+      val = (
+          uid,
+          request.form['username'],
+          request.form['password'],
+          request.form['first_name'],
+          request.form['last_name'],
+          request.form['ssn'],
+          request.form['address'],
+          'applicant')
+      
+      cursor.execute(
+          'INSERT INTO users (uid, username, password, first_name, last_name, ssn, address, user_type) values (%s, %s, %s, %s, %s, %s, %s, %s);', val)
+      cursor.execute(
+         'INSERT INTO applicant (uid, appStatus, decision) values (%s, %s, %s);', (uid, 'Application Incomplete', 'Pending'))
+      mydb.commit()
+
+      return redirect('/')
+    else:
+      session['error_account_creation'] = 'Please fill fields before clicking submit'
+
+  return render_template('register.html')
+
 @app.route("/logout")
 def logout():
   session.clear()
   return redirect(url_for("login"))
+
 
 # system admin
 @app.route("/SAhome")
@@ -184,7 +216,7 @@ def gradlist():
     mydb.commit()
     masters = list()
     for x in range(len(masters_uid)):
-       cur.execute("SELECT * FROM users WHERE uid = %s", (masters_uid[x], ))
+       cur.execute("SELECT * FROM users WHERE uid = %s", (masters_uid[x]['uid'], ))
        masters_info = cur.fetchall()
        masters.append(masters_info)
 
@@ -193,7 +225,9 @@ def gradlist():
     phd_uid = cur.fetchall()
     phd = list()
     for x in range(len(masters_uid)):
-       cur.execute("SELECT * FROM users WHERE uid = %s", (phd_uid[x], ))
+       if not phd_uid:
+        break
+       cur.execute("SELECT * FROM users WHERE uid = %s", (phd_uid[x]['uid'], ))
        phd_info = cur.fetchall()
        phd.append(phd_info)
     mydb.commit()
@@ -329,9 +363,10 @@ def assigned():
     return redirect('/')
   
 # assign advisor to student
-@app.route('/assignadvsior')
+@app.route('/assignadvisor')
 def assignadvisor():
-  if sessionType() == 'sysadmin':
+  if sessionType() == 'sysadmin' or sessionType() == 'gradsec':
+    type = sessionType()
     cur = mydb.cursor(dictionary = True)
 
     # get all advisors
@@ -339,7 +374,7 @@ def assignadvisor():
     advisor_ids = cur.fetchall()
     advisors = list()
     for x in range(len(advisor_ids)):
-       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (advisor_ids[x], ))
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (advisor_ids[x]['uid'], ))
        advisors = cur.fetchall()
 
     # get masters students
@@ -347,19 +382,23 @@ def assignadvisor():
     ms_ids = cur.fetchall()
     mstudents = list()
     for x in range(len(ms_ids)):
-       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (ms_ids[x],))
+       if not ms_ids:
+         break
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (ms_ids[x]['uid'],))
        ms_student = cur.fetchall()
        mstudents.append(ms_student)
 
     cur.execute("SELECT uid from students where degree_type = %s", ('PHD', ))
     phd_ids = cur.fetchall()
     pstudents = list()
-    for x in range(len(ms_ids)):
-       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (phd_ids[x],))
+    for x in range(len(phd_ids)):
+       if not phd_ids:
+         break
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (phd_ids[x]['uid'],))
        phd_student = cur.fetchall()
        pstudents.append(phd_student)
 
-    return render_template("assign_advisor_sysadmin.html", advisors = advisors, mstudents = mstudents, pstudents = pstudents)
+    return render_template("assign_advisor.html", advisors = advisors, mstudents = mstudents, pstudents = pstudents, type = type)
   
   else:
     return redirect('/')
@@ -478,9 +517,7 @@ def addthestudent():
 
       cur.execute("INSERT into users (uid, user_type, first_name, last_name, username, password, address, ssn) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (id, 'student', fname, lname, unm, passwrd, address, ssn))
       mydb.commit()
-      cur.execute("INSERT into students (student_id, degree_type, is_suspended, thesis_approved) VALUES (%s, %s, %s, %s)", (id, degree_type, False, False))
-      mydb.commit()
-      cur.execute("INSERT into advisor_assignments (student_uid, advisor_uid) VALUES (%s)", (id, None))
+      cur.execute("INSERT into students (uid, degree_type, is_suspended, thesis_approved) VALUES (%s, %s, %s, %s)", (id, type, 0, 0))
       mydb.commit()
 
       return redirect('/')
@@ -625,10 +662,25 @@ def addalumni():
 
 # END OF SYSTEM ADMIN FUNCTIONALITY
 
-student_info = list()
-
 @app.route("/GShome", methods=['GET', 'POST'])
 def GShome():
+
+  if(session['user_type'] != "gradsec"):
+        return redirect("/")
+
+  if request.method == 'POST':
+    if request.form['button'] == "students":
+      return redirect(url_for('GSstudents'))
+    
+    if request.form['button'] == "applicants":
+      return redirect(url_for('GSapps'))
+
+  return render_template('GShome.html')
+
+student_info = list()
+
+@app.route("/GSstudents", methods=['GET', 'POST'])
+def GSstudents():
   # get name, id, courses, and grades for all current students
   if sessionType() == 'gradsec':
     cur = mydb.cursor(dictionary = True)
@@ -637,7 +689,50 @@ def GShome():
     cur.execute("SELECT first_name, last_name, uid FROM users WHERE user_type = %s", ('student', ))
     students = cur.fetchall()
     
-  return render_template('GShome.html', students=students)
+  return render_template('GSstudents.html', students=students)
+
+@app.route("/GSapps", methods=['GET', 'POST'])
+def GSapps():
+
+  if(session['user_type'] != "gradsec"):
+        return redirect("/")
+
+  cursor = mydb.cursor(dictionary = True)
+
+  if request.method == 'POST':
+            
+    if request.form["type"] == "updatestat":
+            
+      cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", (request.form["status"],request.form["id"]))
+      mydb.commit()
+
+    if request.form["type"] == "updatestat":
+            
+      cursor.execute("UPDATE applicant SET decision = %s WHERE uid = %s", (request.form["decision"],request.form["id"]))
+      mydb.commit()
+
+    if request.form["type"] == "app":
+
+      cursor.execute("SELECT * FROM applicationForm WHERE uid = %s", (request.form["id"],))
+      app = cursor.fetchone()
+
+      id = request.form["id"]
+
+      return render_template("GSseeapps.html", app=app, id=id)
+
+    if request.form["type"] == "review":
+
+      cursor.execute("SELECT * FROM reviewForm WHERE studentID = %s", (request.form["id"],))
+      form = cursor.fetchone()
+
+      id = request.form["id"]
+
+      return render_template("GSseereviews.html", form=form, id=id)
+
+  cursor.execute("SELECT * FROM applicant")
+  applicants = cursor.fetchall()
+
+  return render_template("GSApps.html", applicants=applicants)
 
 @app.route('/student/<uid>', methods=['GET', 'POST'])
 def gs_student_data(uid):
@@ -668,10 +763,10 @@ def gs_student_data(uid):
     student_info.insert(3, student_grades)
 
     # get gpa requirement for degree
-    if degree[0] == 'MS':
+    if degree[0] == 'ms':
       gpa_req = 3
     
-    if degree[0] == 'PHD':
+    if degree[0] == 'phd':
        gpa_req = 3.6
 
     # get gpa and credit hours
@@ -743,14 +838,14 @@ def gs_student_data(uid):
         gs_all_suspended()
 
     # check if they've applied for graduation
-    cur.execute("SELECT * FROM applied_grad WHERE uid  = %s", (uid , ))
-    applied = cur.fetchall()
-    if not applied:
-       student_info[1]['eligible'] = 'False'
-       student_info[1]['reason'].append('Has not applied to graduate')
+    #cur.execute("SELECT * FROM applied_grad WHERE uid  = %s", (uid , ))
+    #applied = cur.fetchall()
+    #if not applied:
+       #student_info[1]['eligible'] = 'False'
+       #student_info[1]['reason'].append('Has not applied to graduate')
 
     # requirements for master's students
-    if student_info[2]['degree_type'] == 'MS':
+    if student_info[2]['degree_type'] == 'ms':
         # check gpa
         if student_info[4]['gpa'] < 3.0:
             student_info[1]['eligible'] = 'False'
@@ -773,7 +868,7 @@ def gs_student_data(uid):
             student_info[1]['reason'].append('Has not taken enough classes outside of CS')
 
     # requirements for phd students
-    if student_info[2]['degree_type'] == 'PHD':
+    if student_info[2]['degree_type'] == 'phd':
         # check gpa
         if student_info[4]['gpa'] < 3.5:
             student_info[1]['eligible'] = 'False'
@@ -811,6 +906,7 @@ def gs_student_data(uid):
     cur.execute("SELECT first_name, last_name FROM users WHERE uid = %s", (advisor_id[0]['advisor_uid'], ))
     advisor_name = cur.fetchall()
     student_info.insert(6, advisor_name)
+    print(student_info)
     
     return render_template ("student_data.html", student_info=student_info)
   
@@ -861,28 +957,7 @@ def gs_all_suspended():
     return render_template("suspension.html", suspended_students_names=suspended_students_names)
   else:
     return redirect('/')
-  
-@app.route('/assign_advisor/<uid>', methods=['GET', 'POST'])
-def gs_assign_advisor(uid):
-  if sessionType() == 'gradsec':
-    cur = mydb.cursor(dictionary = True)
 
-    if request.method == "POST":
-        advisor_id = request.form.get("advisor")
-        cur.execute("INSERT INTO advisor_assignments VALUES (%s, %s)", (uid, advisor_id))
-
-    # get student name
-    cur.execute("SELECT first_name, last_name, uid, address FROM users WHERE uid = %s", (uid, ))
-    student = cur.fetchall()
-
-    # get advisor names
-    cur.execute("SELECT first_name, last_name, uid FROM users WHERE user_type = %s", ('advisor', ))
-    advisors = cur.fetchall()
-
-    return render_template("assign_advisor_gradsec.html", advisors=advisors, student=student)
-
-  else:
-    return redirect('/')
   
 # END OF GRADSEC FUNCTIONALITY
 
@@ -904,6 +979,32 @@ def Fhome():
     return render_template("Fhome.html", title = 'Faculty Home Page', data = data, employee_types = employee_types)
   else:
       return redirect('/')
+  
+@app.route("/advisor_home",)
+def advisor_home():
+  # check if employee
+  if sessionType() == 'employee':
+    # check if advisor
+    cur = mydb.cursor(dictionary = True)
+    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
+    is_advisor = cur.fetchall()
+
+    if is_advisor:
+      cur = mydb.cursor(dictionary = True)
+      cur.execute("SELECT first_name, last_name, address, uid FROM users WHERE uid = %s", (session['uid'], ))
+      data = cur.fetchone()
+      mydb.commit()
+
+      # see what type(s) of employee they are
+      cur.execute("SELECT * FROM employee WHERE uid = %s", (data['uid'], ))
+      employee_types = cur.fetchall()
+      mydb.commit()
+
+      return render_template("advisor_home.html", title = 'Advisor Home Page', data = data, employee_types = employee_types)
+    else:
+      return redirect('/Fhome')
+  else:
+    return redirect('/')
   
 # list all phd advisees
 @app.route('/faculty/advisees/phd')
@@ -947,14 +1048,11 @@ def phd_students():
 def m_students():
   # check if employee
   if sessionType() == 'employee':
-    print("in first if statement\n")
     # check if advisor
     cur = mydb.cursor(dictionary = True)
     cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
     is_advisor = cur.fetchall()
     if is_advisor:
-      print("in second if statement\n")
-   
       # get advisor id from login session 
       adv_id = session['uid']
 
@@ -970,6 +1068,8 @@ def m_students():
       info1 = cur.fetchall()
 
       for x in range(len(m_students)):
+        if not info1:
+          break
         # get more info about each advisee
         cursor.execute("SELECT * FROM users WHERE uid = %s", (info1[x]['student_uid'], ))
         info2 = cur.fetchall()
@@ -1061,12 +1161,16 @@ def Shome():
 
   if sessionType() == 'student':
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT uaddress, uid, FROM users WHERE username = %s", (session['username'],))
+    cur.execute("SELECT address, uid FROM users WHERE username = %s", (session['username'], ))
     data = cur.fetchone()
     mydb.commit()
 
+    # get degree type
+    cur.execute("SELECT degree_type FROM students WHERE uid = %s", (session['uid'], ))
+    degree = cur.fetchall()
+
     #get the students grade
-    cur.execute("SELECT grade FROM student_classes WHERE student_uid = %s", (session['uid'],))
+    cur.execute("SELECT grade FROM student_classes WHERE student_uid = %s", (session['uid'], ))
     grades = cur.fetchall()
     invalid_grades = ['C', 'D', 'F']
     counter = 0
@@ -1080,11 +1184,11 @@ def Shome():
       cur.execute("INSERT into students (is_suspended) VALUES %s", (1))
       mydb.commit()
         
-    cur.execute("SELECT is_suspended FROM students WHERE student_uid = %s", (session['uid'],))
+    cur.execute("SELECT is_suspended FROM students WHERE uid = %s", (session['uid'],))
     suspended = cur.fetchone()
     mydb.commit()
 
-    return render_template("SHome.html", title = 'Student Logged In', data = data, suspended = suspended)
+    return render_template("SHome.html", title = 'Student Logged In', data = data, suspended = suspended, degree = degree)
   
   else:
     return redirect('/')
@@ -1144,19 +1248,20 @@ def form():
 def applygrad():
    
   # might need an 'applied_grad' table to keep track of the students who've applied for graduation
+  # may need to merge with APPS?
 
    return render_template("applygrad.html")
 
 # alumni
-@app.route("/Ahome")
-def Ahome():
+@app.route("/alum_home")
+def alum_home():
     
     if sessionType() == 'alumni':
       cur = mydb.cursor(dictionary = True)
       cur.execute("SELECT address, uid FROM users WHERE username = %s", (session['username'],))
       data = cur.fetchone()
       mydb.commit()
-      return render_template("Ahome.html", title = 'Alumni Logged In', data = data)
+      return render_template("alum_home.html", title = 'Alumni Logged In', data = data)
     
     else:
       return redirect('/')
@@ -1166,6 +1271,7 @@ def Ahome():
 def coursehist(id):
 
   if sessionType() == 'sysadmin' or sessionType() == 'student' or sessionType() == 'alumni':
+    type = sessionType()
     #connect to the database
     cur = mydb.cursor(dictionary = True)
 
@@ -1222,10 +1328,166 @@ def coursehist(id):
         num_courses = 1
       gpa = grade_points / num_courses
       gpa = round(gpa, 2)
-      return render_template("coursehist.html", data = data, courses = courses, id = id, gpa = gpa)
+      return render_template("coursehist.html", data = data, courses = courses, id = id, gpa = gpa, type = type)
   else:
     return redirect('/')
   
   # END OF STUDENT FUNCTIONALITY
 
-app.run(host='0.0.0.0', port=5003)
+# applicant
+
+# home page
+@app.route("/Ahome", methods=['GET', 'POST'])
+def Ahome():
+
+  if(session['user_type'] != "applicant"):
+      return redirect(url_for('logout'))
+  
+  if request.method == 'POST':
+     if request.form['button'] == "fill":
+        return redirect(url_for('applicationFillout'))
+    
+     if request.form['button'] == "status":
+        return redirect(url_for('seeStatus'))
+     
+  cursor = mydb.cursor(dictionary=True)
+
+  cursor.execute("SELECT appStatus FROM applicant WHERE uid = %s", (session["uid"],))
+  status = cursor.fetchone()
+
+  return render_template("Ahome.html", status=status)
+
+
+@app.route('/email', methods = ['GET', 'POST'])
+def email():
+    return render_template("email.html")
+
+# applicant fills out application
+@app.route("/applicationFillout", methods=['GET', 'POST'])
+def applicationFillout():
+
+    if(session['user_type'] != "applicant"):
+        return redirect("/")
+    
+    return render_template("fillApp.html")
+
+# after submitting application
+@app.route ("/postSubmittingApp", methods=['GET', 'POST'])
+def postSubmittingApp():
+
+    if(session['user_type'] != "applicant"):
+        return redirect("/")
+
+    if request.method == 'POST':
+                
+        degreeSeeking = request.form["degreeSeeking"]
+        MScheck = request.form["MScheck"]
+        MSmajor = request.form["MSmajor"]
+        MSuniversity = request.form["MSuniversity"]
+        if(request.form["MSgpa"] == ""):
+            MSgpa = 0
+        else:
+            MSgpa = float(request.form["MSgpa"])
+
+        if(request.form["MSyear"] == ""):
+            MSyear = 0
+        else:
+            MSyear = int(request.form["MSyear"])
+        BAcheck = request.form["BAcheck"]
+        BAmajor = request.form["BAmajor"]
+        if(request.form["BAyear"] == ""):
+            BAyear = 0
+        else:
+            BAyear = int(request.form["BAyear"])
+        BAuniversity = request.form["BAuniversity"]
+        if(request.form["BAgpa"] == ""):
+            BAgpa = 0
+        else:
+            BAgpa = float(request.form["BAgpa"])
+        if(request.form["GREverbal"] == ""):
+            GREverbal = 0
+        else:
+            GREverbal = int(request.form["GREverbal"])
+        if(request.form["GREquantitative"] == ""):
+            GREquantitative = 0
+        else:
+            GREquantitative = int(request.form["GREquantitative"])
+        if(request.form["GREyear"] == ""):
+            GREyear = 0
+        else:
+            GREyear = int(request.form["GREyear"])
+        if(request.form["GREadvancedScore"] == ""):
+            GREadvancedScore = 0
+        else:
+            GREadvancedScore = int(request.form["GREadvancedScore"])
+        GREadvancedSubject = request.form["GREadvancedSubject"]
+        if(request.form["TOEFLscore"] == ""):
+            TOEFLscore = 0
+        else:
+            TOEFLscore = int(request.form["TOEFLscore"])
+        TOEFLdata = request.form["TOEFLdata"]
+        priorWork = request.form["priorWork"]
+        startDate = request.form["startDate"]
+        transcriptStatus = "Not Received"
+        r1status = "Not Recieved"
+        r1writer = request.form["r1writer"]
+        r1email = request.form["r1email"]
+        r1title = request.form["r1title"]
+        r1affiliation = request.form["r1affiliation"]
+        r1letter = "Fill When Recieved"
+        r2status = "Not Recieved"
+        r2writer = request.form["r2writer"]
+        r2email = request.form["r2email"]
+        r2title = request.form["r2title"]
+        r2affiliation = request.form["r2affiliation"]
+        r2letter =  "Fill When Recieved"
+        r3status = "Not Recieved"
+        r3writer =  request.form["r3writer"]
+        r3email = request.form["r3email"]
+        r3title = request.form["r3title"]
+        r3affiliation = request.form["r3affiliation"]
+        r3letter =   "Fill When Recieved"
+        cursor = mydb.cursor(dictionary= True)
+        cursor.execute (
+            "INSERT INTO applicationForm (uid, degreeSeeking,MScheck,MSmajor,MSyear,MSuniversity,MSgpa,BAcheck,BAmajor,BAyear,BAuniversity,BAgpa,GREverbal,GREquantitative,GREyear,GREadvancedScore,GREadvancedSubject,TOEFLscore,TOEFLdate,priorWork,startDate,transcriptStatus,r1status,r1writer,r1email,r1title,r1affiliation,r1letter,r2status,r2writer,r2email,r2title,r2affiliation,r2letter,r3status,r3writer,r3email,r3title,r3affiliation,r3letter) VALUES (%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s,%s, %s, %s, %s)", (session['uid'], degreeSeeking,MScheck,MSmajor,MSyear,MSuniversity,MSgpa,BAcheck,BAmajor,BAyear,BAuniversity,BAgpa,GREverbal,GREquantitative,GREyear,GREadvancedScore,GREadvancedSubject,TOEFLscore,TOEFLdata,priorWork,startDate,transcriptStatus,r1status,r1writer,r1email,r1title,r1affiliation,r1letter,r2status,r2writer,r2email,r2title,r2affiliation,r2letter,r3status,r3writer,r3email,r3title,r3affiliation,r3letter)
+        )
+        mydb.commit()
+
+        decision = "Application Awaiting Materials"
+        cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", (decision,session['uid']))
+        mydb.commit()
+
+        return render_template("Ahome.html")
+    
+    return redirect ('/')
+
+# applicant can check application status
+@app.route('/seeStatus', methods=['GET', 'POST'])
+def seeStatus():
+
+  if(session['user_type'] != "applicant"):
+    return redirect(url_for('logout'))
+
+  cursor = mydb.cursor(dictionary=True)
+
+  cursor.execute("SELECT appStatus FROM applicant WHERE uid = %s", (session["uid"],))
+  status = cursor.fetchone()
+
+  if status != "Application Incomplete":
+
+    cursor.execute("SELECT transcriptStatus FROM applicationForm WHERE uid = %s", (session["uid"],))
+    transcriptstatus = cursor.fetchone()
+    cursor.execute("SELECT r1status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r1status = cursor.fetchone()
+    cursor.execute("SELECT r2status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r2status = cursor.fetchone()
+    cursor.execute("SELECT r3status FROM applicationForm WHERE uid = %s", (session["uid"],))
+    r3status = cursor.fetchone()
+    cursor.execute("SELECT decision FROM applicant WHERE uid = %s", (session["uid"],))
+    decision = cursor.fetchone()
+
+  return render_template ("seeStatus.html", status = status, transcriptstatus = transcriptstatus, r1status = r1status, r2status = r2status, r3status = r3status, decision = decision)
+
+# END OF APPLICANT FUNCTIONALITY
+
+app.run(host='0.0.0.0', port=5004)

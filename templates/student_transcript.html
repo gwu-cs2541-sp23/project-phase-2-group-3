@@ -4,6 +4,7 @@
     <h2>Name: {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
     <h4>Email: {{transcript[0]['email']}} </h4>
     <body>
+        {%include "navbar.html"%}
         {% for grade in transcript %}
             <li> {{ grade.title }} -- {{ grade.dept }} {{ grade.class_number }}
                 <li> Class ID: {{ grade.cid }}</li>

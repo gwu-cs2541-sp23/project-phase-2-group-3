@@ -6,8 +6,9 @@
   </head>
 
   <body>
+    {%include "navbar.html"%}
 <center>
-    <h1 class = "sameen"> Information </h1>
+    <h1 class = "sameen"> User Information </h1>
     </center>
       {% if not data %}
         <p>No information found</p>
@@ -69,7 +70,6 @@
     </form>
 
     {% if not suspended %}
-    {% else %}
     <p>Currectly Suspended</p>
     {% endif %}
     </div>
@@ -79,10 +79,11 @@
     <button type="submit">Remove</button>
     </form>
 
+    {% endif %}
     <form action = "/SAhome"> 
-     <button type="submit">System Admin Home Page</button>
-    </form>
-    </div>
+      <button type="submit">System Admin Home Page</button>
+     </form>
+     </div>
 </body>
 
 </html>

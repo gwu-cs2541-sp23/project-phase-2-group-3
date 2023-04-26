@@ -3,6 +3,7 @@
     <title> Master's Students </title>
     <h1> Master's Students </h1>
     <body>
+        {%include "navbar.html"%}
         {% for student in m_advisees %}
         <li> {{ student[1]['first_name'] }} {{ student[1]['last_name']}} </li>
         <li> ID: {{ student[0]['uid'] }}</li>
@@ -17,5 +18,11 @@
 
     <form action = "/Fhome"> 
         <button type="submit">Employee Home Page</button>
+    </form>
+    <form action="/advisor_home"> 
+        <button type="submit">Advisor Home Page</button>
+    </form>
+    <form action="/logout"> 
+        <button type="submit">Log Out</button>
     </form>
 </html>

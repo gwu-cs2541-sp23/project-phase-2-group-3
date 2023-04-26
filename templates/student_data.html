@@ -4,35 +4,28 @@
     <title>Student Data</title>
   </head>
   <body>
+    {%include "navbar.html"%}
     <h1 style="text-align:center;"> Student Data </h1>
     <h2> {{student_info[0][0]['first_name']}} {{student_info[0][0]['last_name']}} </h2>
-    <h3> Personal Information </h3>
-    <li> Email: {{student_info[0][0]['email']}}</li>
-    <li> Address: {{student_info[0][0]['address']}}</li>
+    <p> Address: {{student_info[0][0]['address']}}</p>
 
     <h3> Academic Information </h3>
     <li> ID: {{student_info[0][0]['uid']}} </li>
-    <li> {% if student_info[2]['degree_type'] == 'MS': %}
+    <li> {% if student_info[2]['degree_type'] == 'ms' %}
             Master's student
           {% endif %}
-          {% if student_info[2]['degree_type'] == 'PHD': %}
+          {% if student_info[2]['degree_type'] == 'phd' %}
             PhD student
-            <li> {% if student_info[-1][0]['thesis_approved'] == 'False': %}
-                Thesis status: Not Approved
-                {% endif %}
-                {% if student_info[-1][0]['thesis_approved'] == 'True': %}
-                Thesis status: Approved
-                {% endif %}
+            {% if student_info[-1][0]['thesis_approved'] == 'False': %}
+            <li>Thesis status: Not Approved
+              {% endif %}
+              {% if student_info[-1][0]['thesis_approved'] == 'True': %}
+              Thesis status: Approved
             </li>
-          {% endif%}
+            {% endif %}
+          {% endif %}
     </li>
-    <li> Advisor: {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}} 
-        {% if student_info[6][0]['first_name'] == 'N/A': %}
-          <form action="/assign_advisor/{{student_info[0][0]['uid']}}"> 
-            <button type="submit">Assign Advisor</button>
-        </form>
-        {% endif %}
-    </li>
+    <li> Advisor: {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}} </li>
     <li> GPA: {{student_info[4]['gpa']}} </li>
     <li> Total credit hours (not including classes IP): {{student_info[5]['total_credit_hours']}} </li>
     <li> {% if student_info[1]['eligible'] == 'False': %}
@@ -54,8 +47,8 @@
 
     <hr color=#3F000F;>
 
-    <form action="/gradsec"> 
-      <button type="submit">All students</button>
+    <form action="/GShome"> 
+      <button type="submit">Graduate Secretary Home Page</button>
     </form>
 
     <form action="/logout"> 

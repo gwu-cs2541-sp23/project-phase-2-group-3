@@ -4,6 +4,7 @@
     <title> Graduation </title>
   </head>
   <body>
+    {%include "navbar.html"%}
     <h1> Graduation Successful! </h1> 
     <h2> {% if data[1][0]['degree_type'] == 'MS' %}
           {{data[2][0]['first_name']}} {{data[2][0]['last_name']}} has successfully graduated with a Master's in Computer Science.

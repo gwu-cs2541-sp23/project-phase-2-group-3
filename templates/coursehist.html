@@ -6,6 +6,7 @@
   </head>
 
   <body>
+    {%include "navbar.html"%}
 <center>
     <h1 class = "sameen"> Course History </h1>
     </center>
@@ -66,15 +67,29 @@
     {% endfor %}
     {% endif %}
     </ul>
-
-
     {% endif %}
     
+    <br>
+
+    {% if type == 'student' %}
+      <form action = "/Shome"> 
+        <button type="submit">Student Home Page</button>
+      </form>
+    {% endif %}
+
+    {% if type == 'sysadsim' %}
+      <form action = "/SAhome"> 
+        <button type="submit">System Admin Home Page</button>
+      </form>
+    {% endif %}
+
+    {% if type == 'alumni' %}
+      <form action = "/alum_home"> 
+        <button type="submit">Alumni Home Page</button>
+      </form>
+    {% endif %}
 
     
-    <form action = "/"> 
-    <button type="submit">Home Page</button>
-    </form>
 
 
 </body>

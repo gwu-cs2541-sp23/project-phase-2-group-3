@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<HTML>
+    <!-- THIS IS A NAVBAR THAT WE CAN ADD TO EVERY PAGE -->
+
+  <head>
+    <link href="/static/styles.css" rel="stylesheet" type="text/css" />
+    <title> navbar </title>
+  </head>
+
+  <body> 
+    <div class = "navbartext"><h3>Welcome to the Farchael University</h3></div>
+    <div class = "navbarlinks">
+      <!-- <h3>Welcome to our University!</h3> -->
+      
+      <a href = "/">login</a>
+      <a href = "/Portal"> portal </a>
+      {% if session["user_type"] == "student_p" or session["user_type"] == "student_m" %}
+        <a href = "/Transcript{{session['uid']}}"> transcript </a>
+      {% endif %}
+      <a href = "/Account_Creation"> signup </a>
+      <a href = "/Logout"> logout </a></h4>
+      <!-- <img src = "static/logo.png"> -->
+    </div>
+    <!-- <div class = "navbarimg">
+      <img src = "static/logo.png">
+    </div> -->
+  </body>
+
+</HTML>
