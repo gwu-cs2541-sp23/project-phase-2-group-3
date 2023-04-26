@@ -11,7 +11,7 @@
 
     <h3> Academic Information </h3>
     <li> ID: {{student_info[0][0]['uid']}} </li>
-    <li> {% if student_info[2]['degree_type'] == 'ms' %}
+    <li> {% if student_info[2][0]['degree_type'] == 'ms' %}
             Master's student
           {% endif %}
           {% if student_info[2]['degree_type'] == 'phd' %}
