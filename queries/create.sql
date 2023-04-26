@@ -19,6 +19,7 @@ CREATE TABLE students (
     degree_type varchar(4) NOT NULL, --possible choices: PHD or MS (hardcode those options into form, don't make a query)
     is_suspended BOOLEAN,
     thesis_approved BOOLEAN,
+    applied_grad BOOLEAN,
     PRIMARY KEY(uid),
     FOREIGN KEY(uid)
         REFERENCES users(uid)
