@@ -28,8 +28,7 @@ def login():
         
         if x:
             session['username'] = name
-            session['password'] = password
-            session['type'] = x['user_type']
+            session['user_type'] = x['user_type']
             session['uid'] = x['uid']
             session['first_name'] = x['first_name']
             session['last_name'] = x['last_name']
@@ -90,9 +89,84 @@ def logout():
   session.clear()
   return redirect(url_for("login"))
 
-@app.route("/SAhome")
+@app.route("/SAhome", methods = ["GET", "POST"])
 def SAhome():
-  return render_template('SAhome.html')
+  if session['user_type'] != 'sysadmin':
+    return redirect(url_for('login'))
+
+  cursor = mydb.cursor(dictionary=True)
+
+  if request.method == 'POST':
+      if request.form["Form_Type"] == "Submit": #submit changes to existing user
+          uid = request.form["uid"]
+          username = request.form["username"]
+          first_name = request.form["first_name"]
+          last_name = request.form["last_name"]
+          ssn = request.form["ssn"]
+          address = request.form["address"]
+          user_type = request.form["user_type"]
+
+          user_data = (username, first_name, last_name,
+                       ssn, address, user_type, uid)
+          query = "UPDATE users SET username=(%s), first_name=(%s), last_name=(%s), ssn=(%s), address=(%s), user_type=(%s) WHERE uid=(%s)"
+          cursor.execute(query, user_data)
+          mydb.commit()
+
+          if user_type == "employee":
+              is_professor = is_reviewer = is_review_chair = is_advisor = False
+              privileges = request.form.getlist("employee_privileges")
+              if "professor" in privileges:
+                is_professor = True
+              if "reviewer" in privileges:
+                is_reviewer = True
+              if "chair" in privileges:
+                is_review_chair = True
+              if "advisor" in privileges:
+                is_advisor = True
+              
+              cursor.execute("UPDATE employee SET is_professor=(%s), is_reviewer=(%s), is_review_chair=(%s), is_advisor=(%s) WHERE uid=(%s)", (is_professor, is_reviewer, is_review_chair, is_advisor, uid))
+              mydb.commit()
+              
+      elif request.form["Form_Type"] == "Add User": #create new user
+        uid = random.randrange(10000000, 99999999)
+        user_data = (
+            uid,
+            request.form['username'],
+            'password',
+            request.form['first_name'],
+            request.form['last_name'],
+            request.form['ssn'],
+            request.form['address'],
+            request.form['user_type'])
+        cursor.execute('INSERT INTO users (uid, username, password, first_name, last_name, ssn, address, user_type) values (%s, %s, %s, %s, %s, %s, %s, %s);', user_data)
+        mydb.commit()
+
+        if request.form['user_type'] == "student":
+           cursor.execute('INSERT INTO students VALUES (%s, %s, %s, %s)', (uid, 'MS', False, False))
+           mydb.commit()
+        elif request.form['user_type'] == "employee":
+           cursor.execute('INSERT INTO employee VALUES (%s, %s, %s, %s, %s)', (uid, False, False, False, False))
+           mydb.commit()
+        elif request.form['user_type'] == "applicant":
+           cursor.execute('INSERT INTO appicant VALUES (%s, %s, %s)', (uid, 'Application Incomplete', 'Pending'))
+           mydb.commit()
+
+      elif request.form["Form_Type"] == "Delete": # remove existing user
+         cursor.execute("DELETE FROM users WHERE uid = %s", (request.form["uid"],))
+         mydb.commit()
+
+  cursor.execute("SELECT * FROM users")
+  searched_users = cursor.fetchall()
+  cursor.execute("SELECT * FROM employee")
+  result = cursor.fetchall()
+  employee_privs = dict()
+  for employee in result:
+     employee_privs[employee['uid']] = {'is_professor' : employee['is_professor'],
+                                        'is_reviewer' : employee['is_reviewer'],
+                                        'is_review_chair' : employee['is_review_chair'],
+                                        'is_advisor' : employee['is_advisor'],}
+     
+  return render_template('SAhome.html', searched_users=searched_users, employee_privs=employee_privs)
 
 @app.route("/GShome")
 def GShome():

@@ -20,6 +20,7 @@ CREATE TABLE students (
     degree_type varchar(4) NOT NULL, --possible choices: PHD or MS (hardcode those options into form, don't make a query)
     is_suspended BOOLEAN,
     thesis_approved BOOLEAN,
+    applied_grad BOOLEAN,
     PRIMARY KEY(uid),
     FOREIGN KEY(uid)
         REFERENCES users(uid) ON DELETE CASCADE
@@ -37,7 +38,7 @@ CREATE TABLE employee (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS reviewers;
+DROP TABLE IF EXISTS reviewer_assignments;
 CREATE TABLE reviewer_assignments (
     reviewer_uid CHAR(8),
     applicant_uid CHAR(8),
@@ -48,7 +49,7 @@ CREATE TABLE reviewer_assignments (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS advisors;
+DROP TABLE IF EXISTS advisor_assignments;
 CREATE TABLE advisor_assignments (
     advisor_uid CHAR(8),
     student_uid CHAR(8),
@@ -200,6 +201,12 @@ CREATE TABLE review_form (
         REFERENCES applicant(uid) ON DELETE CASCADE,
    FOREIGN KEY (reviewer_uid) 
         REFERENCES employee(uid) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS form1_answer;
+CREATE TABLE form1_answer (
+    student_uid CHAR(8) NOT NULL,
+    cid INTEGER NOT NULL
 );
 
 
