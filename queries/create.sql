@@ -38,7 +38,7 @@ CREATE TABLE employee (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS reviewers;
+DROP TABLE IF EXISTS reviewer_assignments;
 CREATE TABLE reviewer_assignments (
     reviewer_uid CHAR(8),
     applicant_uid CHAR(8),
@@ -49,7 +49,7 @@ CREATE TABLE reviewer_assignments (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS advisors;
+DROP TABLE IF EXISTS advisor_assignments;
 CREATE TABLE advisor_assignments (
     advisor_uid CHAR(8),
     student_uid CHAR(8),
