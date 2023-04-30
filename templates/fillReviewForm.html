@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Fillout Review Form</title>
+    </head>
+
+    <body>
+
+        {%include "navbar.html"%}
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+        <br>
+
+        <form action="/submitReviewForm" method="POST">
+        <g1>studentID*: <input type="text" name="studentID" minlength = "1" required></g1> <br>
+        <g1>reviewer*: <input type="text" name="reviewer" minlength = "1" required></g1> <br>
+        <g1>semesterApplied*: <input type="text" name="semesterApplied" minlength = "1" required></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>r1rating*: <input type="text" name="r1rating" minlength = "1" required></g1> <br>
+        <g1>r1generic*: <input type="text" name="r1generic" minlength = "1" required></g1> <br>
+        <g1>r1credibl*: <input type="text" name="r1credible" minlength = "1" required></g1> <br>
+        <g1>r1from*: <input type="text" name="r1from" minlength = "1" required></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>r2rating: <input type="text" name="r2rating"></g1> <br>
+        <g1>r2generic: <input type="text" name="r2generic"></g1> <br>
+        <g1>r2credible: <input type="text" name="r2credible"></g1> <br>
+        <g1>r2from: <input type="text" name="r2from"></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>r3rating: <input type="text" name="r3rating"></g1> <br>
+        <g1>r3generic: <input type="text" name="r3generic"></g1> <br>
+        <g1>r3credible: <input type="text" name="r3credible"></g1> <br>
+        <g1>r3from: <input type="text" name="r3from"></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>GASrating: <input type="text" name="GASrating"></g1> <br>
+        <g1>decision*: <input type="text" name="decision" minlength = "1" required></g1> <br>
+        <g1>thoughts: <input type="text" name="thoughts"></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>deficiencies: <input type="text" name="deficiencies"></g1> <br>
+        <g1>rejectReason: <input type="text" name="rejectReason"></g1> <br>
+
+        <br>
+        <br>
+
+        <g1>Submit: <input type="submit" name="submit"></g1> <br>
+
+        </form> 
+    </body>
+</html>

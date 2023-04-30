@@ -63,7 +63,7 @@ CREATE TABLE advisor_assignments (
 DROP TABLE IF EXISTS applicant;
 CREATE TABLE applicant (   
    uid CHAR(8) NOT NULL,
-   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Under Review, Decision Pending
+   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered
    decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
    PRIMARY KEY (uid),
    FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
@@ -205,9 +205,8 @@ CREATE TABLE review_form (
 
 DROP TABLE IF EXISTS form1_answer;
 CREATE TABLE form1_answer (
-    student_uid CHAR(8) NOT NULL,
-    cid INTEGER NOT NULL
+  student_uid int(8) NOT NULL,
+  cid INTEGER NOT NULL
 );
-
 
 SET FOREIGN_KEY_CHECKS = 1;

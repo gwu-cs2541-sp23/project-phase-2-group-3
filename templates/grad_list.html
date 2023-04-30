@@ -1,0 +1,53 @@
+<html>
+  <head>
+     <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <title>Graduates List</title>
+ 
+  </head>
+
+  <body>
+    {%include "navbar.html"%}
+<center>
+    <h1 class = "sameen"> All Graduate Students</h1>
+    </center>
+
+    <ul>
+      <h3>Master's Graduate Students</h3>
+      {% if not masters %}
+        <p>No Master's graduate students found</p>
+        {% else %}
+        {% for p in masters: %}
+          <p> 
+          <li>
+            <a href="/user/{{p[0]['uid']}}/{{p[0]['user_type']}}" class="link">{{p[0]['first_name']}} {{p[0]['last_name']}} </a>
+      
+          </li>
+         </p>
+    {% endfor %}
+    {% endif %}
+    </ul>
+
+    <ul>
+          <h3>PhD Graduate Students</h3>
+          {% if not phd %}
+          <p>No PhD graduate students found</p>
+          {% else %}
+          {% for p in phd: %}
+            <p> 
+            <li>
+                <a href="/user/{{p['uid']}}/{{p['user_type']}}" class="link">{{p['first_name']}} {{p['last_name']}} </a>
+    
+            </li>
+           </p>
+      {% endfor %}
+      {% endif %}
+      </ul>
+
+    <form action = "/SAhome"> 
+    <button type="submit">System Admin Home Page</button>
+    </form>
+
+
+</body>
+
+</html>

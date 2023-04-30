@@ -1,0 +1,68 @@
+<html>
+  <head>
+     <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <title>Student Logged In</title>
+ 
+  </head>
+  <body>
+    {%include "navbar.html"%}
+ <center>
+    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
+ </center>
+
+    <div class="buttons">
+
+    <form action = "/updateinfo" method = "POST"> 
+      <h3>University ID: {{ session['uid'] }}</h3>
+      {% if degree[0]['degree_type'] == 'ms' %}
+        <h3> Degree: Master's </h3>
+      {% endif %}
+      {% if degree[0]['degree_type'] == 'phd' %}
+      <h3> Degree: PhD </h3>
+    {% endif %}
+
+      <h4>Last Name: 
+        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
+      </h4>
+
+      <h4> First Name: 
+       <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
+      </h4>
+
+    <h4>Address: 
+    <input type="text" placeholder="{{data['address']}}" name= "address">
+    </h4>
+
+    <button type="submit">Submit</button>
+    </form>
+
+    </div>
+
+    <div class = "buttons">
+
+    <form action = "/form1" method = "GET"> 
+    <button type="submit">Form 1</button>
+    </form>
+
+    {% if not suspended %}
+      <form action = "/applygrad" method = "GET"> 
+      <button type="submit">Apply For Graduation</button>
+      </form>
+    {% else %}
+      <p>You can not apply for graduation since you are currectly suspended</p>
+    {% endif %}
+
+    <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
+    <button type="submit">View Enrollment Information</button>
+    </form>
+
+
+    <form action = "/logout"> 
+    <button type="submit">Log Out</button>
+    </form>
+
+    </div>
+
+
+  </body>
+</html>
