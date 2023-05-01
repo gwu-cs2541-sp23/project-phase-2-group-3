@@ -55,7 +55,11 @@
                     </td>
                     <td> <!-- misc field -->
                     {% if user["user_type"] == "student": %}
-                        <a href = "/Transcript{{user['uid']}}"> transcript</a>
+                        <a href = "/Transcript{{user['uid']}}"> transcript</a><br>
+                        <select name = "degree_type" id = "degree_type">
+                            <option value = "MS" selected> MS </option>
+                            <option value = "PHD"> PHD </option>
+                        </select>
                     {% elif user["user_type"] == "employee": %}
                         {% if employee_privs[user['uid']]['is_professor'] %}
                             <input type="checkbox" name="employee_privileges" value="professor" checked> Professor <br>

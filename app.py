@@ -168,6 +168,10 @@ def SAhome():
               
               cursor.execute("UPDATE employee SET is_professor=(%s), is_reviewer=(%s), is_review_chair=(%s), is_advisor=(%s) WHERE uid=(%s)", (is_professor, is_reviewer, is_review_chair, is_advisor, uid))
               mydb.commit()
+          elif user_type == "student":
+             degree_type = request.form["degree_type"]
+             cursor.execute("UPDATE students SET degree_type=(%s) WHERE uid=(%s)", (degree_type, uid))
+             mydb.commit()
               
       elif request.form["Form_Type"] == "Add User": #create new user
         uid = random.randrange(10000000, 99999999)
@@ -184,7 +188,7 @@ def SAhome():
         mydb.commit()
 
         if request.form['user_type'] == "student":
-           cursor.execute('INSERT INTO students VALUES (%s, %s, %s, %s)', (uid, 'MS', False, False))
+           cursor.execute('INSERT INTO students VALUES (%s, %s, %s, %s, %s)', (uid, 'MS', False, False, False))
            mydb.commit()
         elif request.form['user_type'] == "employee":
            cursor.execute('INSERT INTO employee VALUES (%s, %s, %s, %s, %s)', (uid, False, False, False, False))
