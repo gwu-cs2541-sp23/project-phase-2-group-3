@@ -209,15 +209,6 @@ def SAhome():
                                         'is_advisor' : employee['is_advisor'],}
      
   return render_template('SAhome.html', searched_users=searched_users, employee_privs=employee_privs)
-    if((request.form["first_name"])):
-      cur.execute("UPDATE users SET first_name = %s WHERE uid = %s", ( str((request.form["first_name"])), id))
-      mydb.commit()
-
-    if((request.form["address"])):
-      cur.execute("UPDATE users SET address = %s WHERE uid = %s", ( str((request.form["address"])), id))
-      mydb.commit()
-    
-    return redirect('/')
  
 @app.route("/GShome", methods=['GET', 'POST'])
 def GShome():
