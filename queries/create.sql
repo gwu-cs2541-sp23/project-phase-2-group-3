@@ -10,7 +10,7 @@ CREATE TABLE users (
     last_name varchar(32) NOT NULL,
     ssn varchar(16) NOT NULL UNIQUE,
     address varchar(64) NOT NULL,
-    user_type varchar(16) NOT NULL, --possible choices: sysadmin, gradsec, employee, student, applicant
+    user_type varchar(16) NOT NULL, --possible choices: sysadmin, gradsec, employee, student, applicant, alumni, recommender
     PRIMARY KEY(uid)
 );
 
@@ -21,6 +21,7 @@ CREATE TABLE students (
     is_suspended BOOLEAN,
     thesis_approved BOOLEAN,
     applied_grad BOOLEAN,
+    start_date varchar(16),
     PRIMARY KEY(uid),
     FOREIGN KEY(uid)
         REFERENCES users(uid) ON DELETE CASCADE
@@ -75,6 +76,8 @@ DROP TABLE IF EXISTS alumni;
 CREATE TABLE alumni ( --student is deleted from students when they become an alum
 	uid CHAR(8),
 	grad_year int(4) NOT NULL,
+    degree_type varchar(4) NOT NULL,
+    email varchar(64) NOT NULL,
     PRIMARY KEY(uid),
 	FOREIGN KEY (uid)
         REFERENCES users(uid) ON DELETE CASCADE
