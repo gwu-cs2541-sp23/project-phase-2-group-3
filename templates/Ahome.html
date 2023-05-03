@@ -21,4 +21,39 @@
 
   </form>
 
+  {% if decision['decision'] == "Admit" or decision['decision'] == "Admit With Aid" %}
+
+    <br>
+    <br>
+
+    <h3>Congrats! You have been accepted!</h3>
+
+    <p>Please use the button below to accept your admission as well as pay your deposit via apple pay!</p>
+    <p>After acceptance you will be logged out. You can log in as a student using your same credentials.</p>
+
+    <form action = "/Ahome" method = "POST">
+
+      <input type="submit" value="Accept and deposit!">
+      <input type="hidden" name="button" value="accept">
+  
+    </form>
+
+  {% endif %}
+
+  <br>
+  <br>
+
+  <h3> Update your personal information:</h3>
+        <form action = "/Ahome" method = "POST">
+            Username: <input type = "text" name = "username" > <br>
+            Password: <input type = "text" name = "password" > <br>
+            First Name: <input type = "text" name = "first_name" > <br>
+            Last Name: <input type = "text" name = "last_name" > <br>
+            SSN: <input type = "text" name = "ssn" > <br>
+            Address: <input type = "text" name = "address" > <br>
+           
+            <input type = "submit" name = "button" value = "Confirm update">
+            <input type="hidden" name="type" value="update">
+        </form>
+
 </body>

@@ -1,0 +1,21 @@
+<title> Grad Secretary Home Page </title>
+
+<body>
+    {%include "navbar.html"%}
+  <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+  <h2> universityID: {{session['uid'] }}</h2>
+  <br>
+  
+  <h2>Viewing Applicants Based On Criteria: {{search}}</h2>
+
+  <ul>
+
+    {%for person in applicants%}
+
+      <li>Student ID: {{person.uid}} <br> Name: {{person.first_name}} {{person.last_name}} </li>
+
+    {%endfor%}
+
+  </ul>
+  
+</body>
