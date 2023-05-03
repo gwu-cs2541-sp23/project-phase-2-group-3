@@ -1,10 +1,14 @@
 <html>
-    <head>
-        <title>View Application</title>
-    </head>
+  
+  <head>
+    
+    <title>Viewing Applicantion</title>
+    
+  </head>
 
-    <body>
-        {%include "navbar.html"%}
+  <body>
+
+    {%include "navbar.html"%}
     <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
     <h2> universityID: {{session['uid'] }}</h2>
     <br>
@@ -63,7 +67,16 @@
         <br>
         <br>
 
+        <p> If this field is blank, please update it and upload the transcript once received via the mail, otherwise the applicant has uploaded their transcript themselves.</p>
         <p>Status of their transcript: {{app.transcriptStatus}}</p>
+        <form action = "/GSupdateapp" method = "POST">
+
+            <input type="file" id="transcriptdoc" name="transcriptdoc">
+            <input type="submit" name="Transcript Recieved" value = "Transcript Recieved">
+            <input type="hidden" name="id" value="{{app.studentID}}">
+            <input type="hidden" name="type" value="transcript">
+
+        </form>
 
         <br>
         <br>
@@ -78,7 +91,7 @@
         <br>
         <br>
 
-        <p>If an applicant doesnt have a 2nd or 3rd reccomendation, these fields will be blank. It should not be held against the student.</p>
+        <p>If an applicant doesnt have a 2nd or 3rd reccomendation, these fields will be blank. It should not be held against the applicant.</p>
 
         <p>Status of their 2nd reccomendation letter: {{app.r2status}}</p>
         <p>Writer of their 2nd reccomendation letter: {{app.r2writer}}</p>
@@ -97,5 +110,6 @@
         <p>Affiliation of the writer of their 3rd reccomendation letter to the applicant: {{app.r3affiliation}}</p>
         <p>Their letter: <br> {{app.r3letter}}</p>
 
-    </body>
+  </body>
+
 </html>

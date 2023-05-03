@@ -1,11 +1,12 @@
 <html>
     <body>
+        <br>
         Greetings, 
-        
-        This email is informing you that you have been choosen by {{ session['username'] }} to write a letter of recommendation. 
-        
-        Please respond to this email with your letter. 
-        
+        <br>
+        This email is informing you that you have been choosen by {{ session['first_name'] }} {{ session['last_name'] }} (university ID: {{session['uid']}}) to write their letter of recommendation number {{recnum}}. 
+        <br>
+        Please log into our system with the login info username: reccomender, password: password to write your letter. 
+        <br>
         Thank you!
     </body>
 </html>
