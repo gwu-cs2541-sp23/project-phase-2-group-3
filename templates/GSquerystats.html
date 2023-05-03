@@ -1,0 +1,20 @@
+<title> Grad Secretary Home Page </title>
+
+<body>
+    {%include "navbar.html"%}
+  <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+  <h2> universityID: {{session['uid'] }}</h2>
+  <br>
+  
+  <h2>Viewing Applicant Statistics Based On Criteria: {{search}}</h2>
+
+  <ul>
+
+    <li>Number of applications: {{numapps}}</li>
+    <li>Number of accepted applicants: {{numadmits}}</li>
+    <li>Number of rejected applicants: {{numrejects}}</li>
+    <li>Average total GRE score: {{avgGRE}}</li>
+
+  </ul>
+  
+</body>

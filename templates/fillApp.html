@@ -13,16 +13,26 @@
 
             <g1> Your universityID*: </g1><input type="text" name="studentID" minlength = "1" required> <br>
 
-            <g1> Degree you intend to seek*: </g1><input type="text" name="degreeSeeking" minlength = "1" required> <br>
+            <g1> Degree you intend to seek*: </g1><select id="degreeSeeking" name="degreeSeeking">
+
+                <option value="MS">MS</option>
+                <option value="PHD">PHD</option>
+
+              </select><br>
 
             <br>
             <br>
 
-            <g1> Have you completed your masters?: </g1><input type="text" name="MScheck"> <br>
+            <g1> Have you completed your masters?: </g1><select id="MScheck" name="MScheck">
+
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+
+              </select><br>
 
             <br>
 
-            <g1> If you answered yes to the previous question, please fill out the following questiosn about your masters, if you answered no you may skip this section.</g1> <br>
+            <g1> If you answered yes to the previous question, please fill out the following questions about your masters, if you answered no you may skip this section.</g1> <br>
 
             <br>
 
@@ -37,7 +47,12 @@
             <br>
             <br>
 
-            <g1> Have you completed your bachelors (undergrad)? (Your answer to this question must be yes)*: </g1></g1><input type="text" name="BAcheck"><br>
+            <g1> Have you completed your bachelors (undergrad)? (Your answer to this question must be yes)*: </g1><select id="BAcheck" name="BAcheck">
+
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+
+              </select><br>
 
             <g1> What was your major? *: </g1><input type="text" name="BAmajor" minlength = "1" required><br>
 
@@ -70,9 +85,25 @@
             <br>
             <br>
 
-            <g1> For what start date are you applying to our university?*: </g1><input type="text" name="startDate" minlength = "1" required><br>
+            <g1> For what start date are you applying to our university?*: </g1><select id="semester" name="semester">
+
+                <option value="Fall">Fall</option>
+                <option value="Spring">Spring</option>
+
+              </select><select id="year" name="year">
+
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+
+              </select><br>
 
             <g1> If you have any prior work experince that may provide us more context into you outside the classroom, please enter it here *: </g1><input type="text" name="priorWork" minlength = "1" required><br>
+
+            <br>
+            <br>
+
+            <p> Please upload your transcript below, if you choose to mail your transcript, leave this blank and the graduate secretary will update these fields once it is recieved.</p>
+            <input type="file" id="transcriptdoc" name="transcriptdoc">
 
             <br>
             <br>
@@ -81,7 +112,7 @@
 
             <g1> What is their email? *: </g1><input type="text" name="r1email" minlength = "1" required><br>
 
-            <a href ="/email"> View the email we will send to your recommender</a> <br>
+            <a href ="/email/r1"> View the email we will send to your recommender</a> <br>
 
             <g1> What is their title at their institution? *: </g1><input type="text" name="r1title" minlength = "1" required><br>
 
@@ -90,11 +121,16 @@
             <br>
             <br>
 
+            <p>If you dont have a 2nd or 3rd reccomendation letter, these fields will be left blank. It will not be held against you.</p>
+
+            <br>
+            <br>
+
             <g1> Who is writing your 2nd reccomendation letter?: </g1><input type="text" name="r2writer"><br>
 
             <g1> What is their email?: </g1><input type="text" name="r2email"><br>
 
-            <a href ="/email"> View the email we will send to your recommender</a> <br>
+            <a href ="/email/r2"> View the email we will send to your recommender</a> <br>
 
             <g1> What is their title at their institution?: </g1><input type="text" name="r2title"><br>
 
@@ -107,7 +143,7 @@
 
             <g1> What is their email?: </g1><input type="text" name="r3email"><br>
 
-            <a href ="/email"> View the email we will send to your recommender</a> <br>
+            <a href ="/email/r3"> View the email we will send to your recommender</a> <br>
 
             <g1> What is their title at their institution?: </g1><input type="text" name="r3title"><br>
 

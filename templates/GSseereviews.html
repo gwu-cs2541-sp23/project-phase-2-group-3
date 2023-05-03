@@ -1,0 +1,74 @@
+<html>
+  
+  <head>
+    
+    <title>Viewing Reviews</title>
+    
+  </head>
+
+  <body>
+
+    {%include "navbar.html"%}
+    <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+    <h2> universityID: {{session['uid'] }}</h2>
+    <br>
+
+    <p>Fields left blank by the reviewer will appear blank on this page.</p>
+
+    <br>
+
+    <p>Viewing Reviews of Student: {{id}}</p>
+
+    <br>
+    <br>
+
+    {% for form in forms %}
+
+          <h3>University ID of the reviewer: {{form.reviewer_uid}}</h3>
+          <p>Semester the applicant is applying for: {{form.semesterApplied}}</p>
+
+          <br>
+          <br>
+
+          <p>Reviewer's rating of the 1st reccomendation letter: {{form.r1rating}}</p>
+          <p>Does the reviewer believe the letter is generic: {{form.r1generic}}</p>
+          <p>Does the reviewer believe the letter is credible: {{form.r1credible}}</p>
+          <p>Who the letter was from: {{form.r1from}}</p>
+
+          <br>
+          <br>
+
+          <p>If an applicant doesnt have a 2nd or 3rd reccomendation, these fields will be blank. It should not be held against the applicant.</p>
+
+          <br>
+          <br>
+
+          <p>Reviewer's rating of the 2nd reccomendation letter: {{form.r2rating}}</p>
+          <p>Does the reviewer believe the letter is generic: {{form.r2generic}}</p>
+          <p>Does the reviewer believe the letter is credible: {{form.r2credible}}</p>
+          <p>Who the letter was from: {{form.r2from}}</p>
+
+          <br>
+          <br>
+
+          <p>Reviewer's rating of the 3rd reccomendation letter: {{form.r3rating}}</p>
+          <p>Does the reviewer believe the letter is generic: {{form.r3generic}}</p>
+          <p>Does the reviewer believe the letter is credible: {{form.r3credible}}</p>
+          <p>Who the letter was from: {{form.r3from}}</p>
+
+          <br>
+          <br>
+
+          <p>Reviewer's Rating (0 = reject, 1 = admit, 2 = admit with aid): {{form.GASrating}}</p>
+          <p>Difficiences of the applicant: {{form.deficiencies}}</p>
+          <p>Reasons for rejection: {{form.rejectReason}}</p>
+          <p>Other thoughts from the reviewer: {{form.thoughts}}</p>
+
+          <br>
+          <br>
+
+      {% endfor %}
+
+  </body>
+
+</html>
