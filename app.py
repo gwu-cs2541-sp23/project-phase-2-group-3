@@ -193,6 +193,10 @@ def SAhome():
               
               cursor.execute("UPDATE employee SET is_professor=(%s), is_reviewer=(%s), is_review_chair=(%s), is_advisor=(%s) WHERE uid=(%s)", (is_professor, is_reviewer, is_review_chair, is_advisor, uid))
               mydb.commit()
+          elif user_type == "student":
+             degree_type = request.form["degree_type"]
+             cursor.execute("UPDATE students SET degree_type=(%s) WHERE uid=(%s)", (degree_type, uid))
+             mydb.commit()
               
       elif request.form["Form_Type"] == "Add User": #create new user
         uid = random.randrange(10000000, 99999999)
@@ -209,7 +213,7 @@ def SAhome():
         mydb.commit()
 
         if request.form['user_type'] == "student":
-           cursor.execute('INSERT INTO students VALUES (%s, %s, %s, %s)', (uid, 'MS', False, False))
+           cursor.execute('INSERT INTO students VALUES (%s, %s, %s, %s, %s)', (uid, 'MS', False, False, False))
            mydb.commit()
         elif request.form['user_type'] == "employee":
            cursor.execute('INSERT INTO employee VALUES (%s, %s, %s, %s, %s)', (uid, False, False, False, False))
@@ -222,8 +226,14 @@ def SAhome():
          cursor.execute("DELETE FROM users WHERE uid = %s", (request.form["uid"],))
          mydb.commit()
 
-  cursor.execute("SELECT * FROM users")
+  cursor.execute("SELECT * FROM users ORDER BY CASE WHEN user_type = 'sysadmin' THEN 0 ELSE 1 END, user_type")
   searched_users = cursor.fetchall()
+  cursor.execute("SELECT * FROM students")
+  students = cursor.fetchall()
+  student_types = dict()
+  for student in students:
+     student_types[student['uid']] = student['degree_type']
+     
   cursor.execute("SELECT * FROM employee")
   result = cursor.fetchall()
   employee_privs = dict()
@@ -233,7 +243,7 @@ def SAhome():
                                         'is_review_chair' : employee['is_review_chair'],
                                         'is_advisor' : employee['is_advisor'],}
      
-  return render_template('SAhome.html', searched_users=searched_users, employee_privs=employee_privs)
+  return render_template('SAhome.html', searched_users=searched_users, student_types=student_types, employee_privs=employee_privs)
  
 @app.route("/GShome", methods=['GET', 'POST'])
 def GShome():
