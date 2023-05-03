@@ -156,6 +156,9 @@ def GShome():
     
     if request.form['button'] == "alumni":
        return redirect(url_for('GSalumni'))
+    
+    if request.form['button'] == "admitted":
+       return redirect(url_for('GSadmitted'))
 
   return render_template('GShome.html')
 
@@ -531,6 +534,8 @@ def gs_enrolled_phd():
   else:
      return redirect('/')
   
+# all enrolled students by semester/year
+  
 # GS - list all alumni
 @app.route("/GSalumni")
 def GSalumni():
@@ -551,7 +556,7 @@ def GSalumni():
   else:
     return redirect('/')
   
-
+# all alumni with master's degree
 @app.route("/GSalumni/masters")
 def GSalumni_masters():
   if session['user_type'] == 'gradsec':
@@ -570,10 +575,31 @@ def GSalumni_masters():
 
   else:
     return redirect('/')
-
-
-
   
+
+# all alumni with phd
+@app.route("/GSalumni/phd")
+def GSalumni_phd():
+  if session['user_type'] == 'gradsec':
+    cur = mydb.cursor(dictionary = True)
+
+    cur.execute("SELECT uid FROM alumni WHERE degree_type = %s", ('PHD', ))
+    alumni_uids_phd = cur.fetchall()
+  
+    phd_alumni_info = list()
+    for x in range(len(alumni_uids_phd)):
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (alumni_uids_phd[x]['uid'], ))
+       info = cur.fetchall()
+       phd_alumni_info.append(info)
+
+    return render_template("GSalumni_list_phd.html", phd_alumni_info=phd_alumni_info)
+
+  else:
+    return redirect('/')
+  
+# list alumni by semester/year
+   
+
 # END OF GRADSEC FUNCTIONALITY
   
 @app.route("/advisor_home")
