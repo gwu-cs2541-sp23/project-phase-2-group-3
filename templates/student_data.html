@@ -10,6 +10,11 @@
     <p> Address: {{student_info[0][0]['address']}}</p>
 
     <h3> Academic Information </h3>
+    <li>
+      <form action="/student/{{student['uid']}}"> 
+        <button type="submit">View Transcript</button>
+      </form> 
+    </li>
     <li> ID: {{student_info[0][0]['uid']}} </li>
     <li> {% if student_info[2][0]['degree_type'] == 'ms' %}
             Master's student
