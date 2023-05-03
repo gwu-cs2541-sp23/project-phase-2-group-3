@@ -44,12 +44,12 @@
     <button type="submit">Form 1</button>
     </form>
 
-    {% if is_suspended == False %}
+    {% if suspended == False %}
       <form action = "/applygrad" method = "GET"> 
       <button type="submit">Apply For Graduation</button>
       </form>
     {% endif %}
-    {% if is_suspended == True %}
+    {% if suspended == True %}
       <p>You can not apply for graduation since you are currectly suspended. </p>
     {% endif %}
 

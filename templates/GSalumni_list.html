@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title>Alumni Data</title>
+  </head>
+  <body>
+    {%include "navbar.html"%}
+    <h2> <center>Alumni</center> </h2>
+    <h4> Sort By:
+      <form action="/GSalumni/masters"> 
+        <button type="submit">Master's Alumni</button>
+      </form>
+      <form action="/GSalumni/phd"> 
+        <button type="submit">PhD Alumni</button>
+      </form>
+      <p> Admit Year 
+          &nbsp&nbsp&nbsp
+          Enter Year: 
+          <input type="text" name="year">
+          <button type="submit">Submit</button>   
+      </p>
+    </h4>
+  
+    <hr color=#3F000F;>
+
+    {% if not alumni_info %}
+        <p> No alumni to be displayed. </p>
+    {% endif %}
+
+    {% for alumni in alumni_info: %}
+    <p> {{alumni['first_name']}} {{alumni['last_name']}}</a>
+    </p>
+    {% endfor %}
+
+    <hr color=#3F000F;>
+
+      <form action = "/GShome"> 
+        <button type="submit">Graduate Secretary Home Page</button>
+        </form>
+
+      <form action = "/logout"> 
+        <button type="submit">Log Out</button>
+        </form>
+
+  </body>
+</html>

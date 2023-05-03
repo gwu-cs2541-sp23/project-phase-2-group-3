@@ -153,6 +153,9 @@ def GShome():
     
     if request.form['button'] == "applicants":
       return redirect(url_for('GSapps'))
+    
+    if request.form['button'] == "alumni":
+       return redirect(url_for('GSalumni'))
 
   return render_template('GShome.html')
 
@@ -199,7 +202,6 @@ def GSapps():
 
   return render_template("GSApps.html", applicants=applicants)
   
-student_info = list()
 
 @app.route("/GSstudents", methods=['GET', 'POST'])
 def GSstudents():
@@ -210,9 +212,15 @@ def GSstudents():
 
     cur.execute("SELECT first_name, last_name, uid FROM users WHERE user_type = %s", ('student', ))
     students = cur.fetchall()
+    for student in students:
+       cur.execute ("SELECT degree_type FROM students WHERE uid = %s", (student['uid'], ))
+       degree = cur.fetchone()
+       degree_type = {'degree_type': degree}
+       student
     
   return render_template('GSstudents.html', students=students)
 
+student_info = list()
 
 @app.route('/student/<uid>', methods=['GET', 'POST'])
 def gs_student_data(uid):
@@ -326,7 +334,7 @@ def gs_student_data(uid):
 
     print(student_info)
     # requirements for master's students
-    if student_info[2][0]['degree_type'] == 'ms':
+    if student_info[2][0]['degree_type'] == 'MS':
         # check gpa
         if student_info[4]['gpa'] < 3.0:
             student_info[1]['eligible'] = 'False'
@@ -349,7 +357,7 @@ def gs_student_data(uid):
             student_info[1]['reason'].append('Has not taken enough classes outside of CS')
 
     # requirements for phd students
-    if student_info[2][0]['degree_type'] == 'phd':
+    if student_info[2][0]['degree_type'] == 'PHD':
         # check gpa
         if student_info[4]['gpa'] < 3.5:
             student_info[1]['eligible'] = 'False'
@@ -387,7 +395,6 @@ def gs_student_data(uid):
     cur.execute("SELECT first_name, last_name FROM users WHERE uid = %s", (advisor_id[0]['advisor_uid'], ))
     advisor_name = cur.fetchall()
     student_info.insert(6, advisor_name)
-    print(student_info)
     
     return render_template ("student_data.html", student_info=student_info)
   
@@ -439,7 +446,7 @@ def gs_all_suspended():
   else:
     return redirect('/')
   
-# assign advisor to student
+# assign advisor to ALL students
 @app.route('/assignadvisor')
 def assignadvisor():
   if session['user_type'] == 'gradsec':
@@ -454,36 +461,122 @@ def assignadvisor():
        cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (advisor_ids[x]['uid'], ))
        advisors = cur.fetchall()
 
-    # get masters students
-    cur.execute("SELECT uid from students where degree_type = %s", ('MS', ))
-    ms_ids = cur.fetchall()
-    mstudents = list()
-    for x in range(len(ms_ids)):
-       if not ms_ids:
-         break
-       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (ms_ids[x]['uid'],))
-       ms_student = cur.fetchall()
-       mstudents.append(ms_student)
+    # get students
+    cur.execute("SELECT uid, first_name, last_name FROM users WHERE user_type = %s", ('student', ))
+    students = cur.fetchall()
 
-    cur.execute("SELECT uid from students where degree_type = %s", ('PHD', ))
-    phd_ids = cur.fetchall()
-    pstudents = list()
-    for x in range(len(phd_ids)):
-       if not phd_ids:
-         break
-       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (phd_ids[x]['uid'],))
-       phd_student = cur.fetchall()
-       pstudents.append(phd_student)
-
-    return render_template("assign_advisor.html", advisors = advisors, mstudents = mstudents, pstudents = pstudents, type = type)
+    return render_template("assign_advisor.html", advisors = advisors, students=students, type = type)
   
   else:
     return redirect('/')
 
+@app.route('/assigned', methods = ['GET', 'POST'])
+def assigned():
+
+  if session['user_type'] == 'gradsec':
+
+    if request.method == "POST":
+      cur = mydb.cursor(dictionary = True)
+      student = (request.form["student"])
+      advisor = (request.form["advisor"])
+
+      # check if the student already has an advisor
+      cur.execute("SELECT student_uid FROM advisor_assignments WHERE student_uid = %s", (student, ))
+      student_uid = cur.fetchall()
+      # if the student is already in the table, update their advisor
+      if student_uid:
+        cur.execute("UPDATE advisor_assignments SET advisor_uid = %s WHERE student_uid = %s", (advisor, student))
+        mydb.commit()
+      # if the student doesn't have an advisor, insert both of their information
+      if not student_uid:
+         cur.execute("INSERT INTO advisor_assignments (advisor_uid, student_uid) VALUES (%s, %s)", (advisor, student))
+         mydb.commit()
+      return redirect('/GSstudents')
+  else:
+    return redirect('/')
+
+@app.route("/GSenrolled_masters")
+def gs_enrolled_masters():
+  if session['user_type'] == 'gradsec':
+      
+    cur = mydb.cursor(dictionary = True)
+    cur.execute("SELECT uid FROM students WHERE degree_type = %s", ('MS', ))
+    masters_uids = cur.fetchall()
+
+    masters_info = list()
+    for x in range(len(masters_uids)):
+        cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (masters_uids[x]['uid'], ))
+        info = cur.fetchall()
+        masters_info.append(info)
+
+    return render_template("GSmasters.html", masters_info = masters_info)
+  else:
+     return redirect('/')
+  
+@app.route("/GSenrolled_phd")
+def gs_enrolled_phd():
+  if session['user_type'] == 'gradsec':
+      
+    cur = mydb.cursor(dictionary = True)
+    cur.execute("SELECT uid FROM students WHERE degree_type = %s", ('PHD', ))
+    phd_uids = cur.fetchall()
+
+    phd_info = list()
+    for x in range(len(phd_uids)):
+        cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (phd_uids[x]['uid'], ))
+        info = cur.fetchall()
+        phd_info.append(info)
+
+    return render_template("GSphd.html", phd_info = phd_info)
+  else:
+     return redirect('/')
+  
+# GS - list all alumni
+@app.route("/GSalumni")
+def GSalumni():
+  if session['user_type'] == 'gradsec':
+    cur = mydb.cursor(dictionary = True)
+
+    cur.execute("SELECT uid FROM alumni")
+    alumni_uids = cur.fetchall()
+  
+    alumni_info = list()
+    for x in range(len(alumni_uids)):
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (alumni_uids[x]['uid'], ))
+       info = cur.fetchall()
+       alumni_info.append(info)
+
+    return render_template("GSalumni_list.html", alumni_info=alumni_info)
+
+  else:
+    return redirect('/')
+  
+
+@app.route("/GSalumni/masters")
+def GSalumni_masters():
+  if session['user_type'] == 'gradsec':
+    cur = mydb.cursor(dictionary = True)
+
+    cur.execute("SELECT uid FROM alumni WHERE degree_type = %s", ('MS', ))
+    alumni_uids_ms = cur.fetchall()
+  
+    ms_alumni_info = list()
+    for x in range(len(alumni_uids_ms)):
+       cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (alumni_uids_ms[x]['uid'], ))
+       info = cur.fetchall()
+       ms_alumni_info.append(info)
+
+    return render_template("GSalumni_list_ms.html", ms_alumni_info=ms_alumni_info)
+
+  else:
+    return redirect('/')
+
+
+
   
 # END OF GRADSEC FUNCTIONALITY
   
-@app.route("/advisor_home",)
+@app.route("/advisor_home")
 def advisor_home():
   # check if employee
   if session['user_type'] == 'employee':
@@ -545,8 +638,6 @@ def phd_students():
 
   else:
     return redirect('/')
-  
-
 
 @app.route("/Fhome", methods=['GET', 'POST'])
 def Fhome():
@@ -559,7 +650,7 @@ def Fhome():
       return redirect(url_for('?????'))
     
     if request.form['button'] == "advisor":
-      return redirect(url_for('?????'))
+      return redirect(url_for('advisor_home'))
     
     if request.form['button'] == "chair":
       return redirect(url_for('?????'))
@@ -785,10 +876,10 @@ def Shome():
       mydb.commit()
         
     cur.execute("SELECT is_suspended FROM students WHERE uid = %s", (session['uid'], ))
-    suspended = cur.fetchone()
+    suspended = cur.fetchall()
     mydb.commit()
 
-    return render_template("SHome.html", title = 'Student Logged In', data = data, suspended = suspended, degree = degree)
+    return render_template("Shome.html", title = 'Student Logged In', data = data, suspended = suspended, degree = degree)
   
   else:
     return redirect('/')
@@ -1117,4 +1208,4 @@ def postSubmittingApp():
 
 # END OF APPLICANT
 
-app.run(host='0.0.0.0', port=5004)
+app.run(host='0.0.0.0', port=8080)

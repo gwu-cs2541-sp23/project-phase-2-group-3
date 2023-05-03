@@ -11,10 +11,10 @@
 
     <h3> Academic Information </h3>
     <li> ID: {{student_info[0][0]['uid']}} </li>
-    <li> {% if student_info[2][0]['degree_type'] == 'ms' %}
+    <li> {% if student_info[2][0]['degree_type'] == 'MS' %}
             Master's student
           {% endif %}
-          {% if student_info[2]['degree_type'] == 'phd' %}
+          {% if student_info[2][0]['degree_type'] == 'PHD' %}
             PhD student
             {% if student_info[-1][0]['thesis_approved'] == 'False': %}
             <li>Thesis status: Not Approved
@@ -25,7 +25,8 @@
             {% endif %}
           {% endif %}
     </li>
-    <li> Advisor: {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}} </li>
+    <li> Advisor: {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}} 
+    </li>
     <li> GPA: {{student_info[4]['gpa']}} </li>
     <li> Total credit hours (not including classes IP): {{student_info[5]['total_credit_hours']}} </li>
     <li> {% if student_info[1]['eligible'] == 'False': %}

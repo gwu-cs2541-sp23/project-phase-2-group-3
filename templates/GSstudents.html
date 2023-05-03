@@ -5,17 +5,39 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h1 style="text-align:center;"> Welcome, Graduate Secretary! </h1>
-    <h2> All Students </h2>
-        {% for student in students: %}
-        <p> {{student['first_name']}} {{student['last_name']}}</a>
-          &nbsp&nbsp&nbsp <form action="/student/{{student['uid']}}"> 
-            <button type="submit">View Profile</button>
-          </form>
-        </p>
-        {% endfor %}
+    <h2> <center>All Enrolled Students</center> </h2>
+    <h4> Sort By:
+      <form action="/GSenrolled_masters"> 
+        <button type="submit">Master's Students</button>
+      </form>
+      <form action="/GSenrolled_phd"> 
+        <button type="submit">PhD Students</button>
+      </form>
+      <p> Semester/Year
+          Enter semester (Fall/Spring):  
+          <input type="text" name="semester">
+          Enter Year: 
+          <input type="text" name="year">
+          <button type="submit">Submit</button>   
+      </p>
+    </h4>
+  
+    <hr color=#3F000F;>
+
+    {% for student in students: %}
+    <p> {{student['first_name']}} {{student['last_name']}}</a>
+      &nbsp&nbsp&nbsp 
+      <form action="/student/{{student['uid']}}"> 
+        <button type="submit">View Profile</button>
+      </form>
+    </p>
+    {% endfor %}
 
     <hr color=#3F000F;>
+
+    <form action="/GSapproved_grad"> 
+      <button type="submit">Students Approved for Graduation</button>
+    </form>
 
     <form action="/all_suspended"> 
       <button type="submit">Suspended Students</button>
