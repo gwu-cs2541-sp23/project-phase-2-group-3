@@ -2190,6 +2190,7 @@ def Ahome():
           query = "UPDATE users SET username=(%s), password=(%s), first_name=(%s), last_name=(%s), ssn=(%s), address=(%s) WHERE uid=(%s)"
           cursor.execute(query, user_data)
           mydb.commit()
+          return redirect(url_for('logout'))
      
   cursor = mydb.cursor(dictionary=True)
 
