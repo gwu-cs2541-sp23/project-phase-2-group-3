@@ -8,7 +8,7 @@
 <body>
     {%include "navbar.html"%}
   <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
-  <h2> universityID: {{session['uid'] }}</h2>
+  <h3> universityID: {{session['uid'] }}</h3>
   <br>
   <form action = "/GShome" method = "POST">
 

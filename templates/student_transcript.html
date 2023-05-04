@@ -1,14 +1,13 @@
 <html>
     <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
     <title> Student Transcript </title>
-    <h2>Name: {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
-    <h4>Email: {{transcript[0]['email']}} </h4>
     <body>
         {%include "navbar.html"%}
 
         <br>
         <br>
         <center>
+          <h2>Transcript for {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
         <table border="5" cellspacing="0" align="center">
             <tr>
               <b>

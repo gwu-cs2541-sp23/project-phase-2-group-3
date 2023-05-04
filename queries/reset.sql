@@ -1,7 +1,5 @@
 -- Active: 1681927449683@@group3phase2-taylor23.c71jatiazsww.us-east-1.rds.amazonaws.com@3306@university
-DROP DATABASE IF EXISTS university;
 
-CREATE DATABASE university;
 use university;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
@@ -250,6 +248,8 @@ INSERT INTO prerequisites VALUES (18,3);
 INSERT INTO prerequisites VALUES (19,15);
 
 --users
+INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '00000000', 'sysadmin', 'password', 'SYS', 'ADMIN', '000-00-0000', 'James Taylor University', 'sysadmin' );
+
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '88888888', 'bholiday', 'password', 'Billie', 'Holiday', '001-02-0003', 'The Jazz Bar', 'student' );
 INSERT INTO students ( uid, degree_type, is_suspended, thesis_approved, applied_grad, start_date ) VALUES ('88888888', 'MS', FALSE, FALSE, FALSE, 'Fall 2021' );
 --add into her classes

@@ -12,7 +12,6 @@
 
     <div class="buttons">
 
-    <form action = "/updateinfo" method = "POST"> 
       <center><h3>University ID: {{ session['uid'] }}</h3> </center>
       {% if degree[0]['degree_type'] == 'MS' %}
         <center> <h3> Degree: Master's </h3> </center>
@@ -31,7 +30,7 @@
           </form>
         {% endif %}
         {% if suspended[0]['is_suspended'] == True %}
-          <p>You can not apply for graduation because you are currectly suspended. </p>
+          <p class="p">You can not apply for graduation because you are currectly suspended. </p>
         {% endif %}
         </center>
 
@@ -39,23 +38,29 @@
 
       <hr>
 
+      <center>
       <h3> Update Personal Information </h3>
 
-      <h4 class = "centeredtext">Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class = "formbox">
-      </h4>
 
-      <h4 class = "centeredtext"> First Name: 
-       <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class = "formbox">
-      </h4>
+      <form action = "/updateinfo" method = "POST"> 
+        <h3>Last Name: 
+          <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="formbox">
+        </h3>
 
-      <h4 class = "centeredtext">Address: 
-      <input type="text" placeholder="{{data['address']}}" name= "address" class = "formbox">
-      </h4>
+        <h3> First Name: 
+        <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class="formbox">
+        </h4>
 
-      <button type="submit" class = "loginbutt">Submit</button>
+        <h3>Address: 
+        <input type="text" placeholder="{{data['address']}}" name= "address" class="formbox">
+        </h3>
+
+        <button type="submit" class="loginbutt">Submit</button>
+
       </form>
       <br>
+    </center>
+    </form>
 
     </div>
 
@@ -73,10 +78,6 @@
     <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
     <button type="submit" class = "routebutt">View Enrollment Information</button>
     </form>
-
-    <!-- <form action = "/logout"> 
-    <button type="submit">Log Out</button>
-    </form> -->
 
     </div>
 

@@ -7,29 +7,33 @@
   <body>
     {%include "navbar.html"%}
  <center>
-    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
- </center>
+    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}} </h1>
+    <h3>University ID: {{session['uid']}}</h3>
 
+ <hr>
+
+
+<h3> Personal Information</h3>
  <div class="buttons">
 
     <form action = "/updateinfo" method = "POST"> 
-    <h3 class = "centeredtext">University ID: {{(session['user_id']) }}</h3>
+
     
-    <h4 class = "centeredtext">Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class = "niceformbox">
-    </h4>
+        <h4>Last Name: 
+            <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="niceformbox">
+        </h4>
 
-    <h4 class = "centeredtext"> First Name: 
-        <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class = "niceformbox">
-    </h4>
+        <h4> First Name: 
+            <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class="niceformbox">
+        </h4>
 
-    <h4 class = "centeredtext">Email Address: 
-        <input type="text" placeholder="{{data['email']}}" name= "email" class = "niceformbox">
-    </h4>
+        <h4>Address: 
+            <input type="text" placeholder="{{data['address']}}" name= "address" class="niceformbox">
+        </h4>
 
-    <h4 class = "centeredtext">Address: 
-        <input type="text" placeholder="{{data['address']}}" name= "address" class = "niceformbox">
-    </h4>
+        <button type="submit" class="routebutt">Submit</button>
+    </form>
+
 
 </div>
 
@@ -43,11 +47,11 @@
     <button type="submit" class = "routebutt">View Transcript</button>
     </form>
     
-    <!-- <form action = "/logout"> 
-    <button type="submit">Log Out</button>
-    </form> -->
+    </form>
 
     </div>
+
+</center>
 
 
 </body>

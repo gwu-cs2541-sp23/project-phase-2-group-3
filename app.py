@@ -55,7 +55,7 @@ def login():
                return redirect(url_for('Rhome'))
             
             if x['user_type'] == "alumni":
-               return redirect(url_for('alum_home'))
+               return redirect(url_for("alum_home"))
 
         else:
           session['error'] = 'That username or password is not valid'
@@ -122,7 +122,6 @@ def Rhome():
 
 @app.route('/updateinfo', methods=['GET', 'POST'])
 def updateinfo():
-  print("in updateinfo")
   #connect to the database
   cur = mydb.cursor(dictionary = True)
 
@@ -845,9 +844,6 @@ def GSalum_gradyear():
       cur = mydb.cursor(dictionary = True)
 
       if request.method == 'POST':
-
-
-        print("in post if statement\n")
         # get grad year from search bar
         grad_year = (str)(request.form["search"])
 
@@ -1064,13 +1060,10 @@ def GSapproved_admit():
       if request.method == 'POST':
         cur = mydb.cursor(dictionary = True)
         start_date = (str)(request.form["search"])
-        print(start_date)
-
         result = list()
         # check if the start date is the same as the search
         for x in range(len(approved_grad)):
            if (str)(approved_grad[x][2][0]['start_date']) == start_date:
-              print("in equality if statement")
               result.append(approved_grad[x])
         return render_template("GSapproved_admit.html", result=result, start_date=start_date)
       else:
@@ -1158,7 +1151,6 @@ def phd_students():
    
     # get advisor id from login session 
       adv_id = session['uid']
-      print(adv_id)
 
       # get all PhD students
       cursor = mydb.cursor(dictionary=True)
@@ -1166,7 +1158,6 @@ def phd_students():
       # get all students that belong to this specific advisor
       cursor.execute("SELECT student_uid FROM advisor_assignments WHERE advisor_uid = %s", (adv_id, ))
       all_advisees = cur.fetchall()
-      print(all_advisees)
 
       # get uid of all phd advisees
       phd_advisees = list()
@@ -1178,8 +1169,6 @@ def phd_students():
           cur.execute("SELECT * FROM users WHERE uid = %s", (info1[0]['uid'], ))
           info2 = cur.fetchall()
           phd_advisees.append(info2)
-
-      print(phd_advisees)
 
       return render_template('phd_students.html', phd_advisees=phd_advisees)
 
@@ -1586,10 +1575,6 @@ def Shome():
     suspended = cur.fetchall()
     mydb.commit()
 
-    print(data)
-    print(suspended[0]['is_suspended'])
-    print(degree[0]['degree_type'])
-
     return render_template("Shome.html", title = 'Student Logged In', data = data, suspended = suspended, degree = degree)
   
   else:
@@ -1663,23 +1648,17 @@ def form():
 # allows student to apply for graduation
 @app.route('/applygrad', methods=['GET', 'POST'])
 def applygrad():
-  print("in applygrad")
   if session['user_type'] == 'student':
   #connect to the database
     cur = mydb.cursor(dictionary = True)
-    if request.method == "GET":
-      return render_template("applying.html")
 
-    if request.method == "POST":
-      type = (request.form["dates"])
-      cur.execute("INSERT into students (applied_grad) VALUES (%s) WHERE uid = %s", (True, session['uid']))
-      mydb.commit()
-      return render_template("applygrad.html")
+    if request.method == "GET":
+       cur.execute("UPDATE students SET applied_grad = %s WHERE uid = %s", (True, session['uid'], ))
+       return render_template("applygrad.html")
+    else:
+       return redirect('/')
   else:
     return redirect('/')
-
-
-  return render_template("applygrad.html")
 
 # alumni
 @app.route("/alum_home")
@@ -1699,7 +1678,10 @@ def alum_home():
 @app.route('/coursehist/<id>', methods=['GET', 'POST'])
 def coursehist(id):
 
-  if session['user_type'] == 'student' or session['user_type'] == 'alumni':
+  if session['user_type'] == 'student' or 'alumni':
+
+    print("in coursehist")
+
     type = session['user_type']
     #connect to the database
     cur = mydb.cursor(dictionary = True)
@@ -1726,7 +1708,6 @@ def coursehist(id):
         cur.execute("SELECT cid, title, class_number, credit_hours FROM classes WHERE cid = %s", (student_grades[i]['cid'], ))
         info1 = cur.fetchall()
         class_info.append(info1)
-        print(class_info)
 
         cur.execute("SELECT credit_hours FROM classes WHERE cid = %s", (student_grades[i]['cid'], ))
         course_hours = cur.fetchone()
@@ -1768,10 +1749,9 @@ def coursehist(id):
       for x in range(len(class_info)):
          class_info[x].append(student_grades[x])
 
-      print(class_info)
-
       return render_template("coursehist.html", student_grades=student_grades, courses = courses, id = id, gpa = gpa, type = type, class_info=class_info)
   else:
+    print("else statement")
     return redirect('/')
   
   # END OF STUDENT FUNCTIONALITY

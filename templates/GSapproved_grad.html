@@ -6,7 +6,40 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>All Students Approved for Graduation</center> </h2>
+
+    {% if not approved_grad %}
+    <p> No students are approved for graduation at this time. </p>
+    {% endif %}
+
+    {% if approved_grad %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Profile <br></td>
+        </b>
+      </tr>
+      {% for x in approved_grad: %}
+      <tr>
+        <td> {{x[0][0]['first_name']}} <br></td>
+        <td> {{x[0][0]['last_name']}} </td>
+        <td>
+          <form action="/student/{{x[0][0]['uid']}}"> 
+          <button type="submit" class="routebutt">View Profile</button>
+          </form> 
+       </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    <br>
+    <hr>
+
+    <center>
     <h4> Sort By:
+      <br>
       <form action="/GSapproved_ms"> 
         <button type="submit" class = "selectorbox">Master's Students</button>
       </form>
@@ -22,8 +55,7 @@
           </form>    
       </p>
     </h4>
-  
-    <hr color=#3F000F;>
+   </center>
 
     {% if not approved_grad %}
     <p> No students are approved for graduation at this time. </p>

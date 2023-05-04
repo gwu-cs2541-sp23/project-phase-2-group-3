@@ -5,11 +5,18 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h1 style="text-align:center;"> All Students Under Academic Suspension </h1>
-    <p> {% for student in suspended_students_names %}
+    <h2 style="text-align:center;"> All Students Under Academic Suspension </h2>
+
+    {% if suspended_students_names %}
+    <h3> {% for student in suspended_students_names %}
         <li> {{student[0]['first_name']}} {{student[0]['last_name']}}</li>
     {% endfor %}
-    </p>
+    </h3>
+    {% endif %}
+
+    {% if not suspended_students_names %}
+    <h3> There are currently no suspended students.</h3>
+    {% endif %}
 
     <br>
     <br>
@@ -20,9 +27,6 @@
     <form action="/GShome"> 
       <button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
     </form>
-
-    <form action="/logout"> 
-      <button type="submit" class = "routebutt">Log Out</button>
     </form>
     
   </body>
