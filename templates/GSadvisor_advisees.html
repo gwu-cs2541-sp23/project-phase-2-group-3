@@ -6,7 +6,7 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>Advisees of {{advisor_name[0]['first_name']}} {{advisor_name[0]['last_name']}}</center> </h2>
-    <hr color=#3F000F;>
+    <hr>
 
     {% if not advisees %}
     <p> There are currently no advisees for {{advisor_name['first_name']}} {{advisor_name['last_name']}}. </p>
@@ -27,7 +27,7 @@
           <td> {{x[0]['last_name']}} </td>
           <td> 
             <form action="/student/{{x[0]['uid']}}"> 
-              <button type="submit">View Profile</button>
+              <button type="submit" class="routebutt">View Profile</button>
             </form>
           </td>
         </tr>
@@ -38,11 +38,7 @@
     <hr>
 
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
-        </form>
-
-      <form action = "/logout"> 
-        <button type="submit">Log Out</button>
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
         </form>
 
   </body>

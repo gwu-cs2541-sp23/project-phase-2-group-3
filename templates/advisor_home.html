@@ -2,29 +2,31 @@
     <body>
         {%include "navbar.html"%}
 
-        <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
+        <link rel="stylesheet" href="static/style.css">
         <title> Advisor Homepage </title>
         <h1> <center>Welcome, {{data['first_name']}} {{data['last_name']}}</center> </h1>
         <h2><center> Advisor Homepage </center></h2>
 
         <br>
+        <hr>
 
         <center>
             <form action="/faculty/advisees/phd"> 
-                <button type="submit">View PhD Advisees</button>
+                <button type="submit" class="routebutt">View PhD Advisees</button>
             </form>
             <br>
             <form action="/faculty/advisees/masters"> 
-                <button type="submit">View Master's Advisees</button>
+                <button type="submit" class="routebutt">View Master's Advisees</button>
             </form>
         </center>
 
         <br>
 
         <hr>
+        <br>
 
         <form action="/Fhome"> 
-            <button type="submit">Employee Home Page</button>
+            <button type="submit" class="routebutt">Employee Home Page</button>
         </form>
 
     </body>

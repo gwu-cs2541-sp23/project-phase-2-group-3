@@ -73,21 +73,18 @@
     {% if student_info[1]['eligible'] == 'True': %}
       <h3>Currently eligible for graduation</h3>
         <form action="/graduate/{{student_info[0][0]['uid']}}"> 
-            <button type="submit">Approve for Graduation</button>
+            <button type="submit" class = "routebutt">Approve for Graduation</button>
         </form>
             
     {% endif %}
   </center>
 
-    <hr color=#3F000F;>
+  <br>
+  <hr>
 
-    <form action="/GShome"> 
-      <button type="submit">Graduate Secretary Home Page</button>
-    </form>
-
-    <form action="/logout"> 
-      <button type="submit">Log Out</button>
-  </form>
+    <form action = "/GShome"> 
+      <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
+      </form>
 
   </body>
 </html>

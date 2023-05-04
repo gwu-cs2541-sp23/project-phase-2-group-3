@@ -12,13 +12,16 @@
 </center>
 
 <center>
-Create Advisor/Advisee pairings
-</center>
+<h3>Create Advisor/Advisee pairings</h3>
+
+<hr>
+<br>
 
 <form action = "/assigned" method = "POST">
 
+<h3>
 <label for= "student">Select a Student:</label>
-<select name= "student" id= "student" required>
+<select name= "student" id= "student" required class="selectors">
     {% for s in students: %}
   <option value="{{s['uid']}}">{{s['first_name']}} {{s['last_name']}}</option>
   {% endfor %}
@@ -26,25 +29,33 @@ Create Advisor/Advisee pairings
 <br><br>
 
 <label for= "advisor">Select an Advisor:</label>
-<select name= "advisor" id= "advisor" required>
+<select name= "advisor" id= "advisor" required class="selectors">
     {% for a in advisors: %}
   <option value="{{a['uid']}}">{{a['first name']}} {{a['last_name']}}</option>
   {% endfor %}
 </select>
+
+</h3>
+</center>
 <br><br>
  
-<button type="submit">Assign</button>
+<button type="submit" class="routebutt">Assign</button>
 </form>
+
+<br>
+<hr>
+<br>
+
 
 {% if type == 'sysadmin' %}
 <form action = "/SAhome"> 
-  <button type="submit">System Admin Home Page</button>
+  <button type="submit" class="routebutt">System Admin Home Page</button>
 </form>
 {% endif %}
 
 {% if type == 'gradsec' %}
 <form action = "/GShome"> 
-  <button type="submit">Graduate Secretary Home Page</button>
+  <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
 </form>
 {% endif %}
 

@@ -8,7 +8,7 @@
 <body>
     {%include "navbar.html"%}
   <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
-  <h2> universityID: {{session['uid'] }}</h2>
+  <h3> universityID: {{session['uid'] }}</h3>
   <br>
   <form action = "/GShome" method = "POST">
 
@@ -29,14 +29,14 @@
 
   <form action = "/GShome" method = "POST">
 
-    <input type="submit" value="View Alumni">
+    <input type="submit" value="View Alumni" class = "routebutt">
     <input type="hidden" name="button" value="alumni">
 
   </form>
   <br>
 
   <form action = "/GSadvisors"> 
-    <button type="submit">View Advisors</button>
+    <button type="submit" class = "routebutt">View Advisors</button>
     </form>
 
 </body>

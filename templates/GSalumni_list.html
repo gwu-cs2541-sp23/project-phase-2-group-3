@@ -6,30 +6,8 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>Alumni Data</center> </h2>
-    <h4> Sort By:
-      <br>
-      <form action="/GSalumni/masters"> 
-        <button type="submit">Master's Alumni</button>
-      </form>
-      <form action="/GSalumni/phd"> 
-        <button type="submit">PhD Alumni</button>
-      </form>
-      <p> Graduation Year 
-          &nbsp
-          <form action="/GSalumni/gradyear" method="POST">
-            <input type="text" name="search" placeholder = "Search a Year">
-            <input type="submit" name="search_gradyear" value = "search by graduation year">
-            <input type="hidden" name="type" value="search_gradyear">
-          </form>  
-      </p>
-    </h4>
-  
-    <hr color=#3F000F;>
 
-    <center> </center>
-    {% if not alumni_info %}
-        <p> No alumni to be displayed. </p>
-    {% endif %}
+    <br>
 
     {% if alumni_info %}
     <table border="5" cellspacing="0" align="center">
@@ -50,16 +28,39 @@
     </table>
     {% endif %}
 
+    <br>
+
+    <h3> Sort By:
+      <br>
+      <form action="/GSalumni/masters"> 
+        <button type="submit" class = "routebutt">Master's Alumni</button>
+      </form>
+      <form action="/GSalumni/phd"> 
+        <button type="submit" class = "routebutt">PhD Alumni</button>
+      </form>
+      <center>
+      <p> Graduation Year 
+          &nbsp
+          <form action="/GSalumni/gradyear" method="POST">
+            <input type="text" name="search" placeholder = "Search a Year" class="searchbox">
+            <input type="submit" name="search_gradyear" value = "Search" class="searchbutt">
+            <input type="hidden" name="type" value="search_gradyear">
+          </form>  
+      </p>
+    </center>
+    </h3>
+
+    <center>
+    {% if not alumni_info %}
+        <p> No alumni to be displayed. </p>
+    {% endif %}
+
   </center>
 
     <hr>
 
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
-        </form>
-
-      <form action = "/logout"> 
-        <button type="submit">Log Out</button>
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
         </form>
 
   </body>

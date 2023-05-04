@@ -27,7 +27,7 @@
           <td> {{x[0]['last_name']}} </td>
           <td> 
             <form action="/GSadvisor/advisees/{{x[0]['uid']}}"> 
-              <button type="submit">View Advisees</button>
+              <button type="submit" class="routebutt">View Advisees</button>
             </form>
           </td>
         </tr>
@@ -39,15 +39,11 @@
     <hr>
 
     <form action="/GSstudents"> 
-      <button type="submit">All Students</button>
+      <button type="submit" class="routebutt">All Students</button>
     </form>
 
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
-        </form>
-
-      <form action = "/logout"> 
-        <button type="submit">Log Out</button>
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
         </form>
 
   </body>

@@ -6,59 +6,66 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>All Students Approved for Graduation</center> </h2>
-    <h4> Sort By:
-      <form action="/GSapproved_ms"> 
-        <button type="submit">Master's Students</button>
-      </form>
-      <form action="/GSapproved_phd"> 
-        <button type="submit">PhD Students</button>
-      </form>
-      <p> Admit Semester/Year
-          &nbsp&nbsp
-          <form action="/GSapproved/admit" method="POST">
-            <input type="text" name="search" placeholder = "Search for Students">
-            <input type="submit" name="search_admityear" value = "search by admit semester/year">
-            <input type="hidden" name="type" value="search_admityear">
-          </form>    
-      </p>
-    </h4>
-  
-    <hr color=#3F000F;>
 
     {% if not approved_grad %}
     <p> No students are approved for graduation at this time. </p>
     {% endif %}
 
-    {% for x in approved_grad: %}
-    <p> {{x[0][0]['first_name']}} {{x[0][0]['last_name']}}</a>
-      &nbsp&nbsp&nbsp 
-      <form action="/student/{{x[0][0]['uid']}}"> 
-        <button type="submit">View Profile</button>
-      </form>
-    </p>
-    {% endfor %}
+    {% if approved_grad %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Profile <br></td>
+        </b>
+      </tr>
+      {% for x in approved_grad: %}
+      <tr>
+        <td> {{x[0][0]['first_name']}} <br></td>
+        <td> {{x[0][0]['last_name']}} </td>
+        <td>
+          <form action="/student/{{x[0][0]['uid']}}"> 
+          <button type="submit" class="routebutt">View Profile</button>
+          </form> 
+       </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
 
-    <hr color=#3F000F;>
+    <br>
+    <hr>
+
+    <center>
+    <h4> Sort By:
+      <br>
+      <form action="/GSapproved_ms"> 
+        <button type="submit" class="routebutt">Master's Students</button>
+      </form>
+      <form action="/GSapproved_phd"> 
+        <button type="submit" class="routebutt">PhD Students</button>
+      </form>
+      <p> Admit Semester/Year
+          &nbsp&nbsp
+          <form action="/GSapproved/admit" method="POST">
+            <input type="text" name="search" placeholder = "Search for Students" class="searchbox">
+            <input type="submit" name="search_admityear" value = "Search" class="searchbutt">
+            <input type="hidden" name="type" value="search_admityear">
+          </form>    
+      </p>
+    </h4>
+   </center>
+
+    <hr>
 
     <form action="/GSstudents"> 
-      <button type="submit">All Students</button>
+      <button type="submit" class="routebutt">All Students</button>
     </form>
-
-    <form action="/all_suspended"> 
-      <button type="submit">Suspended Students</button>
-    </form>
-
-    <form action = "/assignadvisor"> 
-      <button type="submit">Assign Advisors</button>
-      </form>
 
       <br>
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
-        </form>
-
-      <form action = "/logout"> 
-        <button type="submit">Log Out</button>
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
         </form>
 
   </body>

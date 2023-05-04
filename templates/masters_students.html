@@ -24,12 +24,12 @@
               <td> {{ student[0]['last_name']}} </td>
               <td> 
                 <form action="/faculty/advisees/{{student[0]['uid']}}"> 
-                    <button type="submit">View Transcript</button>
+                    <button type="submit" class="routebutt">View Transcript</button>
                 </form> 
               </td>
               <td>
                 <form action="/faculty/advisees/form1/{{student[0]['uid']}}"> 
-                    <button type="submit">Review Form 1</button>
+                    <button type="submit" class="routebutt">Review Form 1</button>
                 </form>
               </td>
             </tr>
@@ -43,15 +43,17 @@
         </center>
     </body>
 
+    <br>
     <hr>
+    <br>
 
     <form action = "/Fhome"> 
-        <button type="submit">Employee Home Page</button>
+        <button type="submit" class="routebutt">Employee Home Page</button>
     </form>
     <br>
 
     <form action="/advisor_home"> 
-        <button type="submit">Advisor Home Page</button>
+        <button type="submit" class="routebutt">Advisor Home Page</button>
     </form>
     <br>
 
