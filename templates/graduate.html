@@ -5,23 +5,19 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h1> Graduation Successful! </h1> 
-    <h2> {% if data[1][0]['degree_type'] == 'MS' %}
+    <h2> Graduation Successful! </h2> 
+    <h3> {% if data[1][0]['degree_type'] == 'MS' %}
           {{data[2][0]['first_name']}} {{data[2][0]['last_name']}} has successfully graduated with a Master's in Computer Science.
         {% endif %}
         {% if data[1][0]['degree_id'] == 'PHD' %}
           {{data[2][0]['first_name']}} {{data[2][0]['last_name']}} has successfully graduated with a PhD in Computer Science.
         {% endif %}
-    </h2>
+    </h3>
 
     <hr color=#3F000F;>
 
-    <form action="/gradsec"> 
-      <button type="submit">All students</button>
-    </form>
-
-    <form action="/logout"> 
-      <button type="submit">Log Out</button>
+    <form action="/GShome"> 
+      <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
     </form>
 
   </body>
