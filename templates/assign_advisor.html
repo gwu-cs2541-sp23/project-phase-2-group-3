@@ -19,12 +19,8 @@ Create Advisor/Advisee pairings
 
 <label for= "student">Select a Student:</label>
 <select name= "student" id= "student" required>
-    {% for s in mstudents: %}
-  <option value="{{s['uid']}}">{{s[0]['first_name']}} {{s[0]['last_name']}}</option>
-  {% endfor %}
-
-  {% for p in pstudents: %}
-  <option value="{{p['uid']}}">{{p[0]['first_name']}} {{p[0]['last_name']}}</option>
+    {% for s in students: %}
+  <option value="{{s['uid']}}">{{s['first_name']}} {{s['last_name']}}</option>
   {% endfor %}
 </select>
 <br><br>

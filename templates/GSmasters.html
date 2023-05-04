@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title>Enrolled Master's Students</title>
+  </head>
+  <body>
+    {%include "navbar.html"%}
+    <h1 style="text-align:center;"> Enrolled Master's Students </h1>
+
+    {% for student in masters_info %}
+    <p> {{student[0]['first_name']}} {{student[0]['last_name']}} &nbsp&nbsp&nbsp 
+        <form action="/student/{{student[0]['uid']}}"> 
+            <button type="submit">View Profile</button>
+        </form>
+    </p>
+    {% endfor %}
+    {% if not masters_info %}
+    <p> There are no master's students currently enrolled.</p>
+    {% endif %}
+
+    <hr color=#3F000F;>
+
+    <form action="/GShome"> 
+      <button type="submit">Graduate Secretary Home Page</button>
+    </form>
+
+    <form action="/logout"> 
+      <button type="submit">Log Out</button>
+  </form>
+
+  </body>
+</html>

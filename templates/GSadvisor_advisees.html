@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title>Student Data</title>
+  </head>
+  <body>
+    {%include "navbar.html"%}
+    <h2> <center>Advisees of {{advisor_name[0]['first_name']}} {{advisor_name[0]['last_name']}}</center> </h2>
+    <hr color=#3F000F;>
+
+    {% if not advisees %}
+    <p> There are currently no advisees for {{advisor_name['first_name']}} {{advisor_name['last_name']}}. </p>
+    {% endif %}
+
+    {% for x in advisees: %}
+    <p> {{x[0]['first_name']}} {{x[0]['last_name']}}</a>
+      &nbsp&nbsp&nbsp 
+      <form action="/student/{{x[0]['uid']}}"> 
+        <button type="submit">View Profile</button>
+      </form>
+    </p>
+    {% endfor %}
+
+    <hr color=#3F000F;>
+
+      <form action = "/GShome"> 
+        <button type="submit">Graduate Secretary Home Page</button>
+        </form>
+
+      <form action = "/logout"> 
+        <button type="submit">Log Out</button>
+        </form>
+
+  </body>
+</html>

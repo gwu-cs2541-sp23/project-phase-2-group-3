@@ -44,12 +44,13 @@
     <button type="submit">Form 1</button>
     </form>
 
-    {% if not suspended %}
+    {% if suspended == False %}
       <form action = "/applygrad" method = "GET"> 
       <button type="submit">Apply For Graduation</button>
       </form>
-    {% else %}
-      <p>You can not apply for graduation since you are currectly suspended</p>
+    {% endif %}
+    {% if suspended == True %}
+      <p>You can not apply for graduation since you are currectly suspended. </p>
     {% endif %}
 
     <form action = "/coursehist/{{data['uid']}}" method = "POST"> 

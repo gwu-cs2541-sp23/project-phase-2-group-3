@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title>Alumni Data</title>
+  </head>
+  <body>
+    {%include "navbar.html"%}
+    <h2> <center>Alumni with PhD</center> </h2>
+
+    {% if not alumni_info %}
+        <p> No PhD alumni to be displayed. </p>
+    {% endif %}
+
+    {% for alumni in alumni_info: %}
+    <p> {{alumni[0]['first_name']}} {{alumni[0]['last_name']}}
+        <ul> Email: {{alumni[1]['email']}} </ul>
+    </p>
+    {% endfor %}
+
+    <hr color=#3F000F;>
+
+      <form action = "/GShome"> 
+        <button type="submit">Graduate Secretary Home Page</button>
+        </form>
+
+      <form action = "/logout"> 
+        <button type="submit">Log Out</button>
+        </form>
+
+  </body>
+</html>
