@@ -7,59 +7,75 @@
   <body>
     {%include "navbar.html"%}
  <center>
-    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
+    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}} </h1>
  </center>
 
     <div class="buttons">
 
     <form action = "/updateinfo" method = "POST"> 
-      <h3>University ID: {{ session['uid'] }}</h3>
-      {% if degree[0]['degree_type'] == 'ms' %}
-        <h3> Degree: Master's </h3>
+      <center><h3>University ID: {{ session['uid'] }}</h3> </center>
+      {% if degree[0]['degree_type'] == 'MS' %}
+        <center> <h3> Degree: Master's </h3> </center>
       {% endif %}
-      {% if degree[0]['degree_type'] == 'phd' %}
-      <h3> Degree: PhD </h3>
-    {% endif %}
+      {% if degree[0]['degree_type'] == 'PHD' %}
+        <center><h3> Degree: PhD </h3> </center>
+      {% endif %}
 
-      <h4>Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
+      <hr>
+
+      <center>
+      <h3>Apply for Graduation</h3>
+        {% if suspended[0]['is_suspended'] == False %}
+          <form action = "/applygrad" method = "POST"> 
+          <button type="submit" class="routebutt">Apply For Graduation</button>
+          </form>
+        {% endif %}
+        {% if suspended[0]['is_suspended'] == True %}
+          <p>You can not apply for graduation because you are currectly suspended. </p>
+        {% endif %}
+        </center>
+
+      <hr>
+
+      <center>
+      <h3> Update Personal Information </h3>
+
+      <form action = "/updateinfo" method = "POST"> 
+      <h3>Last Name: 
+        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="searchbox">
+      </h3>
+
+      <h3> First Name: 
+       <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class="searchbox">
       </h4>
 
-      <h4> First Name: 
-       <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
-      </h4>
+      <h3>Address: 
+      <input type="text" placeholder="{{data['address']}}" name= "address" class="searchbox">
+      </h3>
 
-    <h4>Address: 
-    <input type="text" placeholder="{{data['address']}}" name= "address">
-    </h4>
-
-    <button type="submit">Submit</button>
+      <button type="submit" class="routebutt">Submit</button>
+      </form>
+      <br>
+    </center>
     </form>
 
     </div>
 
+    <hr>
+    <br>
+
     <div class = "buttons">
+    <br>
 
     <form action = "/form1" method = "GET"> 
-    <button type="submit">Form 1</button>
+    <button type="submit" class="routebutt">Form 1</button>
     </form>
+    <br>
 
-    {% if not suspended %}
-      <form action = "/applygrad" method = "GET"> 
-      <button type="submit">Apply For Graduation</button>
-      </form>
-    {% else %}
-      <p>You can not apply for graduation since you are currectly suspended</p>
-    {% endif %}
-
-    <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
-    <button type="submit">View Enrollment Information</button>
+    <form action = "/coursehist/{{session['uid']}}" method = "POST"> 
+      <button type="submit" class="routebutt">View Enrollment Information</button>
     </form>
-
-
-    <form action = "/logout"> 
-    <button type="submit">Log Out</button>
-    </form>
+    <br>
 
     </div>
 

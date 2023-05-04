@@ -3,6 +3,17 @@
   <head>
     
     <title>Login Page</title>
+    <link rel="stylesheet" href="static/style.css">
+
+    <style>
+
+      li{
+
+        list-style-type:none;
+
+      }
+
+    </style>
     
   </head>
 
@@ -16,15 +27,15 @@
 
     <form action="/GSapps" method="POST">
       
-      <input type="text" name="search" placeholder = "Search For Applicants">
-      <input type="submit" name="searchuid" value = "search by uid">
+      <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+      <input type="submit" name="searchuid" value = "search by uid" class = "searchbutt">
       <input type="hidden" name="type" value="searchuid">
       
     </form>
     <form action="/GSapps" method="POST">
       
-      <input type="text" name="search" placeholder = "Search For Applicants">
-      <input type="submit" name="searchlname" value = "search by last name">
+      <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+      <input type="submit" name="searchlname" value = "search by last name" class = "searchbutt">
       <input type="hidden" name="type" value="searchlname">
       
     </form>
@@ -35,24 +46,29 @@
 
       {%for person in applicants%}
 
-        <li>Student ID: {{person.uid}} <br> Name: {{person.first_name}} {{person.last_name}}
+        {% if person.appStatus != "Matriculated" %}
+
+        <div>
+
+        <li>Student ID: {{person.uid}} <br> Name: {{person.first_name}} {{person.last_name}} <br><br>
 
           <ul>
 
             <li>Status: {{person.appStatus}}</li>
             <li>Update Status: <form action = "/GSapps" method = "POST">
 
-              <select id="status" name="status">
+              <select id="status" name="status" class = "selectors">
 
                 <option value="Application Incomplete">Application Incomplete</option>
                 <option value="Application Awaiting Materials">Application Awaiting Materials</option>
                 <option value="Application Under Review">Application Under Review</option>
                 <option value="Decision Pending">Decision Pending</option>
                 <option value="Decision Delivered">Decision Delivered</option>
+                <option value="Matriculated">Matriculated</option>
 
               </select>
 
-              <input type="submit" name="Update" value = "Update">
+              <input type="submit" name="Update" value = "Update" class = "selectorbox">
               <input type="hidden" name="id" value="{{person.uid}}">
               <input type="hidden" name="type" value="updatestat">
 
@@ -61,7 +77,7 @@
             <li>Decision: {{person.decision}}</li>
             <li>Update Decision: <form action = "/GSapps" method = "POST">
 
-              <select id="decision" name="decision">
+              <select id="decision" name="decision" class = "selectors">
 
                 <option value="Pending">Pending</option>
                 <option value="Admit">Admit</option>
@@ -70,7 +86,7 @@
 
               </select>
 
-              <input type="submit" name="Update" value = "Update">
+              <input type="submit" name="Update" value = "Update" class = "selectorbox">
               <input type="hidden" name="id" value="{{person.uid}}">
               <input type="hidden" name="type" value="updatedecision">
 
@@ -78,7 +94,7 @@
 
             <li><form action = "/GSapps" method = "POST">
 
-              <input type="submit" name="View Application" value = "View Application">
+              <input type="submit" name="View Application" value = "View Application" class = "routebutt">
               <input type="hidden" name="id" value="{{person.uid}}">
               <input type="hidden" name="type" value="app">
 
@@ -86,7 +102,7 @@
 
             <li><form action = "/GSapps" method = "POST">
 
-              <input type="submit" name="View Reviews" value = "View Reviews">
+              <input type="submit" name="View Reviews" value = "View Reviews" class = "routebutt">
               <input type="hidden" name="id" value="{{person.uid}}">
               <input type="hidden" name="type" value="review">
 
@@ -95,6 +111,14 @@
           </ul>
 
         </li>
+
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        {%endif%}
 
       {%endfor%}
 
@@ -106,9 +130,9 @@
     <p>Generate a list of applicants either by their intended start semester or by the degree they intend to seek</p>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="appsdate">
-      <select id="criteria1" name="criteria1">
+      <select id="criteria1" name="criteria1" class = "selectors">
 
         <option value="Fall 2023">Fall 2023</option>
         <option value="Spring 2023">Spring 2023</option>
@@ -120,9 +144,9 @@
     </form>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="appsdeg">
-      <select id="criteria2" name="criteria2">
+      <select id="criteria2" name="criteria2" class = "selectors">
 
         <option value="MS">MS</option>
         <option value="PHD">PHD</option>
@@ -136,9 +160,9 @@
     <p>Generate a list of accepted applicants either by their intended start semester or by the degree they intend to seek</p>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="acceptdate">
-      <select id="criteria3" name="criteria3">
+      <select id="criteria3" name="criteria3" class = "selectors">
 
         <option value="Fall 2023">Fall 2023</option>
         <option value="Spring 2023">Spring 2023</option>
@@ -150,9 +174,9 @@
     </form>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="acceptdeg">
-      <select id="criteria4" name="criteria4">
+      <select id="criteria4" name="criteria4" class = "selectors">
 
         <option value="MS">MS</option>
         <option value="PHD">PHD</option>
@@ -166,9 +190,9 @@
     <p>Generate a list of other statistics either by applicants' intended start semester or by the degree the applicants' are seeking</p>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="statsdate">
-      <select id="criteria5" name="criteria5">
+      <select id="criteria5" name="criteria5" class = "selectors">
 
         <option value="Fall 2023">Fall 2023</option>
         <option value="Spring 2023">Spring 2023</option>
@@ -180,9 +204,9 @@
     </form>
     <form action = "/GSappsqueries" method = "POST">
 
-      <input type="submit" name="Find" value = "Find">
+      <input type="submit" name="Find" value = "Find" class = "selectorbox">
       <input type="hidden" name="type" value="statsdeg">
-      <select id="criteria6" name="criteria6">
+      <select id="criteria6" name="criteria6" class = "selectors">
 
         <option value="MS">MS</option>
         <option value="PHD">PHD</option>

@@ -9,10 +9,9 @@
     {%include "navbar.html"%}
     <center>
     <h1 class = "sameen"> Form 1 </h1>
-    </center>
 
     <form action = "/form1"  method = "POST" id = "form">
-        <h3> Select with yes or no with classes you have already taken </h3>
+        <h3> Select with yes or no with classes you plan to take </h3>
         <p> CSCI 6221 (required course for MS)</p>
         
         <input type="radio" name = "100" value="yes"> Yes </br>
@@ -104,9 +103,10 @@
 
         <div id="error-message"></div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="routebutt">Submit</button>
 
     </form>
+  </center>
 
 
 
@@ -132,7 +132,7 @@
 
 
 <form action = "/Shome"> 
-  <button type="submit">Student Home Page</button>
+  <button type="submit" class="routebutt">Student Home Page</button>
   </form>
 
   </body>

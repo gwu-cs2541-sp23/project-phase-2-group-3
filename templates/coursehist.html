@@ -9,88 +9,50 @@
     {%include "navbar.html"%}
 <center>
     <h1 class = "sameen"> Course History </h1>
-    </center>
 
-    GPA: {{gpa}} {% if session['username'] == "admin" %}
+    <h2>GPA: {{gpa}}</h2>
+    <br>
 
-    <ul>
-      {% if not data %}
-        <p>No course history found</p>
-        {% else %}
-        {% for p in data: %}
-          <p> 
-          <li>Course ID: {{p["cid"]}} 
-            <br>Course:
-            {% for i in courses: %}
-                {% if p["cid"] == i["cid"]: %}
-                    {{i["class_name"]}} {{i["class_number"]}} 
-                    <br>
-                    Credits: {{i["credit_hours"]}} 
-                {% endif %}
-            {% endfor %}
-            <br>Grade: 
-            <div class="buttons">
-            <form action = "/updategrade/{{id}}/{{p['cid']}}" method = "POST"> 
-              <input type="text" placeholder="{{p['grade']}}" name= "grade">
-              <button type="submit">Update Grade</button>
-            </form>
-          </div>
-      
-          </li>
-         </p>
-    {% endfor %}
-    {% endif %}
-    </ul>
+      {% if not class_info %}
+        <p>No course history found.</p></center>
+      {% else %}
 
-    {% else %}
+        <table border="5" cellspacing="0" align="center">
+          <tr>
+            <b>
+              <td align="center" height="50" width="100"> Class ID <br></td>
+              <td align="center" height="50" width="100"> Class Title <br></td>
+              <td align="center" height="50" width="100"> Class Number <br></td>
+              <td align="center" height="50" width="100"> Credit Hours <br></td>
+              <td align="center" height="50" width="100"> Grade <br></td>
+            </b>
+          </tr>
+          {% for p in class_info: %}
+          <tr>
+            <td> {{ p[0]["cid"] }} </td>
+                <td> {{ p[0]["title"] }} <br></td>
+                <td> {{ p[0]["class_number"] }} </td>
+                <td> {{ p[0]["credit_hours"] }} </td>
+                <td> {{ p[1]["grade"] }} </td>
+          {% endfor %}
+          </tr>
+        </table>
+      </center>
+  {% endif %}
 
-    <ul>
-      {% if not data %}
-        <p>No course history found</p>
-        {% else %}
-        {% for p in data: %}
-          <p> 
-          <li>Course ID: {{p["course_id"]}} 
-            <br>Course:
-            {% for i in courses: %}
-                {% if p["course_id"] == i["id"]: %}
-                    {{i["course_name"]}} {{i["course_num"]}} 
-                    <br>
-                    Credits: {{i["credit_hours"]}} 
-                {% endif %}
-            {% endfor %}
-            <br>Grade: {{p["grade"]}} 
-            <br>
-      
-          </li>
-         </p>
-    {% endfor %}
-    {% endif %}
-    </ul>
-    {% endif %}
-    
     <br>
 
     {% if type == 'student' %}
       <form action = "/Shome"> 
-        <button type="submit">Student Home Page</button>
-      </form>
-    {% endif %}
-
-    {% if type == 'sysadsim' %}
-      <form action = "/SAhome"> 
-        <button type="submit">System Admin Home Page</button>
+        <button type="submit" class="routebutt">Student Home Page</button>
       </form>
     {% endif %}
 
     {% if type == 'alumni' %}
       <form action = "/alum_home"> 
-        <button type="submit">Alumni Home Page</button>
+        <button type="submit" class="routebutt">Alumni Home Page</button>
       </form>
     {% endif %}
-
-    
-
 
 </body>
 

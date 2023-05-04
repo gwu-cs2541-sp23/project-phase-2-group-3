@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+    <title>Alumni Data</title>
+  </head>
+  <body>
+    {%include "navbar.html"%}
+    <h2> <center>Alumni Data</center> </h2>
+
+    <br>
+
+    {% if alumni_info %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Email <br></td>
+        </b>
+      </tr>
+      {% for alumni in alumni_info: %}
+      <tr>
+        <td> {{alumni[0]['first_name']}} <br></td>
+        <td> {{alumni[0]['last_name']}} </td>
+        <td> {{alumni[1][0]['email']}} </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    <br>
+
+    <h3> Sort By:
+      <br>
+      <form action="/GSalumni/masters"> 
+        <button type="submit" class = "routebutt">Master's Alumni</button>
+      </form>
+      <form action="/GSalumni/phd"> 
+        <button type="submit" class = "routebutt">PhD Alumni</button>
+      </form>
+      <center>
+      <p> Graduation Year 
+          &nbsp
+          <form action="/GSalumni/gradyear" method="POST">
+            <input type="text" name="search" placeholder = "Search a Year" class="searchbox">
+            <input type="submit" name="search_gradyear" value = "Search" class="searchbutt">
+            <input type="hidden" name="type" value="search_gradyear">
+          </form>  
+      </p>
+    </center>
+    </h3>
+
+    <center>
+    {% if not alumni_info %}
+        <p> No alumni to be displayed. </p>
+    {% endif %}
+
+  </center>
+
+    <hr>
+
+      <form action = "/GShome"> 
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
+        </form>
+
+  </body>
+</html>

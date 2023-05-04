@@ -3,24 +3,24 @@
     <!-- THIS IS A NAVBAR THAT WE CAN ADD TO EVERY PAGE -->
 
   <head>
-    <link href="/static/styles.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="static/style.css">
     <title> navbar </title>
   </head>
 
   <body> 
     <img src="/static/jtu_logo.png" style="width:175px">
-    <div class = "navbartext"><h3>Welcome to James Taylor University</h3></div>
-    <div class = "navbarlinks">
+    <h3 class = "nav">Welcome to the James Taylor University</h3>
+    
       <!-- <h3>Welcome to our University!</h3> -->
       
-      <a href = "/">login</a>
-      <a href = "/Portal"> portal </a>
-      {% if session["user_type"] == "student_p" or session["user_type"] == "student_m" %}
+      <!-- <a href = "/">login</a> -->
+      <!-- <a href = "/Portal"> portal </a> -->
+      <!-- {% if session["user_type"] == "student_p" or session["user_type"] == "student_m" %}
         <a href = "/Transcript{{session['uid']}}"> transcript </a>
-      {% endif %}
-      <a href = "/logout"> logout </a></h4>
+      {% endif %} -->
+      <a href = "/logout" class = "logout"> logout </a></h4>
       <!-- <img src = "static/logo.png"> -->
-    </div>
+    
     <!-- <div class = "navbarimg">
       <img src = "static/logo.png">
     </div> -->

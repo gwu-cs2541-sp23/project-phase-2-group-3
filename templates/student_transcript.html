@@ -1,16 +1,32 @@
 <html>
     <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
     <title> Student Transcript </title>
-    <h2>Name: {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
-    <h4>Email: {{transcript[0]['email']}} </h4>
     <body>
         {%include "navbar.html"%}
-        {% for grade in transcript %}
-            <li> {{ grade.title }} -- {{ grade.dept }} {{ grade.class_number }}
-                <li> Class ID: {{ grade.cid }}</li>
-                <li> Credit Hours:{{ grade.credit_hours }}</li>
-                <li> Grade: {{ grade.grade }}</li>
-            </li>
-        {% endfor %}
+        <center>
+          <h2>Transcript for {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
+        <table border="5" cellspacing="0" align="center">
+            <tr>
+              <b>
+                <td align="center" height="50" width="100"> Class Title <br></td>
+                <td align="center" height="50" width="100"> Department <br></td>
+                <td align="center" height="50" width="100"> Class Number <br></td>
+                <td align="center" height="50" width="100"> Class ID <br></td>
+                <td align="center" height="50" width="100"> Credit Hours <br></td>
+                <td align="center" height="50" width="100"> Grade <br></td>
+              </b>
+            </tr>
+            {% for grade in transcript: %}
+            <tr>
+              <td> {{ grade.title }} <br></td>
+              <td> {{ grade.dept }}</td>
+              <td> {{ grade.class_number }} </td>
+              <td> {{ grade.cid }} </td>
+              <td> {{ grade.credit_hours }} </td>
+              <td> {{ grade.grade }} </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </center>
     </body>
 </html>
