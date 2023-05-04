@@ -8,16 +8,16 @@
     <h2> <center>All Students Approved for Graduation</center> </h2>
     <h4> Sort By:
       <form action="/GSapproved_ms"> 
-        <button type="submit">Master's Students</button>
+        <button type="submit" class = "selectorbox">Master's Students</button>
       </form>
       <form action="/GSapproved_phd"> 
-        <button type="submit">PhD Students</button>
+        <button type="submit" class = "selectorbox">PhD Students</button>
       </form>
       <p> Admit Semester/Year
           &nbsp&nbsp
           <form action="/GSapproved/admit" method="POST">
-            <input type="text" name="search" placeholder = "Search for Students">
-            <input type="submit" name="search_admityear" value = "search by admit semester/year">
+            <input type="text" name="search" placeholder = "Search for Students" class = "searchbox">
+            <input type="submit" name="search_admityear" value = "search by admit semester/year" class = "searchbutt2">
             <input type="hidden" name="type" value="search_admityear">
           </form>    
       </p>
@@ -30,36 +30,40 @@
     {% endif %}
 
     {% for x in approved_grad: %}
-    <p> {{x[0][0]['first_name']}} {{x[0][0]['last_name']}}</a>
+    <p class = "centeredtext"> {{x[0][0]['first_name']}} {{x[0][0]['last_name']}}</a>
       &nbsp&nbsp&nbsp 
       <form action="/student/{{x[0][0]['uid']}}"> 
-        <button type="submit">View Profile</button>
+        <button type="submit" class = "routebutt">View Profile</button>
       </form>
     </p>
     {% endfor %}
 
+    <br>
+    <br>
     <hr color=#3F000F;>
+    <br>
+    <br>
 
     <form action="/GSstudents"> 
-      <button type="submit">All Students</button>
+      <button type="submit" class = "routebutt">All Students</button>
     </form>
 
     <form action="/all_suspended"> 
-      <button type="submit">Suspended Students</button>
+      <button type="submit" class = "routebutt">Suspended Students</button>
     </form>
 
     <form action = "/assignadvisor"> 
-      <button type="submit">Assign Advisors</button>
+      <button type="submit" class = "routebutt">Assign Advisors</button>
       </form>
 
       <br>
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
+        <button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
         </form>
 
-      <form action = "/logout"> 
+      <!-- <form action = "/logout"> 
         <button type="submit">Log Out</button>
-        </form>
+        </form> -->
 
   </body>
 </html>

@@ -27,7 +27,7 @@
       <h3>Apply for Graduation</h3>
         {% if suspended[0]['is_suspended'] == False %}
           <form action = "/applygrad" method = "POST"> 
-          <button type="submit">Apply For Graduation</button>
+          <button type="submit" class = "routebutt">Apply For Graduation</button>
           </form>
         {% endif %}
         {% if suspended[0]['is_suspended'] == True %}
@@ -35,47 +35,48 @@
         {% endif %}
         </center>
 
+        <br>
+
       <hr>
 
       <h3> Update Personal Information </h3>
 
-      <h4>Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
+      <h4 class = "centeredtext">Last Name: 
+        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class = "formbox">
       </h4>
 
-      <h4> First Name: 
-       <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
+      <h4 class = "centeredtext"> First Name: 
+       <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class = "formbox">
       </h4>
 
-      <h4>Address: 
-      <input type="text" placeholder="{{data['address']}}" name= "address">
+      <h4 class = "centeredtext">Address: 
+      <input type="text" placeholder="{{data['address']}}" name= "address" class = "formbox">
       </h4>
 
-      <button type="submit">Submit</button>
+      <button type="submit" class = "loginbutt">Submit</button>
       </form>
       <br>
 
     </div>
 
+    <br>
     <hr>
     <br>
 
     <div class = "buttons">
 
     <form action = "/form1" method = "GET"> 
-    <button type="submit">Form 1</button>
+    <button type="submit" class = "routebutt">Form 1</button>
     </form>
     <br>
 
     <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
-    <button type="submit">View Enrollment Information</button>
+    <button type="submit" class = "routebutt">View Enrollment Information</button>
     </form>
-    <br>
 
-    <form action = "/logout"> 
+    <!-- <form action = "/logout"> 
     <button type="submit">Log Out</button>
-    </form>
-    <br>
+    </form> -->
 
     </div>
 

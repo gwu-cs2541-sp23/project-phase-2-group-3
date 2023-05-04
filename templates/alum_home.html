@@ -13,36 +13,39 @@
  <div class="buttons">
 
     <form action = "/updateinfo" method = "POST"> 
-    <h3>University ID: {{ '{:08d}'.format(session['user_id']) }}</h3>
+    <h3 class = "centeredtext">University ID: {{(session['user_id']) }}</h3>
     
-    <h4>Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
+    <h4 class = "centeredtext">Last Name: 
+        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class = "niceformbox">
     </h4>
 
-    <h4> First Name: 
-        <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
+    <h4 class = "centeredtext"> First Name: 
+        <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class = "niceformbox">
     </h4>
 
-    <h4>Email Address: 
-        <input type="text" placeholder="{{data['email']}}" name= "email">
+    <h4 class = "centeredtext">Email Address: 
+        <input type="text" placeholder="{{data['email']}}" name= "email" class = "niceformbox">
     </h4>
 
-    <h4>Address: 
-        <input type="text" placeholder="{{data['address']}}" name= "address">
+    <h4 class = "centeredtext">Address: 
+        <input type="text" placeholder="{{data['address']}}" name= "address" class = "niceformbox">
     </h4>
 
 </div>
 
+<br>
+<br>
+<br>
 
  <div class = "buttons">
 
     <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
-    <button type="submit">View Transcript</button>
+    <button type="submit" class = "routebutt">View Transcript</button>
     </form>
     
-    <form action = "/logout"> 
+    <!-- <form action = "/logout"> 
     <button type="submit">Log Out</button>
-    </form>
+    </form> -->
 
     </div>
 

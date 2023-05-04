@@ -65,6 +65,13 @@ h3{
 
 }
 
+h4{
+
+  font-family:Verdana, sans-serif;
+  color:#333333;
+
+}
+
 .login{
 
     font-family:Verdana, sans-serif;
@@ -119,6 +126,24 @@ h3{
   
   }
 
+  .tableformbox{
+
+    width: 95%;
+    padding-top: 8px;
+    box-sizing: border-box;
+    background-color: #DBE6EA;
+    font-family:Verdana, sans-serif;
+      color:#333333;
+    font-size: 10px;
+  
+  }
+
+  .checkbox{
+
+    background-color: #2196F3;
+
+  }
+
   .bigformbox{
 
     width: 30%;
@@ -148,11 +173,34 @@ h3{
   
   }
 
+  .tableselectors{
+
+    width: 80%;
+    padding-top: 8px;
+    box-sizing: border-box;
+    background-color: #FCE7CA;
+    font-family:Verdana, sans-serif;
+      color:#333333;
+    font-size: 15px;
+  
+  }
+
+  .tableselectorbox{
+
+    font-family:Verdana, sans-serif;
+    color:#333333;
+    width: 80%;
+    background-color: FCF8F3;
+    border-radius: 8px;
+    font-size: 12px;
+  
+  }
+
   .selectorbox{
 
     font-family:Verdana, sans-serif;
     color:#333333;
-    width: 10%;
+    width: 12%;
     background-color: FCF8F3;
     border-radius: 8px;
     font-size: 12px;
@@ -208,6 +256,16 @@ h3{
     font-size: 12px;
   
   }
+  .searchbutt2{
+
+    font-family:Verdana, sans-serif;
+    color:#333333;
+    width: fit-content;
+    background-color: FCF8F3;
+    border-radius: 8px;
+    font-size: 12px;
+  
+  }
 
   .routebutt{
 
@@ -256,7 +314,7 @@ table, th, td {
 
   table{
 
-    width: 85%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
 

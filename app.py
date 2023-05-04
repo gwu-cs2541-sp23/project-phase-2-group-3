@@ -53,6 +53,9 @@ def login():
             
             if x['user_type'] == "recommender":
                return redirect(url_for('Rhome'))
+            
+            if x['user_type'] == "alumni":
+               return redirect(url_for('alum_home'))
 
         else:
           session['error'] = 'That username or password is not valid'

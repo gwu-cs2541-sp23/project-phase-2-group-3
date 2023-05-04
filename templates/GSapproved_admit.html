@@ -16,7 +16,7 @@
     <p> {{x[0][0]['first_name']}} {{x[0][0]['last_name']}}</a>
       &nbsp&nbsp&nbsp 
       <form action="/student/{{x[0][0]['uid']}}"> 
-        <button type="submit">View Profile</button>
+        <button type="submit" class = "routebutt">View Profile</button>
       </form>
     </p>
     {% endfor %}
@@ -24,16 +24,16 @@
     <hr color=#3F000F;>
 
     <form action="/GSstudents"> 
-      <button type="submit">All Students</button>
+      <button type="submit" class = "routebutt">All Students</button>
     </form>
 
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
+        <button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
         </form>
 
-      <form action = "/logout"> 
+      <!-- <form action = "/logout"> 
         <button type="submit">Log Out</button>
-        </form>
+        </form> -->
 
   </body>
 </html>

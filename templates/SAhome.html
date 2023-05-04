@@ -9,7 +9,7 @@
 <body>
   {% include "navbar.html" %}
 
-  <div class="main">
+  
 
     <h2> Welcome Sysadmin </h2><br><br>
 
@@ -39,19 +39,19 @@
             {{user["uid"]}}
           </td>
           <td align="center" height="50" width="100">
-            <input type="text" name="username" value="{{user['username']}}">
+            <input type="text" name="username" value="{{user['username']}}" class = "tableformbox">
           </td>
           <td align="center" height="50" width="100">
-            <input type="text" name="first_name" value="{{user['first_name']}}">
+            <input type="text" name="first_name" value="{{user['first_name']}}" class = "tableformbox">
           </td>
           <td align="center" height="50" width="100">
-            <input type="text" name="last_name" value="{{user['last_name']}}">
+            <input type="text" name="last_name" value="{{user['last_name']}}" class = "tableformbox"> 
           </td>
           <td align="center" height="50" width="100">
-            <input type="text" name="ssn" value="{{user['ssn']}}"><br>
+            <input type="text" name="ssn" value="{{user['ssn']}}" class = "tableformbox"><br>
           </td>
           <td align="center" height="50" width="100">
-            <input type="text" name="address" value="{{user['address']}}">
+            <input type="text" name="address" value="{{user['address']}}" class = "tableformbox">
           </td>
 
           <td align="center" height="50" width="100">
@@ -60,7 +60,7 @@
           <td> <!-- misc field -->
             {% if user["user_type"] == "student": %}
             <a href="/Transcript{{user['uid']}}"> transcript</a><br>
-            <select name="degree_type" id="degree_type">
+            <select name="degree_type" id="degree_type" class = "tableselectors">
               {% if student_types[user['uid']] == "MS" %}
               <option value="MS" selected> MS </option>
               <option value="PHD"> PHD </option>
@@ -71,33 +71,33 @@
             </select>
             {% elif user["user_type"] == "employee": %}
             {% if employee_privs[user['uid']]['is_professor'] %}
-            <input type="checkbox" name="employee_privileges" value="professor" checked> Professor <br>
+            <input type="checkbox" name="employee_privileges" value="professor" checked class = "checkbox"> Professor <br>
             {% else %}
-            <input type="checkbox" name="employee_privileges" value="professor"> Professor <br>
+            <input type="checkbox" name="employee_privileges" value="professor" class = "checkbox"> Professor <br>
             {% endif %}
             {% if employee_privs[user['uid']]['is_reviewer'] %}
-            <input type="checkbox" name="employee_privileges" value="reviewer" checked> Reviewer <br>
+            <input type="checkbox" name="employee_privileges" value="reviewer" checked class = "checkbox"> Reviewer <br>
             {% else %}
-            <input type="checkbox" name="employee_privileges" value="reviewer"> Reviewer <br>
+            <input type="checkbox" name="employee_privileges" value="reviewer" class = "checkbox"> Reviewer <br>
             {% endif %}
             {% if employee_privs[user['uid']]['is_review_chair'] %}
-            <input type="checkbox" name="employee_privileges" value="chair" checked> Chair <br>
+            <input type="checkbox" name="employee_privileges" value="chair" checked class = "checkbox"> Chair <br>
             {% else %}
-            <input type="checkbox" name="employee_privileges" value="chair"> Chair <br>
+            <input type="checkbox" name="employee_privileges" value="chair" class = "checkbox"> Chair <br>
             {% endif %}
             {% if employee_privs[user['uid']]['is_advisor'] %}
-            <input type="checkbox" name="employee_privileges" value="advisor" checked> Advisor <br>
+            <input type="checkbox" name="employee_privileges" value="advisor" checked class = "checkbox"> Advisor <br>
             {% else %}
-            <input type="checkbox" name="employee_privileges" value="advisor"> Advisor <br>
+            <input type="checkbox" name="employee_privileges" value="advisor" class = "checkbox"> Advisor <br>
             {% endif %}
             {% endif %}
           </td>
           <td>
-            <input type="submit" name="Form_Type" value="Submit">
+            <input type="submit" name="Form_Type" value="Submit" class = "tableselectorbox">
           </td>
           <td>
             {% if user['user_type'] != "sysadmin" %}
-            <input type="submit" name="Form_Type" value="Delete">
+            <input type="submit" name="Form_Type" value="Delete" class = "tableselectorbox">
             {% endif %}
           </td>
       </tr>
@@ -106,17 +106,17 @@
     </table>
 
     <br><br><br><br>
-    <h3> Add a New User:</h3>
+    <h3 class = "centeredtext"> Add a New User:</h3>
     <error>{{session["error"]}}</error>
-    <form action="/SAhome" method="POST">
-      Username: <input type="text" name="username"> <br>
-      First Name: <input type="text" name="first_name"> <br>
-      Last Name: <input type="text" name="last_name"> <br>
-      SSN: <input type="text" name="ssn"> <br>
-      Address: <input type="text" name="address"> <br>
+    <form action="/SAhome" method="POST" class = "centeredtext">
+      Username: <input type="text" name="username" class = "formbox"> <br>
+      First Name: <input type="text" name="first_name" class = "formbox"> <br>
+      Last Name: <input type="text" name="last_name" class = "formbox"> <br>
+      SSN: <input type="text" name="ssn" class = "formbox"> <br>
+      Address: <input type="text" name="address" class = "formbox"> <br>
       User Type:
-      <label for=user_type></label>
-      <select name=user_type id="user_type">
+      <label for=user_type class = "centeredtext"></label>
+      <select name=user_type id="user_type" class = "selectors">
         <option value="sysadmin" selected> sysadmin </option>
         <option value="gradsec"> grad secretary</option>
         <option value="employee"> employee </option>
@@ -124,7 +124,9 @@
         <option value="applicant"> applicant </option>
         <option value="recommender"> recommender </option>
       </select>
-      <br><input type="submit" name="Form_Type" value="Add User">
+      <br>
+      <br>
+      <br><input type="submit" name="Form_Type" value="Add User" class = "loginbutt">
     </form>
 
     <br>
@@ -132,7 +134,7 @@
 
     <a href="/Section_Add"> Manage Available Class Sections </a>
 
-  </div>
+  
 </body>
 
 </html>
