@@ -12,11 +12,30 @@
     <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
     <h2> universityID: {{session['uid']}}</h2>
 
+    <br>
+
+    <form action="/GSapps" method="POST">
+      
+      <input type="text" name="search" placeholder = "Search For Applicants">
+      <input type="submit" name="searchuid" value = "search by uid">
+      <input type="hidden" name="type" value="searchuid">
+      
+    </form>
+    <form action="/GSapps" method="POST">
+      
+      <input type="text" name="search" placeholder = "Search For Applicants">
+      <input type="submit" name="searchlname" value = "search by last name">
+      <input type="hidden" name="type" value="searchlname">
+      
+    </form>
+
+    <br>
+
     <ul>
 
       {%for person in applicants%}
 
-        <li>Student ID: {{person.uid}}
+        <li>Student ID: {{person.uid}} <br> Name: {{person.first_name}} {{person.last_name}}
 
           <ul>
 
@@ -80,6 +99,97 @@
       {%endfor%}
 
     </ul>
+
+    <br>
+
+    <h3>Generate Queries</h3>
+    <p>Generate a list of applicants either by their intended start semester or by the degree they intend to seek</p>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="appsdate">
+      <select id="criteria1" name="criteria1">
+
+        <option value="Fall 2023">Fall 2023</option>
+        <option value="Spring 2023">Spring 2023</option>
+        <option value="Fall 2024">Fall 2024</option>
+        <option value="Spring 2024">Spring 2024</option>
+
+      </select>
+
+    </form>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="appsdeg">
+      <select id="criteria2" name="criteria2">
+
+        <option value="MS">MS</option>
+        <option value="PHD">PHD</option>
+
+      </select>
+
+    </form>
+
+    <br>
+
+    <p>Generate a list of accepted applicants either by their intended start semester or by the degree they intend to seek</p>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="acceptdate">
+      <select id="criteria3" name="criteria3">
+
+        <option value="Fall 2023">Fall 2023</option>
+        <option value="Spring 2023">Spring 2023</option>
+        <option value="Fall 2024">Fall 2024</option>
+        <option value="Spring 2024">Spring 2024</option>
+
+      </select>
+
+    </form>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="acceptdeg">
+      <select id="criteria4" name="criteria4">
+
+        <option value="MS">MS</option>
+        <option value="PHD">PHD</option>
+
+      </select>
+
+    </form>
+
+    <br>
+
+    <p>Generate a list of other statistics either by applicants' intended start semester or by the degree the applicants' are seeking</p>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="statsdate">
+      <select id="criteria5" name="criteria5">
+
+        <option value="Fall 2023">Fall 2023</option>
+        <option value="Spring 2023">Spring 2023</option>
+        <option value="Fall 2024">Fall 2024</option>
+        <option value="Spring 2024">Spring 2024</option>
+
+      </select>
+
+    </form>
+    <form action = "/GSappsqueries" method = "POST">
+
+      <input type="submit" name="Find" value = "Find">
+      <input type="hidden" name="type" value="statsdeg">
+      <select id="criteria6" name="criteria6">
+
+        <option value="MS">MS</option>
+        <option value="PHD">PHD</option>
+
+      </select>
+
+    </form>
     
   </body>
   

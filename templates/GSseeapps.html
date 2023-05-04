@@ -1,0 +1,115 @@
+<html>
+  
+  <head>
+    
+    <title>Viewing Applicantion</title>
+    
+  </head>
+
+  <body>
+
+    {%include "navbar.html"%}
+    <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+    <h2> universityID: {{session['uid'] }}</h2>
+    <br>
+
+    <p>Fields left blank by the applicant will appear blank on this page.</p>
+
+    <br>
+    <br>
+
+    <p>Viewing Aplication of Student: {{app.uid}}</p>
+
+        <p>Students university ID: {{app.uid}}</p>
+        <p>Degree the are seeking: {{app.degreeSeeking}}</p>
+
+        <br>
+        <br>
+
+        <p>Did they complete a masters: {{app.MScheck}}</p>
+        <p>If they answered no to the previous question, the following fields are intentionally blank.</p>
+        <p>The major of their masters: {{app.MSmajor}}</p>
+        <p>Graduation year from their masters program: {{app.MSyear}}</p>
+        <p>University they completed their masters at: {{app.MSuniversity}}</p>
+        <p>GPA they obtained while completing their masters: {{app.MSgpa}}</p>
+
+        <br>
+        <br>
+
+        <p>Did they complete a bachelors: {{app.BAcheck}}</p>
+        <p>If they answered no to the previous question, the following fields are intentionally blank, and therefore the applicant should not be considered for admission.</p>
+        <p>The major of their bachelors: {{app.BAmajor}}</p>
+        <p>Graduation year from their undergraduate program: {{app.BAyear}}</p>
+        <p>University they completed theur undergraduate program at: {{app.BAuniversity}}</p>
+        <p>GPA they obtained while completed their undergraduate program at: {{app.BAgpa}}</p>
+
+        <br>
+        <br>
+
+        <p>Score of their GRE verbal section: {{app.GREverbal}}</p>
+        <p>Score of their GRE quantitative section: {{app.GREquantitative}}</p>
+        <p>Year of GRE taking: {{app.GREyear}}</p>
+        <p>Score of their GRE advanced section: {{app.GREadvancedScore}}</p>
+        <p>Subject of their GRE advanced section: {{app.GREadvancedSubject}}</p>
+
+        <br>
+        <br>
+
+        <p>Score of their TOEFL exam: {{app.TOEFLscore}}</p>
+        <p>Date of their TOEFL exam: {{app.TOEFLdata}}</p>
+
+        <br>
+        <br>
+
+        <p>Prior work experience: {{app.priorWork}}</p>
+        <p>Intended start date at our university: {{app.startDate}}</p>
+
+        <br>
+        <br>
+
+        <p> If this field is blank, please update it and upload the transcript once received via the mail, otherwise the applicant has uploaded their transcript themselves.</p>
+        <p>Status of their transcript: {{app.transcriptStatus}}</p>
+        <form action = "/GSupdateapp" method = "POST">
+
+            <input type="file" id="transcriptdoc" name="transcriptdoc">
+            <input type="submit" name="Transcript Recieved" value = "Transcript Recieved">
+            <input type="hidden" name="id" value="{{app.studentID}}">
+            <input type="hidden" name="type" value="transcript">
+
+        </form>
+
+        <br>
+        <br>
+
+        <p>Status of their 1st reccomendation letter: {{app.r1status}}</p>
+        <p>Writer of their 1st reccomendation letter: {{app.r1writer}}</p>
+        <p>Email of the writer of their 1st reccomendation letter: {{app.r1email}}</p>
+        <p>Title of the writer of their 1st reccomendation letter at their institution: {{app.r1title}}</p>
+        <p>Affilition of the writer of their 1st reccomendation letter to the applicant: {{app.r1affiliation}}</p>
+        <p>Their letter: <br> {{app.r1letter}}</p>
+
+        <br>
+        <br>
+
+        <p>If an applicant doesnt have a 2nd or 3rd reccomendation, these fields will be blank. It should not be held against the applicant.</p>
+
+        <p>Status of their 2nd reccomendation letter: {{app.r2status}}</p>
+        <p>Writer of their 2nd reccomendation letter: {{app.r2writer}}</p>
+        <p>Email of the writer of their 2nd reccomendation letter: {{app.r2email}}</p>
+        <p>Title of the writer of their 2nd reccomendation letter at their institution: {{app.r2title}}</p>
+        <p>Affiliation of the writer of their 2nd reccomendation letter to the applicant: {{app.r2affiliation}}</p>
+        <p>Their letter: <br> {{app.r2letter}}</p>
+
+        <br>
+        <br>
+
+        <p>Status of their 3rd reccomendation letter: {{app.r3status}}</p>
+        <p>Writer of their 3rd reccomendation letter: {{app.r3writer}}</p>
+        <p>Email of the writer of their 3rd reccomendation letter: {{app.r3email}}</p>
+        <p>Title of the writer of their 3rd reccomendation letter at their institution: {{app.r3title}}</p>
+        <p>Affiliation of the writer of their 3rd reccomendation letter to the applicant: {{app.r3affiliation}}</p>
+        <p>Their letter: <br> {{app.r3letter}}</p>
+
+  </body>
+
+</html>

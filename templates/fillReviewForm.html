@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <title>Fillout Review Form</title>
+    </head>
+
+    <body>
+
+        {%include "navbar.html"%}
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+        <br>
+
+        <p>Please fill out the form below, your work will not be saved when leaving this page. <br><br> All submissions are final. <br><br> A * denotes a required field.</p>
+
+        <br>
+        <br>
+
+        <form action="/submitReviewForm" method="POST">
+        <p>University ID of the applicant*: <input type="text" name="studentID" minlength = "1" required></p>
+        <p>University ID of the reviewer (you) *: <input type="text" name="reviewer" minlength = "1" required></p> 
+        <p>Semester the applicant is applying for*: <select id="semester" name="semester">
+
+            <option value="Fall">Fall</option>
+            <option value="Spring">Spring</option>
+
+          </select><select id="year" name="year">
+
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+
+          </select></p> 
+
+        <br>
+        <br>
+
+        <p>Rate the applicant's 1st reccomendation letter out of 10*: <select id="r1rating" name="r1rating">
+
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+
+          </select></p> 
+        <p>Is the applicant's 1st reccomendation letter generic*: <select id="r1generic" name="r1generic">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Is the applicant's 1st reccomendation letter credible*: <select id="r1credible" name="r1credible">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Who is the applicant's 1st reccomendation letter from*: <input type="text" name="r1from" minlength = "1" required></p> 
+
+        <br>
+        <br>
+
+        <p>If an applicant doesnt have a 2nd or 3rd reccomendation, these fields will be blank. It should not be held against the applicant.</p>
+
+        <br>
+        <br>
+
+        <p>Rate the applicant's 2nd reccomendation letter out of 10: <select id="r2rating" name="r2rating">
+
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+
+          </select></p> 
+        <p>Is the applicant's 2nd reccomendation letter generic: <select id="r2generic" name="r2generic">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Is the applicant's 2nd reccomendation letter credible: <select id="r2credible" name="r2credible">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Who is the applicant's 2nd reccomendation letter from: <input type="text" name="r2from"></p> 
+
+        <br>
+        <br>
+
+        <p>Rate the applicant's 3rd reccomendation letter out of 10: <select id="r3rating" name="r3rating">
+
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+
+          </select></p> 
+        <p>Is the applicant's 3rd reccomendation letter generic: <select id="r3generic" name="r3generic">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Is the applicant's 3rd reccomendation letter credible: <select id="r3credible" name="r3credible">
+
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+
+          </select></p> 
+        <p>Who is the applicant's 3rd reccomendation letter from: <input type="text" name="r3from"></p> 
+
+        <br>
+        <br>
+
+        <p>Your rating (0 = reject, 1 = admit, 2 = admit with aid)*: <select id="GASrating" name="GASrating">
+
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+
+          </select></p> 
+        <p>Other thoughts: <input type="text" name="thoughts"></p> 
+
+        <br>
+        <br>
+
+        <p>Fill the following only if the rating is 0 for reject.</p>
+
+        <p>Difficiences of the applicant: <input type="text" name="deficiencies"></p> 
+        <p>Reason for rejection of the applicant: <input type="text" name="rejectReason"></p> 
+
+        <br>
+        <br>
+
+        <p>Submit: <input type="submit" name="submit"></p> <br>
+
+        </form> 
+    </body>
+</html>

@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title> Welcome Chair of the Applications Committee! </title>
+  </head>
+  <body>
+        
+    {%include "navbar.html"%}
+
+        <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
+        <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+
+        <form action = "/Chome" method = "POST">
+
+            <input type="submit" value="Fill Out A Review Form">
+            <input type="hidden" name="type" value="fill">
+        
+        
+        </form>
+
+        <h1>Applicants:</h1>
+
+        <form action="/Chome" method="POST">
+      
+            <input type="text" name="search" placeholder = "Search For Applicants">
+            <input type="submit" name="searchuid" value = "search by uid">
+            <input type="hidden" name="type" value="searchuid">
+            
+          </form>
+          <form action="/Chome" method="POST">
+            
+            <input type="text" name="search" placeholder = "Search For Applicants">
+            <input type="submit" name="searchlname" value = "search by last name">
+            <input type="hidden" name="type" value="searchlname">
+            
+          </form>
+
+          <br>
+
+        {% for n in applicants %}
+
+            <form action = "/Chome" method = "POST">
+
+                <input type="submit" value="View {{n.uid}}'s Application">
+                <input type="hidden" name="id" value="{{n.uid}}">
+                <input type="hidden" name="type" value="view">
+            
+            
+            </form>
+
+            <p> Their average score (0 = reject, 1 = admit, 2 = admit with aid): {{averages[n['uid']]}}</p>
+
+            <li>Update Decision: <form action = "/Chome" method = "POST">
+
+                <select id="decision" name="decision">
+  
+                  <option value="Pending">Pending</option>
+                  <option value="Admit">Admit</option>
+                  <option value="Admit With Aid">Admit With Aid</option>
+                  <option value="Reject">Reject</option>
+  
+                </select>
+  
+                <input type="submit" name="Update" value = "Update">
+                <input type="hidden" name="id" value="{{n.uid}}">
+                <input type="hidden" name="type" value="updatedecision">
+  
+              </form></li>
+          {% endfor %}
+  </body>
+</html>

@@ -16,12 +16,29 @@
         <form action = "/FRhome" method = "POST">
 
             <input type="submit" value="Fill Out A Review Form">
-            <input type="hidden" name="button" value="fill">
+            <input type="hidden" name="type" value="fill">
         
         
         </form>
 
         <h1>Applicants:</h1>
+
+        <form action="/FRhome" method="POST">
+      
+            <input type="text" name="search" placeholder = "Search For Applicants">
+            <input type="submit" name="searchuid" value = "search by uid">
+            <input type="hidden" name="type" value="searchuid">
+            
+          </form>
+          <form action="/FRhome" method="POST">
+            
+            <input type="text" name="search" placeholder = "Search For Applicants">
+            <input type="submit" name="searchlname" value = "search by last name">
+            <input type="hidden" name="type" value="searchlname">
+            
+          </form>
+
+        <br>
 
         {% for n in applicants %}
 
@@ -29,7 +46,7 @@
 
                 <input type="submit" value="View {{n.uid}}'s Application">
                 <input type="hidden" name="id" value="{{n.uid}}">
-                <input type="hidden" name="button" value="view">
+                <input type="hidden" name="type" value="view">
             
             
             </form>

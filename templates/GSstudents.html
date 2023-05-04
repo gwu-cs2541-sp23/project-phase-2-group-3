@@ -5,17 +5,32 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h2> <center>All Enrolled Students</center> </h2>
-    <hr color=#3F000F;>
-
-    {% for student in students: %}
-    <p> {{student['first_name']}} {{student['last_name']}}</a>
-      &nbsp&nbsp&nbsp 
-      <form action="/student/{{student['uid']}}"> 
-        <button type="submit">View Profile</button>
-      </form>
-    </p>
-    {% endfor %}
+    
+    <h1 style="text-align:center;"> Welcome, Graduate Secretary! </h1>
+    <h2> All Students </h2>
+        
+        <table border="5" cellspacing="0" align="center">
+          <tr>
+            <b>
+              <td align="center" height="50" width="100"> UID <br></td>
+              <td align="center" height="50" width="100"> First Name <br></td>
+              <td align="center" height="50" width="100"> Last Name <br></td>
+              <td align="center" height="50" width="100"> Profile <br></td>
+            </b>
+          </tr>
+          {% for student in students: %}
+          <tr>
+            <td> {{ student['uid'] }} <br></td>
+            <td> {{ student['first_name'] }} </td>
+            <td> {{ student['last_name'] }} </td>
+            <td> 
+              <form action="/student/{{student['uid']}}"> 
+                <button type="submit">View Profile</button>
+              </form> 
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
 
     <hr color=#3F000F;>
 

@@ -1,92 +1,136 @@
+<!DOCTYPE html>
 <html>
-  <head>
-     <link href="/static/style.css" rel="stylesheet" type="text/css" />
-    <title>Admin Logged In</title>
- 
-  </head>
-  <body>
-   {%include "navbar.html"%}
- <center>
-    <h1 class = "sameen"> Welcome, {{session["first_name"]}} {{session["last_name"]}}! </h1>
- </center>
 
- <div class="buttons">
+<head>
+  <title> sysadmin portal </title>
+</head>
 
-    <form action = "/updateinfo" method = "POST"> 
-      <h3>University ID: {{ session['uid'] }}</h3>
-      <h4>Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname">
-      </h4>
+<body>
+  {% include "navbar.html" %}
 
-      <h4> First Name: 
-       <input type="text" placeholder= "{{session['first_name']}}" name = "fname">
-      </h4>
+  <div class="main">
 
-    <h4>Address: 
-    <input type="text" placeholder="{{data['address']}}" name= "address">
-    </h4>
+    <h1> Welcome Sysadmin </h1><br><br>
 
-    <button type="submit">Submit</button>
+    <h1> Lookup Users and Edit Info: </h1>
+
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> UID <br></td>
+          <td align="center" height="50" width="100"> Username <br></td>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> SSN <br></td>
+          <td align="center" height="50" width="100"> Address <br></td>
+          <td align="center" height="50" width="100"> User Type <br></td>
+          <td align="center" height="50" width="100"> Misc <br></td>
+          <td align="center" height="50" width="100"> Submit Changes <br></td>
+          <td align="center" height="50" width="100"> Delete User <br></td>
+        </b>
+      </tr>
+      {% for user in searched_users: %}
+      <tr>
+        <form action="/SAhome" method="POST">
+          <input type="hidden" name="uid" value="{{ user['uid'] }}">
+          <input type="hidden" name="user_type" value="{{ user['user_type'] }}">
+          <td align="center" height="50" width="100">
+            {{user["uid"]}}
+          </td>
+          <td align="center" height="50" width="100">
+            <input type="text" name="username" value="{{user['username']}}">
+          </td>
+          <td align="center" height="50" width="100">
+            <input type="text" name="first_name" value="{{user['first_name']}}">
+          </td>
+          <td align="center" height="50" width="100">
+            <input type="text" name="last_name" value="{{user['last_name']}}">
+          </td>
+          <td align="center" height="50" width="100">
+            <input type="text" name="ssn" value="{{user['ssn']}}"><br>
+          </td>
+          <td align="center" height="50" width="100">
+            <input type="text" name="address" value="{{user['address']}}">
+          </td>
+
+          <td align="center" height="50" width="100">
+            {{ user['user_type'] }}
+          </td>
+          <td> <!-- misc field -->
+            {% if user["user_type"] == "student": %}
+            <a href="/Transcript{{user['uid']}}"> transcript</a><br>
+            <select name="degree_type" id="degree_type">
+              {% if student_types[user['uid']] == "MS" %}
+              <option value="MS" selected> MS </option>
+              <option value="PHD"> PHD </option>
+              {% else %}
+              <option value="MS"> MS </option>
+              <option value="PHD" selected> PHD </option>
+              {% endif %}
+            </select>
+            {% elif user["user_type"] == "employee": %}
+            {% if employee_privs[user['uid']]['is_professor'] %}
+            <input type="checkbox" name="employee_privileges" value="professor" checked> Professor <br>
+            {% else %}
+            <input type="checkbox" name="employee_privileges" value="professor"> Professor <br>
+            {% endif %}
+            {% if employee_privs[user['uid']]['is_reviewer'] %}
+            <input type="checkbox" name="employee_privileges" value="reviewer" checked> Reviewer <br>
+            {% else %}
+            <input type="checkbox" name="employee_privileges" value="reviewer"> Reviewer <br>
+            {% endif %}
+            {% if employee_privs[user['uid']]['is_review_chair'] %}
+            <input type="checkbox" name="employee_privileges" value="chair" checked> Chair <br>
+            {% else %}
+            <input type="checkbox" name="employee_privileges" value="chair"> Chair <br>
+            {% endif %}
+            {% if employee_privs[user['uid']]['is_advisor'] %}
+            <input type="checkbox" name="employee_privileges" value="advisor" checked> Advisor <br>
+            {% else %}
+            <input type="checkbox" name="employee_privileges" value="advisor"> Advisor <br>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td>
+            <input type="submit" name="Form_Type" value="Submit">
+          </td>
+          <td>
+            {% if user['user_type'] != "sysadmin" %}
+            <input type="submit" name="Form_Type" value="Delete">
+            {% endif %}
+          </td>
+      </tr>
+      </form>
+      {% endfor %}
+    </table>
+
+    <br><br><br><br>
+    <h1> Add a New User:</h1>
+    <error>{{session["error"]}}</error>
+    <form action="/SAhome" method="POST">
+      Username: <input type="text" name="username"> <br>
+      First Name: <input type="text" name="first_name"> <br>
+      Last Name: <input type="text" name="last_name"> <br>
+      SSN: <input type="text" name="ssn"> <br>
+      Address: <input type="text" name="address"> <br>
+      User Type:
+      <label for=user_type></label>
+      <select name=user_type id="user_type">
+        <option value="sysadmin" selected> sysadmin </option>
+        <option value="gradsec"> grad secretary</option>
+        <option value="employee"> employee </option>
+        <option value="student"> student </option>
+        <option value="applicant"> applicant </option>
+      </select>
+      <br><input type="submit" name="Form_Type" value="Add User">
     </form>
 
-    </div>
+    <br>
+    <a href="/Class_Add"> Manage Course Catalogue </a><br>
 
+    <a href="/Section_Add"> Manage Available Class Sections </a>
 
- <div class = "buttons">
-
-    <form action = "/facultylist"> 
-    <button type="submit">Faculty Advisors</button>
-    </form>
-
-    <form action = "/gradlist"> 
-    <button type="submit">Graduate Students</button>
-    </form>
-
-    <form action = "/gradseclist"> 
-    <button type="submit">Graduate Secretaries</button>
-    </form>
-
-    <form action = "/alumnilist"> 
-    <button type="submit">Alumni</button>
-    </form>
-    
-
- </div>
-
- <div class = "buttons">
-
-   <form action = "/add_advisor" method = "GET"> 
-   <button type="submit">Add Advisors</button>
-   </form>
-
-   <form action = "/addthestudent" method = "GET"> 
-   <button type="submit">Add Students</button>
-   </form>
-
-   <form action = "/addgradsec" method = "GET"> 
-   <button type="submit">Add Grad Secretaries</button>
-   </form>
-
-   <form action = "/addalumni" method = "GET"> 
-   <button type="submit">Add Alumni</button>
-   </form>
-   
-
-</div>
-
-
-<div class = "buttons">
-
-   <form action = "/assignadvisor"> 
-   <button type="submit">Assign Advisors</button>
-   </form>
-
-   <form action = "/logout"> 
-   <button type="submit">Log Out</button>
-   </form>
-
-</div>
-
-
+  </div>
 </body>
+
 </html>
