@@ -291,12 +291,10 @@ INSERT INTO employee (uid, is_professor, is_advisor, is_review_chair, is_reviewe
 
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '55555555', 'pmccartney', 'password', 'Paul', 'McCartney', '010-11-0012', 'Sgt. Pepper\'s Lonely Hearts Club', 'student' );
 INSERT INTO students ( uid, degree_type, is_suspended, thesis_approved, applied_grad, start_date ) VALUES ('55555555', 'MS', FALSE, FALSE, FALSE, 'Spring 2021' );
--- add classes and grades
 
 
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '66666667', 'gharrison', 'password', 'George', 'Harrison', '011-12-0013', 'The Sun', 'student' );
 INSERT INTO students ( uid, degree_type, is_suspended, thesis_approved, applied_grad, start_date ) VALUES ('66666667', 'MS', FALSE, FALSE, FALSE, 'Spring 2021' );
--- add classes and grades
 
 
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '00000007', 'rstarr2', 'password', 'Ringo', 'Starr2', '012-13-0014', 'In the Sky with Diamonds, as well', 'student' );

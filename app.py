@@ -19,6 +19,8 @@ mydb = mysql.connector.connect(
 def login():
   cursor = mydb.cursor(dictionary=True)
 
+  session.clear()
+
   session['error'] = ''
 
   if request.method == 'POST':
@@ -1542,12 +1544,191 @@ def faculty_form(user_id):
 
 # END OF ADVISOR FUNCTIONALITY
 
+def prereq_check(section_id):
+  cursor = mydb.cursor(dictionary=True, buffered=True)
+
+  cursor.execute('SELECT current_sections.cid, class_number, day, timeslot FROM current_sections JOIN classes ON current_sections.cid = classes.cid WHERE current_sections.section_id = %s',
+                 (section_id, ))
+  course = cursor.fetchone()
+
+  eligable = True
+  cursor.execute('SELECT prereq_cid FROM prerequisites WHERE class_cid = %s', (course['cid'], ))
+  prereqs = cursor.fetchall()
+  cursor.execute('SELECT cid FROM student_classes WHERE student_uid = %s and finalized = 1', (session['uid'], ))
+  courses_taken = cursor.fetchall()
+
+  for prereq in prereqs:
+    if prereq not in courses_taken:
+      eligable = False
+          
+  if session['user_type'] == 'student_p' and int(course['class_number']) < 6000:
+    eligable = False
+
+  cursor.execute('''
+  SELECT current_sections.section_id, current_sections.day, current_sections.timeslot, current_sections.cid 
+  FROM current_sections 
+    JOIN classes ON classes.cid = current_sections.cid 
+    JOIN users ON users.uid = current_sections.professor_uid
+    JOIN student_classes ON student_classes.section_id = current_sections.section_id
+  WHERE current_sections.year = %s 
+    AND current_sections.semester = %s 
+    AND student_classes.student_uid = %s''', 
+                 (str(session['current_year']), str(session['current_semester']), session["uid"],))
+  current_classes = cursor.fetchall()
+
+  for c in current_classes:
+    if c['day'] == course['day'] and abs(c['timeslot'] - course['timeslot']) != 2:
+      eligable == False
+    elif c['cid'] == course['cid']:
+      eligable == False
+
+  return eligable
+
+def classes_search(department = "%", title = "%", number = "%"):
+  cursor = mydb.cursor(dictionary=True)
+    
+  # can't pass null parameters into sql query so we have to figure out which are searched before querying
+  cursor.execute('''
+  SELECT * 
+  FROM current_sections 
+    JOIN classes ON classes.cid = current_sections.cid 
+    JOIN users ON users.uid = current_sections.professor_uid
+  WHERE current_sections.year = %s 
+    AND current_sections.semester = %s 
+    AND classes.dept LIKE (%s) 
+    AND classes.title LIKE (%s) 
+    AND classes.cid LIKE (%s)''',
+                 (str(session['current_year']), str(session['current_semester']), department, title, number))
+  all_classes = cursor.fetchall()
+
+  cursor.execute('''
+  SELECT current_sections.section_id 
+  FROM current_sections 
+    JOIN classes ON classes.cid = current_sections.cid 
+    JOIN users ON users.uid = current_sections.professor_uid
+    JOIN student_classes ON student_classes.section_id = current_sections.section_id
+  WHERE current_sections.year = %s 
+    AND current_sections.semester = %s 
+    AND student_classes.student_uid = %s''', 
+                 (str(session['current_year']), str(session['current_semester']), session["uid"],))
+  current_classes = cursor.fetchall()
+
+  session['lookup_results_classes'] = []
+  for course in all_classes:
+    if {'section_id': course['section_id']} not in current_classes:
+      course['eligable'] = prereq_check(course['section_id'])
+      session['lookup_results_classes'].append(course)
+
 # student
-@app.route("/Shome")
+@app.route("/Shome", methods = ['GET', 'POST'])
 def Shome():
 
   if session['user_type'] == 'student':
+    session['years'] = [2014, 2023, 2024]
+    session['semesters'] = [1, 2, 3]
+    session['student_portal_error'] = ''
+    if 'current_year' not in session:
+      session['current_year'] = 2023
+    if 'current_semester' not in session:
+      session['current_semester'] = 1
+    session['semester_names'] = ['blank', 'spring', 'summer', 'fall'] # 'blank' becaues there is no 0 semester
+
     cur = mydb.cursor(dictionary = True)
+
+    if 'schedule' not in session:
+      session['schedule'] = []
+      cur.execute('SELECT * FROM student_classes JOIN classes ON classes.cid = student_classes.cid JOIN current_sections ON student_classes.section_id = current_sections.section_id WHERE student_classes.student_uid = %s AND current_sections.year = %s AND current_sections.semester = %s',
+                      (session['uid'], str(session['current_year']), str(session['current_semester'])))
+      classes_taking = cur.fetchall()
+      for i in [1, 2, 3]:
+        partial = []
+        for j in ['M', 'T', 'W', 'R', 'F']:
+          for k in classes_taking:
+            if k['timeslot'] == i and k['day'] == j:
+              partial.append([k['title'], k['section_id']])
+          else:
+            partial.append(['free period', 'none'])
+        session['schedule'].append(partial)
+    
+    session['different_periods'] = ['3-5:30pm', '4-6:30pm', '6-8:30pm']
+    session['different_periods_2'] = ['blank', '3-5:30pm', '4-6:30pm', '6-8:30pm']
+
+    if request.method == 'POST' and 'semester' in request.form:
+      session['current_semester'] = int(request.form['semester'])
+      session['current_year'] = int(request.form['year'])
+      
+      classes_search()
+
+      # TODO: get all classes from database for that semester/year
+      session['schedule'] = []
+      cur.execute('SELECT * FROM student_classes INNER JOIN current_sections ON student_classes.student_uid = (%s) AND student_classes.cid = current_sections.cid AND current_sections.year = (%s) AND current_sections.semester = (%s) JOIN classes ON classes.cid = student_classes.cid ',
+                      (session['uid'], session['current_year'], session['current_semester']))
+      classes_taking = cur.fetchall()
+      print(session['uid'])
+      print(classes_taking)
+      for i in [1, 2, 3]:
+        partial = []
+        for j in ['M', 'T', 'W', 'R', 'F']:
+          for k in classes_taking:
+            if k['timeslot'] == i and k['day'] == j:
+              partial.append([k['title'], k['section_id']])
+          else:
+            partial.append(['free period', 'none'])
+        session['schedule'].append(partial)
+        # print(session['schedule'])
+
+    elif request.method == 'POST' and 'class_lookup' in request.form:
+      department = '%'
+      title = '%'
+      number = '%'
+
+      if request.form['department'] != '':
+        department = request.form['department']
+      if request.form['title'] != '':
+        title = request.form['title']
+      if request.form['number'] != '':
+        number = request.form['number']
+      
+      classes_search(department, title, number)
+    elif request.method == 'POST':
+      cur.execute('''
+      SELECT * 
+      FROM current_sections 
+        JOIN classes ON classes.cid = current_sections.cid 
+        JOIN users ON users.uid = current_sections.professor_uid
+      WHERE current_sections.year = %s 
+        AND current_sections.semester = %s ''',
+                    (str(session['current_year']), str(session['current_semester'])))
+      all_classes = cur.fetchall()
+
+      cur.execute('''
+      SELECT current_sections.section_id 
+      FROM current_sections 
+        JOIN classes ON classes.cid = current_sections.cid 
+        JOIN users ON users.uid = current_sections.professor_uid
+        JOIN student_classes ON student_classes.section_id = current_sections.section_id
+      WHERE current_sections.year = %s 
+        AND current_sections.semester = %s 
+        AND student_classes.student_uid = %s''', 
+                    (str(session['current_year']), str(session['current_semester']), session["uid"],))
+      current_classes = cur.fetchall()
+
+      for course in all_classes:
+        if {'section_id': course['section_id']} in current_classes and course['title'] in request.form:
+          session['schedule'][course['timeslot'] - 1][['M', 'T', 'W', 'R', 'F'].index(course['day'])] = ['free period', 'none']
+          cur.execute('DELETE FROM student_classes WHERE student_classes.student_uid = %s AND student_classes.section_id = %s',
+                        (session['uid'], course['section_id']))
+          mydb.commit()
+        elif course['title'] in request.form and prereq_check(course['section_id']):
+          session['schedule'][course['timeslot'] - 1][['M', 'T', 'W', 'R', 'F'].index(course['day'])] = [course['title'], course['section_id']]
+          cur.execute('INSERT INTO student_classes VALUE(%s, %s, %s, %s, %s)',
+                        (session['uid'], course['cid'], course['section_id'], 'IP', 0))
+          mydb.commit()
+      
+      classes_search()
+
+    
+
     cur.execute("SELECT address, uid FROM users WHERE username = %s", (session['username'], ))
     data = cur.fetchone()
     mydb.commit()
