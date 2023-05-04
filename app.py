@@ -1118,10 +1118,13 @@ def advisor_home():
   if session['user_type'] == 'employee':
     # check if advisor
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
-    is_advisor = cur.fetchall()
+    cur.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cur.fetchone()
 
-    if is_advisor:
+    if booleans['is_advisor'] == False:
+      return redirect('/')
+
+    else:
       cur = mydb.cursor(dictionary = True)
       cur.execute("SELECT first_name, last_name, address, uid FROM users WHERE uid = %s", (session['uid'], ))
       data = cur.fetchone()
@@ -1133,8 +1136,7 @@ def advisor_home():
       mydb.commit()
 
       return render_template("advisor_home.html", title = 'Advisor Home Page', data = data, employee_types = employee_types)
-    else:
-      return redirect('/Fhome')
+
   else:
     return redirect('/')
   
@@ -1145,9 +1147,13 @@ def phd_students():
   if session['user_type'] == 'employee':
     # check if advisor
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
-    is_advisor = cur.fetchall()
-    if is_advisor:
+    cur.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cur.fetchone()
+
+    if booleans['is_advisor'] == False:
+      return redirect('/')
+
+    else:
    
     # get advisor id from login session 
       adv_id = session['uid']
@@ -1162,7 +1168,8 @@ def phd_students():
       # get uid of all phd advisees
       phd_advisees = list()
       for x in range(len(all_advisees)):
-         cur.execute("SELECT uid FROM students WHERE uid = %s AND degree_type = %s", (all_advisees[x]['is_advisor'], 'PHD'))
+         print(all_advisees[x])
+         cur.execute("SELECT uid FROM students WHERE uid = %s AND degree_type = %s", (all_advisees[x]['uid'], 'PHD'))
          info1 = cur.fetchall()
          # get rest of student info
          if info1:
@@ -1435,10 +1442,12 @@ def m_students():
   if session['user_type'] == 'employee':
     # check if advisor
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
-    is_advisor = cur.fetchall()
-    if is_advisor:
-   
+    cur.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cur.fetchone()
+
+    if booleans['is_advisor'] == False:
+      return redirect('/')
+    else:
     # get advisor id from login session 
       adv_id = session['uid']
 
@@ -1452,7 +1461,7 @@ def m_students():
       # get uid of all phd advisees
       m_advisees = list()
       for x in range(len(all_advisees)):
-         cur.execute("SELECT uid FROM students WHERE uid = %s AND degree_type = %s", (all_advisees[x]['is_advisor'], 'MS'))
+         cur.execute("SELECT uid FROM students WHERE uid = %s AND degree_type = %s", (all_advisees[x]['uid'], 'MS'))
          info1 = cur.fetchall()
          # get rest of student info
          if info1:
@@ -1461,9 +1470,9 @@ def m_students():
           m_advisees.append(info2)
 
       return render_template('masters_students.html', m_advisees=m_advisees)
-
+    
   else:
-    return redirect('/')
+     return redirect('/')
   
 # review transcript of advisee
 @app.route('/faculty/advisees/<transcript_id>')
@@ -1472,10 +1481,13 @@ def faculty_transcript(transcript_id):
   if session['user_type'] == 'employee':
     # check if advisor
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
-    is_advisor = cur.fetchall()
-    if is_advisor:
+    cur.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cur.fetchone()
+
+    if booleans['is_advisor'] == False:
+      return redirect('/')
     
+    else:
       if transcript_id != None:
             transcript_id = int(transcript_id)
 
@@ -1497,8 +1509,6 @@ def faculty_transcript(transcript_id):
 
             return render_template('student_transcript.html', transcript=result)
 
-    else:
-      return redirect('/')
     
 # review form 1 answers from advisees
 @app.route('/faculty/advisees/form1/<user_id>', methods=['GET', 'POST'])
@@ -1508,10 +1518,13 @@ def faculty_form(user_id):
   if session['user_type'] == 'employee':
     # check if advisor
     cur = mydb.cursor(dictionary = True)
-    cur.execute("SELECT is_advisor FROM employee WHERE uid = %s", (session['uid'], ))
-    is_advisor = cur.fetchall()
+    cur.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cur.fetchone()
 
-    if is_advisor:
+    if booleans['is_advisor'] == False:
+      return redirect('/')
+    
+    else:
       # get uid
       if request.method == "GET":
         if user_id != None:
@@ -1530,7 +1543,7 @@ def faculty_form(user_id):
 
             # get all info from classes listed in form1
             for x in range(len(class_ids)):
-               cur.execute("SELECT * FROM classes WHERE cid = %s", (class_ids[x], ))
+               cur.execute("SELECT * FROM classes WHERE cid = %s", (class_ids[x]['cid'], ))
                form1_answer = cur.fetchall()
                if not form1_answer:
                   form1_answer = []
