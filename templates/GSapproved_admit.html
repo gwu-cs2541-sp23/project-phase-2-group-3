@@ -6,33 +6,43 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>Students Approved for Graduation with Admit Semester/Year {{start_date}}</center> </h2>
-    <hr color=#3F000F;>
+    <hr>
 
     {% if not result %}
     <p> Your search found 0 results. </p>
     {% endif %}
 
-    {% for x in result: %}
-    <p> {{x[0][0]['first_name']}} {{x[0][0]['last_name']}}</a>
-      &nbsp&nbsp&nbsp 
-      <form action="/student/{{x[0][0]['uid']}}"> 
-        <button type="submit">View Profile</button>
-      </form>
-    </p>
-    {% endfor %}
+    {% if result %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Profile <br></td>
+        </b>
+      </tr>
+      {% for x in result: %}
+      <tr>
+        <td> {{x[0][0]['first_name']}} <br></td>
+        <td> {{x[0][0]['last_name']}} </td>
+        <td>
+          <form action="/student/{{x[0][0]['uid']}}"> 
+          <button type="submit" class="routebutt">View Profile</button>
+          </form> 
+       </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
 
-    <hr color=#3F000F;>
+    <hr>
 
     <form action="/GSstudents"> 
-      <button type="submit">All Students</button>
+      <button type="submit" class="routebutt">All Students</button>
     </form>
 
       <form action = "/GShome"> 
-        <button type="submit">Graduate Secretary Home Page</button>
-        </form>
-
-      <form action = "/logout"> 
-        <button type="submit">Log Out</button>
+        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
         </form>
 
   </body>
