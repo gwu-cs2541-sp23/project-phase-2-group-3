@@ -309,7 +309,7 @@ img{
 
 table, th, td {
     border: 1px solid;
-    border-collapse: collapse;
+    
   }
 
   table{
@@ -317,16 +317,33 @@ table, th, td {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+    border-color: #FFFCF8;
 
   }
 
-  td,th{
+  th{
 
     text-align: center;
     height: 50px;
     vertical-align: center;
     font-family:Verdana, sans-serif;
     color:#333333;
+    border-radius: 8px;
+    border-color: #FFFCF8;
+    background-color: #607566;
+
+  }
+
+  td{
+
+    text-align: center;
+    height: 50px;
+    vertical-align: center;
+    font-family:Verdana, sans-serif;
+    color:#333333;
+    border-radius: 8px;
+    border-color: #FFFCF8;
+    background-color: #7b9c84;
 
   }
 
