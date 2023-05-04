@@ -1652,7 +1652,7 @@ def applygrad():
   #connect to the database
     cur = mydb.cursor(dictionary = True)
 
-    if request.method == "GET":
+    if request.method == "POST":
        cur.execute("UPDATE students SET applied_grad = %s WHERE uid = %s", (True, session['uid'], ))
        return render_template("applygrad.html")
     else:
