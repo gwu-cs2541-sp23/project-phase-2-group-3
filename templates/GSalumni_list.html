@@ -5,8 +5,9 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h2> <center>Alumni</center> </h2>
+    <h2> <center>Alumni Data</center> </h2>
     <h4> Sort By:
+      <br>
       <form action="/GSalumni/masters"> 
         <button type="submit">Master's Alumni</button>
       </form>
@@ -16,7 +17,7 @@
       <p> Graduation Year 
           &nbsp
           <form action="/GSalumni/gradyear" method="POST">
-            <input type="text" name="search" placeholder = "Search for Alumni">
+            <input type="text" name="search" placeholder = "Search a Year">
             <input type="submit" name="search_gradyear" value = "search by graduation year">
             <input type="hidden" name="type" value="search_gradyear">
           </form>  
@@ -25,17 +26,33 @@
   
     <hr color=#3F000F;>
 
+    <center> </center>
     {% if not alumni_info %}
         <p> No alumni to be displayed. </p>
     {% endif %}
 
-    {% for alumni in alumni_info: %}
-    <p> {{alumni[0]['first_name']}} {{alumni[0]['last_name']}}
-        <ul> Email: {{alumni[1][0]['email']}} </ul>
-    </p>
-    {% endfor %}
+    {% if alumni_info %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Email <br></td>
+        </b>
+      </tr>
+      {% for alumni in alumni_info: %}
+      <tr>
+        <td> {{alumni[0]['first_name']}} <br></td>
+        <td> {{alumni[0]['last_name']}} </td>
+        <td> {{alumni[1][0]['email']}} </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
 
-    <hr color=#3F000F;>
+  </center>
+
+    <hr>
 
       <form action = "/GShome"> 
         <button type="submit">Graduate Secretary Home Page</button>

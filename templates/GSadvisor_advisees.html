@@ -12,16 +12,30 @@
     <p> There are currently no advisees for {{advisor_name['first_name']}} {{advisor_name['last_name']}}. </p>
     {% endif %}
 
-    {% for x in advisees: %}
-    <p> {{x[0]['first_name']}} {{x[0]['last_name']}}</a>
-      &nbsp&nbsp&nbsp 
-      <form action="/student/{{x[0]['uid']}}"> 
-        <button type="submit">View Profile</button>
-      </form>
-    </p>
-    {% endfor %}
+    {% if advisees %}
+      <table border="5" cellspacing="0" align="center">
+        <tr>
+          <b>
+            <td align="center" height="50" width="100"> First Name <br></td>
+            <td align="center" height="50" width="100"> Last Name <br></td>
+            <td align="center" height="50" width="100"> Profile <br></td>
+          </b>
+        </tr>
+        {% for x in advisees: %}
+        <tr>
+          <td> {{x[0]['first_name']}}</td>
+          <td> {{x[0]['last_name']}} </td>
+          <td> 
+            <form action="/student/{{x[0]['uid']}}"> 
+              <button type="submit">View Profile</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
 
-    <hr color=#3F000F;>
+    <hr>
 
       <form action = "/GShome"> 
         <button type="submit">Graduate Secretary Home Page</button>

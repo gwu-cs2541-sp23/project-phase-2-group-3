@@ -1,24 +1,30 @@
 <html>
-    <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
-    <title> Advisor Homepage </title>
-    <h1> <center>Welcome, {{ data['first_name'] }} {{ data['last_name'] }}</center> </h1>
-    <h3><center> Advisor Homepage </center></h3>
-    
-
     <body>
         {%include "navbar.html"%}
-        <form action="/faculty/advisees/phd"> 
-            <button type="submit">PhD Advisees</button>
-        </form>
-        <form action="/faculty/advisees/masters"> 
-            <button type="submit">Master's Advisees</button>
-        </form>
+
+        <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
+        <title> Advisor Homepage </title>
+        <h1> <center>Welcome, {{data['first_name']}} {{data['last_name']}}</center> </h1>
+        <h2><center> Advisor Homepage </center></h2>
+
         <br>
+
+        <center>
+            <form action="/faculty/advisees/phd"> 
+                <button type="submit">View PhD Advisees</button>
+            </form>
+            <br>
+            <form action="/faculty/advisees/masters"> 
+                <button type="submit">View Master's Advisees</button>
+            </form>
+        </center>
+
+        <br>
+
+        <hr>
+
         <form action="/Fhome"> 
             <button type="submit">Employee Home Page</button>
-        </form>
-        <form action="/logout"> 
-            <button type="submit">Log Out</button>
         </form>
 
     </body>

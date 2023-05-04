@@ -1,20 +1,48 @@
 <html>
     <head> <link href="/static/style.css" rel="stylesheet" type="text/css" /> </head>
-    <title> PhD Students </title>
-    <h1> PhD Students </h1>
+    <title> PhD Advisees </title>
+    <br>
     <body>
         {%include "navbar.html"%}
-        {% for student in phd_advisees %}
-        <li> {{ student[1]['first_name'] }} {{ student[1]['last_name']}} </li>
-        <li> ID: {{ student[0]['uid'] }}</li>
-        <li> Email: {{ student[1]['email'] }}</li>
-        <li> <a href="/faculty/advisees/{{student[0]['uid']}}">View Transcript</a></li>
-        <li> <a href="/faculty/advisees/formone/{{student[0]['uid']}}">Review FormOne</a></li>
-        {% endfor %}
+        <center>
+        <h1> PhD Advisees </h1>
+        {% if phd_advisees %}
+        <table border="5" cellspacing="0" align="center">
+            <tr>
+              <b>
+                <td align="center" height="50" width="100"> UID <br></td>
+                <td align="center" height="50" width="100"> First Name <br></td>
+                <td align="center" height="50" width="100"> Last Name <br></td>
+                <td align="center" height="50" width="100"> View Transcript <br></td>
+                <td align="center" height="50" width="100"> View Form 1 <br></td>
+              </b>
+            </tr>
+            {% for student in phd_advisees: %}
+            <tr>
+              <td> {{ student[0]['uid'] }} <br></td>
+              <td> {{ student[0]['first_name'] }} </td>
+              <td> {{ student[0]['last_name']}} </td>
+              <td> 
+                <form action="/faculty/advisees/{{student[0]['uid']}}"> 
+                    <button type="submit">View Transcript</button>
+                </form> 
+              </td>
+              <td>
+                <form action="/faculty/advisees/form1/{{student[0]['uid']}}"> 
+                    <button type="submit">Review Form 1</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+
+
         {% if not phd_advisees %}
         <p> No PhD advisees to be displayed. </p>
         {% endif %}
     </body>
+    </center>
 
     <form action = "/Fhome"> 
         <button type="submit">Employee Home Page</button>

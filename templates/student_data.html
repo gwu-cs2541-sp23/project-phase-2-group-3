@@ -5,46 +5,79 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h1 style="text-align:center;"> Student Data </h1>
-    <h2> {{student_info[0][0]['first_name']}} {{student_info[0][0]['last_name']}} </h2>
-    <p> Address: {{student_info[0][0]['address']}}</p>
+    <h1 style="text-align:center;"> {{student_info[0][0]['first_name']}} {{student_info[0][0]['last_name']}} </h1>
+    <center><p> Address: {{student_info[0][0]['address']}}</p>
+
+    <hr>
 
     <h3> Academic Information </h3>
-    <li> ID: {{student_info[0][0]['uid']}} </li>
-    <li> {% if student_info[2][0]['degree_type'] == 'MS' %}
-            Master's student
-          {% endif %}
-          {% if student_info[2][0]['degree_type'] == 'PHD' %}
-            PhD student
-            {% if student_info[-1][0]['thesis_approved'] == 'False': %}
-            <li>Thesis status: Not Approved
-              {% endif %}
-              {% if student_info[-1][0]['thesis_approved'] == 'True': %}
-              Thesis status: Approved
-            </li>
-            {% endif %}
-          {% endif %}
-    </li>
-    <li> Advisor: {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}} 
-    </li>
-    <li> GPA: {{student_info[4]['gpa']}} </li>
-    <li> Total credit hours (not including classes IP): {{student_info[5]['total_credit_hours']}} </li>
-    <li> {% if student_info[1]['eligible'] == 'False': %}
-            Not eligible for graduation
-            <ul> <li>Reason(s): </li>
-                {% for x in student_info[1]['reason']: %}
-                  <ul> <li> {{x}} </li> </ul>
-                {% endfor %}
-            </ul>
-          {% endif %}
-          {% if student_info[1]['eligible'] == 'True': %}
-            Eligible for graduation
-            <ul> <form action="/graduate/{{student_info[0][0]['uid']}}"> 
-                  <button type="submit">Approve for Graduation</button>
-                </form>
-            </ul>
-          {% endif %}
-     </li>
+
+    {% if student_info[2][0]['degree_type'] == 'MS' %}
+      <table border="5" cellspacing="0" align="center">
+        <tr>
+          <b>
+            <td align="center" height="50" width="100"> UID <br></td>
+            <td align="center" height="50" width="100"> Degree <br></td>
+            <td align="center" height="50" width="100"> Advisor <br></td>
+            <td align="center" height="50" width="100"> GPA <br></td>
+            <td align="center" height="50" width="100"> Total Credit Hours <br></td>
+          </b>
+        </tr>
+        <tr>
+          <td> {{student_info[0][0]['uid']}} <br></td>
+          <td> Master's </td>
+          <td> {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}}  </td>
+          <td> {{student_info[4]['gpa']}} </td>
+          <td> {{student_info[5]['total_credit_hours']}}  </td>
+        </tr>
+      </table>
+    {% endif %}
+
+    {% if student_info[2][0]['degree_type'] == 'PHD' %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> UID <br></td>
+          <td align="center" height="50" width="100"> Degree <br></td>
+          <td align="center" height="50" width="100"> Advisor <br></td>
+          <td align="center" height="50" width="100"> GPA <br></td>
+          <td align="center" height="50" width="100"> Total Credit Hours <br></td>
+          <td align="center" height="50" width="100"> Thesis Status <br></td>
+        </b>
+      </tr>
+      <tr>
+        <td> {{student_info[0][0]['uid']}} <br></td>
+        <td> PhD </td>
+        <td> {{student_info[6][0]['first_name']}} {{student_info[6][0]['last_name']}}  </td>
+        <td> {{student_info[4]['gpa']}} </td>
+        <td> {{student_info[5]['total_credit_hours']}}  </td>
+        {% if student_info[-1][0]['thesis_approved'] == False: %}
+        <td> Not Approved </td>
+        {% endif %}
+        {% if student_info[-1][0]['thesis_approved'] == True: %}
+        <td> Approved </td>
+        {% endif %}
+      </tr>
+    </table>
+    {% endif %}
+
+    <br>
+    <hr>
+
+    {% if student_info[1]['eligible'] == 'False': %}
+      <h3>Not currently eligible for graduation for the following reasons:</h3>
+        {% for x in student_info[1]['reason']: %}
+          <p>{{x}}</p>
+            {% endfor %}
+    {% endif %}
+    {% if student_info[1]['eligible'] == 'True': %}
+      <h3>Currently eligible for graduation</h3>
+        <form action="/graduate/{{student_info[0][0]['uid']}}"> 
+            <button type="submit">Approve for Graduation</button>
+        </form>
+            
+    {% endif %}
+  </center>
 
     <hr color=#3F000F;>
 
