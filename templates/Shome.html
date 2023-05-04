@@ -126,7 +126,7 @@
             <td align="center" height="50" widht="100">
                 <b>{{ session['schedule'][period][day][0] }}</b>
                 {% if session['schedule'][period][day][0] != 'free period' %}
-                    <a href={{ url_for('login') }}>class page</a>
+                    <a href={{ url_for('Class_Page', class_ID = session['schedule'][period][day][1]) }}>class page</a>
                     <form method="POST" action="/Student_Portal">
                         <input type="submit" name="{{ session['schedule'][period][day][0] }}" value='drop'>
                     </form>

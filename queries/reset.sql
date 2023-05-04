@@ -86,7 +86,7 @@ CREATE TABLE classes (
 DROP TABLE IF EXISTS current_sections;
 CREATE TABLE current_sections (
     cid INTEGER,
-    section_id varchar(8),
+    section_id varchar(32),
     professor_uid CHAR(8),
     year INTEGER,
     semester INTEGER,
@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS student_classes;
 CREATE TABLE student_classes (
     student_uid CHAR(8),
     cid INTEGER,
-    section_id varchar(8),
+    section_id varchar(32),
     grade char(4),
     finalized BOOL,
     PRIMARY KEY(student_uid, cid, section_id),

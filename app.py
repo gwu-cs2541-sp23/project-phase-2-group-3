@@ -37,6 +37,7 @@ def login():
             session['uid'] = x['uid']
             session['first_name'] = x['first_name']
             session['last_name'] = x['last_name']
+            session['address'] = x['address']
 
             if x['user_type'] == "sysadmin":
                return redirect(url_for('SAhome'))
@@ -1311,7 +1312,7 @@ def Class_Page(class_ID):
   
   cursor.execute('''SELECT * 
 FROM current_sections 
-	JOIN classes ON current_sections.cid = classes.cid 
+	JOIN classes ON current_sections.cid = classes.cid
     LEFT JOIN student_classes ON student_classes.section_id = current_sections.section_id 
     LEFT JOIN users ON users.uid = current_sections.professor_uid 
 WHERE current_sections.section_id = %s''',
@@ -1322,7 +1323,7 @@ WHERE current_sections.section_id = %s''',
   except:
     pass
 
-  cursor.execute('SELECT * FROM student_classes JOIN users ON users.uid = student_classes.student_uid WHERE student_classes.section_id = (%s)',
+  cursor.execute('SELECT * FROM student_classes INNER JOIN users ON users.uid = student_classes.student_uid WHERE student_classes.section_id = (%s)',
                  (class_ID, ))
   session['students'] = cursor.fetchall()
 
