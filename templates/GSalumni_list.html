@@ -7,6 +7,31 @@
     {%include "navbar.html"%}
     <h2> <center>Alumni Data</center> </h2>
 
+    <h4> Sort By:
+      <br>
+      <form action="/GSalumni/masters"> 
+        <button type="submit" class = "selectorbox">Master's Alumni</button>
+      </form>
+      <form action="/GSalumni/phd"> 
+        <button type="submit" class = "selectorbox">PhD Alumni</button>
+      </form>
+      <p> Graduation Year 
+          &nbsp
+          <form action="/GSalumni/gradyear" method="POST">
+            <input type="text" name="search" placeholder = "Search a Year" class = "searchbox">
+            <input type="submit" name="search_gradyear" value = "search by graduation year" class = "searchbutt2">
+            <input type="hidden" name="type" value="search_gradyear">
+          </form>  
+      </p>
+    </h4>
+  
+    <br>
+    <br>
+    <hr color=#3F000F;>
+    <br>
+    <br>
+
+
     <br>
 
     {% if alumni_info %}
@@ -57,11 +82,16 @@
 
   </center>
 
-    <hr>
+    <br>
+    <br>
+    <hr color=#3F000F;>
+    <br>
+    <br>
 
       <form action = "/GShome"> 
-        <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
+        <button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
         </form>
+
 
   </body>
 </html>

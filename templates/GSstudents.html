@@ -25,15 +25,21 @@
             <td> {{ student['last_name'] }} </td>
             <td> 
               <form action="/student/{{student['uid']}}"> 
-                <button type="submit" class = "routebutt">View Profile</button>
+                <button type="submit" class = "tableselectorbox">View Profile</button>
               </form> 
             </td>
           </tr>
           {% endfor %}
         </table>
 
+        <br>
     <br>
-    <hr>
+    <br>
+
+    <hr color=#3F000F;>
+
+    <br>
+    <br>
     <br>
 
     <form action="/GSapproved_grad"> 
@@ -48,5 +54,8 @@
       <button type="submit" class = "routebutt">Assign Advisors</button>
       </form>
 
+      <form action = "/GShome"> 
+        <button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
+        </form>
   </body>
 </html>

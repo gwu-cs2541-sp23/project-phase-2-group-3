@@ -17,6 +17,7 @@
  <div class="buttons">
 
     <form action = "/updateinfo" method = "POST"> 
+
     
         <h4>Last Name: 
             <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="niceformbox">
@@ -33,14 +34,19 @@
         <button type="submit" class="routebutt">Submit</button>
     </form>
 
+
 </div>
 
+<br>
+<br>
 <br>
 
  <div class = "buttons">
 
-    <form action = "/coursehist/{{session['uid']}}" method = "POST"> 
-    <button type="submit" class="routebutt">View Transcript</button>
+    <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
+    <button type="submit" class = "routebutt">View Transcript</button>
+    </form>
+    
     </form>
 
     </div>
