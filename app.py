@@ -1651,19 +1651,14 @@ def applygrad():
   if session['user_type'] == 'student':
   #connect to the database
     cur = mydb.cursor(dictionary = True)
-    if request.method == "GET":
-      return render_template("applying.html")
 
-    if request.method == "POST":
-      type = (request.form["dates"])
-      cur.execute("INSERT into students (applied_grad) VALUES (%s) WHERE uid = %s", (True, session['uid']))
-      mydb.commit()
-      return render_template("applygrad.html")
+    if request.method == "GET":
+       cur.execute("UPDATE students SET applied_grad = %s WHERE uid = %s", (True, session['uid'], ))
+       return render_template("applygrad.html")
+    else:
+       return redirect('/')
   else:
     return redirect('/')
-
-
-  return render_template("applygrad.html")
 
 # alumni
 @app.route("/alum_home")
