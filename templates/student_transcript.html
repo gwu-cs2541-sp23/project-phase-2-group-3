@@ -7,6 +7,11 @@
         <br>
         <br>
         <center>
+          {% if not transcript %}
+            <h3> No transcript to be displayed. </h3>
+          {% endif %}
+
+          {% if transcript %}
           <h2>Transcript for {{transcript[0]['first_name'] + ' ' + transcript[0]['last_name']  }}</h2>
         <table border="5" cellspacing="0" align="center">
             <tr>
@@ -30,6 +35,13 @@
             </tr>
             {% endfor %}
           </table>
+          {% endif %}
+
+          <hr>
+
+          <form action = "/Fhome"> 
+            <button type="submit" class="routebutt">Employee Home Page</button>
+            </form>
         </center>
     </body>
 </html>

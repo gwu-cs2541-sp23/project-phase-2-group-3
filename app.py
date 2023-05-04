@@ -698,7 +698,7 @@ def gs_graduate(uid):
 
     cur.execute("INSERT INTO alumni (uid, grad_year) VALUES (%s, %s)", (uid, 2023))
     cur.execute("DELETE FROM students WHERE uid = %s", (uid, ))
-    cur.execute("UPDATE users SET user_type = %s WHERE user_id = %s", ('alumni', uid))
+    cur.execute("UPDATE users SET user_type = %s WHERE uid = %s", ('alumni', uid))
 
     return render_template("graduate.html", data=data)
 
@@ -890,7 +890,7 @@ def GSapproved_grad():
         student_info = list()
         degree = list()
 
-        cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s", (students[x]['uid'], ))
+        cur.execute("SELECT first_name, last_name, uid FROM users WHERE uid = %s AND user_type = %s", (students[x]['uid'], 'student'))
         student_basic_info = cur.fetchall()
         student_info.insert(0, student_basic_info)
         eligible = {'eligible': 'True'}
@@ -2009,8 +2009,6 @@ def alum_home():
 def coursehist(id):
 
   if session['user_type'] == 'student' or 'alumni' or 'employee' or 'gradsec' or 'sysadmin':
-
-    print("in coursehist")
 
     type = session['user_type']
     #connect to the database
