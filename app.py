@@ -1192,7 +1192,7 @@ def Fhome():
   
   if request.method == 'POST':
     if request.form['button'] == "professor":
-      return redirect(url_for('?????'))
+      return redirect(url_for('Phome'))
     
     if request.form['button'] == "advisor":
       return redirect(url_for('advisor_home'))
@@ -1209,6 +1209,142 @@ def Fhome():
   booleans = cursor.fetchone()
 
   return render_template('Fhome.html', booleans=booleans)
+
+@app.route('/Phome', methods=['GET', 'POST'])
+def Phome():
+  cursor = mydb.cursor(dictionary=True)
+  # doesn't allow access if not logged in as faculty
+  if session["user_type"] != "employee":
+    return redirect(url_for("Login"))
+
+  session['years'] = [2014, 2023, 2024]
+  session['semesters'] = [1, 2, 3]
+  session['student_portal_error'] = ''
+  if 'current_year' not in session:
+    session['current_year'] = 2023
+  if 'current_semester' not in session:
+    session['current_semester'] = 3
+  session['semester_names'] = ['blank', 'spring', 'summer', 'fall'] # 'blank' becaues there is no 0 semester
+
+  # Make the blank schedule
+  # TODO: make a 'create schedule' function, takes a semester and a student as input
+  if 'schedule' not in session:
+    session['schedule'] = []
+    cursor.execute('SELECT * FROM current_sections JOIN classes ON classes.cid = current_sections.cid JOIN users ON current_sections.professor_uid = users.uid WHERE users.uid = %s AND current_sections.year = %s AND current_sections.semester = %s',
+                    (session['uid'], str(session['current_year']), str(session['current_semester'])))
+    classes_teaching = cursor.fetchall()
+    for i in [1, 2, 3]:
+      partial = []
+      for j in ['M', 'T', 'W', 'R', 'F']:
+        for k in classes_teaching:
+          if k['timeslot'] == i and k['day'] == j:
+            partial.append([k['title'], k['section_id']])
+        else:
+          partial.append(['free period', 'none'])
+      session['schedule'].append(partial)
+  
+  session['different_periods'] = ['3-5:30pm', '4-6:30pm', '6-8:30pm']
+  session['different_periods_2'] = ['blank', '3-5:30pm', '4-6:30pm', '6-8:30pm']
+
+  # Allows users to edit there personal info
+  if request.method == 'POST' and 'edit_first_name' in request.form:
+    if request.form['new_first_name'] != '':
+      cursor.execute('UPDATE users SET first_name = %s WHERE uid = %s', (request.form['new_first_name'], session['uid']))
+      session['first_name'] = request.form['new_first_name']
+      mydb.commit()
+      cursor.close()
+  
+  elif request.method == 'POST' and 'edit_last_name' in request.form:
+    if request.form['new_last_name'] != '':
+      cursor.execute('UPDATE users SET last_name = %s WHERE uid = %s', (request.form['new_last_name'], session['uid']))
+      session['last_name'] = request.form['new_last_name']
+      mydb.commit()
+      cursor.close()
+
+  elif request.method == 'POST' and 'edit_address' in request.form:
+    if request.form['new_address'] != '':
+      cursor.execute('UPDATE users SET address = %s WHERE uid = %s', (request.form['new_address'], session['uid']))
+      mydb.commit()
+      cursor.close()
+      session['address'] = request.form['new_address']
+
+  elif request.method == 'POST' and 'edit_password' in request.form:
+    if request.form['new_password'] != '':
+      cursor.execute('UPDATE users SET password = %s WHERE uid = %s', (request.form['new_password'], session['uid']))
+      mydb.commit()
+      cursor.close()
+      session['password'] = request.form['new_password']
+  
+  # Allow users to pick the semester they want to see there schedule for
+  elif request.method == 'POST' and 'semester' in request.form:
+    session['current_semester'] = int(request.form['semester'])
+    session['current_year'] = int(request.form['year'])
+
+    # TODO: get all classes from database for that semester/year
+    session['schedule'] = []
+    cursor.execute('SELECT * FROM current_sections JOIN classes ON classes.cid = current_sections.cid JOIN users ON current_sections.professor_uid = users.uid WHERE users.uid = %s AND current_sections.year = %s AND current_sections.semester = %s',
+                    (session['uid'], str(session['current_year']), str(session['current_semester'])))
+    classes_taking = cursor.fetchall()
+    for i in [1, 2, 3]:
+      partial = []
+      for j in ['M', 'T', 'W', 'R', 'F']:
+        for k in classes_taking:
+          if k['timeslot'] == i and k['day'] == j:
+            partial.append([k['title'], k['section_id']])
+        else:
+          partial.append(['free period', 'none'])
+      session['schedule'].append(partial)
+  
+
+  return render_template('Phome.html')
+
+@app.route('/Class_Page<class_ID>', methods = ['GET', 'POST'])
+def Class_Page(class_ID):
+  # class_ID is a section id
+  cursor = mydb.cursor(dictionary=True)
+  if "user_type" not in session:
+    return redirect(url_for("login"))
+  
+  session['different_periods'] = ['3-5:30pm', '4-6:30pm', '6-8:30pm']
+  session['different_periods_2'] = ['blank', '3-5:30pm', '4-6:30pm', '6-8:30pm']
+  session['semester_names'] = ['blank', 'spring', 'summer', 'fall']
+  
+  cursor.execute('''SELECT * 
+FROM current_sections 
+	JOIN classes ON current_sections.cid = classes.cid 
+    LEFT JOIN student_classes ON student_classes.section_id = current_sections.section_id 
+    LEFT JOIN users ON users.uid = current_sections.professor_uid 
+WHERE current_sections.section_id = %s''',
+                (class_ID, ))
+  session['course'] = cursor.fetchone()
+  try:
+    cursor.fetchall() # so cursor doesn't have a fit when I try to use it again
+  except:
+    pass
+
+  cursor.execute('SELECT * FROM student_classes JOIN users ON users.uid = student_classes.student_uid WHERE student_classes.section_id = (%s)',
+                 (class_ID, ))
+  session['students'] = cursor.fetchall()
+
+  session['possible_grades'] = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'F', 'IP']
+
+  if request.method == 'POST':
+    student_uid = list(request.form.keys())[0]
+    new_grade = request.form[student_uid]
+    if new_grade == 'IP':
+      cursor.execute('UPDATE student_classes SET grade = %s, finalized = 0 WHERE student_uid = %s AND section_id = %s',
+                   (new_grade, student_uid, class_ID))
+      mydb.commit()
+    else:
+      cursor.execute('UPDATE student_classes SET grade = %s, finalized = 1 WHERE student_uid = %s AND section_id = %s',
+                   (new_grade, student_uid, class_ID))
+      mydb.commit()
+
+    cursor.execute('SELECT * FROM student_classes JOIN users ON users.uid = student_classes.student_uid WHERE student_classes.section_id = %s',
+                 (class_ID, ))
+    session['students'] = cursor.fetchall()
+  
+  return render_template('Class_Page.html', class_ID = class_ID)
 
 @app.route('/Chome', methods=['GET', 'POST'])
 def Chome():
@@ -1872,7 +2008,7 @@ def alum_home():
 @app.route('/coursehist/<id>', methods=['GET', 'POST'])
 def coursehist(id):
 
-  if session['user_type'] == 'student' or 'alumni':
+  if session['user_type'] == 'student' or 'alumni' or 'employee' or 'gradsec' or 'sysadmin':
 
     print("in coursehist")
 
@@ -1945,8 +2081,70 @@ def coursehist(id):
 
       return render_template("coursehist.html", student_grades=student_grades, courses = courses, id = id, gpa = gpa, type = type, class_info=class_info)
   else:
-    print("else statement")
-    return redirect('/')
+      type='student'
+    # classes that the student is taking
+      cur.execute("SELECT cid, grade FROM student_classes WHERE student_uid = %s", (id, ))
+      data = cur.fetchall()
+
+      #all available classes
+      cur.execute("SELECT cid, title, class_number, credit_hours from classes")
+      courses = cur.fetchall()
+      mydb.commit()
+
+      grade_points = 0
+      num_courses = 0
+      credits = 0
+
+      class_info = list()
+      cur.execute("SELECT cid, grade FROM student_classes WHERE student_uid = %s", (id, ))
+      student_grades = cur.fetchall()
+
+      for i in range(len(student_grades)):
+        cur.execute("SELECT cid, title, class_number, credit_hours FROM classes WHERE cid = %s", (student_grades[i]['cid'], ))
+        info1 = cur.fetchall()
+        class_info.append(info1)
+
+        cur.execute("SELECT credit_hours FROM classes WHERE cid = %s", (student_grades[i]['cid'], ))
+        course_hours = cur.fetchone()
+        credits += course_hours['credit_hours']
+        grade = student_grades[i]['grade'] 
+        #num_courses = num_courses + 1
+        if grade == 'A':
+            grade_points = grade_points + 4
+            num_courses = num_courses + 1
+        if grade == 'A-':
+            grade_points = grade_points + 3.7
+            num_courses = num_courses + 1
+        if grade == 'B+':
+            grade_points = grade_points + 3.3
+            num_courses = num_courses + 1
+        if grade == 'B':
+            grade_points = grade_points + 3
+            num_courses = num_courses + 1
+        if grade == 'B-':
+            grade_points = grade_points + 2.7
+            num_courses = num_courses + 1
+        if grade == 'C+':
+            grade_points = grade_points + 2.3
+            num_courses = num_courses + 1
+        if grade == 'C':
+            grade_points = grade_points + 2
+            num_courses = num_courses + 1
+        if grade == 'C-':
+            grade_points = grade_points + 1.7
+            num_courses = num_courses + 1
+        if grade == 'F':
+            grade_points = grade_points + 0
+            num_courses = num_courses + 1
+      if num_courses == 0:
+        num_courses = 1
+      gpa = grade_points / num_courses
+      gpa = round(gpa, 2)
+
+      for x in range(len(class_info)):
+         class_info[x].append(student_grades[x])
+
+      return render_template("coursehist.html", student_grades=student_grades, courses = courses, id = id, gpa = gpa, type = type, class_info=class_info)
   
   # END OF STUDENT FUNCTIONALITY
 

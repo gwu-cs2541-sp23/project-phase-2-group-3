@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> class page </title>
+    </head>
+    <body>
+        {% include "navbar.html" %}
+
+        <div class = "main">
+        Time of Class: {{ session['different_periods_2'][session['course']['timeslot']] }} <br><br>
+        Day of Class: {{ session['course']['day'] }}  <br><br>
+        Semester: {{ session['semester_names'][session['course']['semester']] }} {{ session['course']['year'] }} <br><br>
+        Class Name: {{ session['course']['title'] }} <br><br>
+        Class number: {{ session['course']['class_number'] }} <br><br>
+        Section ID: {{ class_ID }} <br><br>
+        Teacher: {{ session['course']['first_name'] }} {{ session['course']['last_name'] }} <br><br>
+
+        Students: 
+        <table border="5" cellspacing="0" align="center">
+            <tr>
+                <td align="center" height="50" width="100"><br>
+                    <b>First Name</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>Last Name</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>Univsersity_ID</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>Link to Transcript</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>Grade</b></br>
+                </td>
+            </tr>
+            {% for student in session['students'] %}
+            <tr>
+                <td align="center" height="50" width="100"><br>
+                    <b>{{ student['first_name'] }}</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>{{ student['last_name'] }}</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    <b>{{ student['uid'] }}</b></br>
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    {% if student['uid'] == session['uid'] or session['user_type'] == 'employee' or session['user_type'] == 'gradsec' %}
+                        <form action = "/coursehist/{{student['uid']}}" method = "POST"> 
+                            <button type="submit" class = "routebutt">View Enrollment Information</button>
+                        </form>
+                    {% endif %}
+                </td>
+                <td align="center" height="50" width="100"><br>
+                    {% if student['uid'] == session['uid'] %}
+                        <b>{{ student['grade'] }}</b></br>
+                    {% elif session['user_type'] == 'employee' and student['finalized'] == 1 %} 
+                        <b>{{ student['grade'] }}</b></br>
+                    {% elif session['user_type'] == 'employee' and student['finalized'] == 0 %} 
+                    <form method="POST" action="/Class_Page{{ class_ID }}">
+                        <select name="{{ student['uid'] }}">
+                            {% for grade in session['possible_grades'] %}
+                                {% if grade == student['grade'] %}
+                                    <option value="{{ grade }}" selected>{{ grade }}</option>
+                                {% else %}
+                                    <option value="{{ grade }}">{{ grade }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Submit">
+                    </form>
+                    {% elif session['user_type'] == 'grad_sec' %}
+                    <form method="POST" action="/Class_Page{{ class_ID }}">
+                        <select name="{{ student['uid'] }}">
+                            {% for grade in session['possible_grades'] %}
+                                {% if grade == student['grade'] %}
+                                    <option value="{{ grade }}" selected>{{ grade }}</option>
+                                {% else %}
+                                    <option value="{{ grade }}">{{ grade }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Submit">
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    </body>
+</html>

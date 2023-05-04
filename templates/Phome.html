@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> faculty portal </title>
+    </head>
+  <body>
+    {% include "navbar.html" %}
+
+    <div class = "buttons">
+    Welcome {{ session['first_name'] }} {{ session['last_name'] }} <br><br>
+
+    
+
+    Choose a semester: 
+    <form class="sm" method="POST" action="/Phome">
+        <select name="semester">
+            {% for semester in session['semesters'] %}
+                {% if semester == session['current_semester'] %}
+                    <option value="{{ semester }}" selected>{{ semester }}</option>
+                {% else %}
+                    <option value="{{ semester }}">{{ semester }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select name="year">
+            {% for year in session['years'] %}
+                {% if year == session['current_year'] %}
+                    <option value="{{ year }}" selected>{{ year }}</option>
+                {% else %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+
+    Schedule for semester:
+    <table border="5" cellspacing="0" align="center">
+        <tr>
+            <td align="center" height="50" width="100"><br>
+                <b>{{ session['semester_names'][session['current_semester']] }} {{ session['current_year'] }}</b></br>
+            </td>
+            <td align="center" height="50" width="100"><br>
+                <b>Monday</b></br>
+            </td>
+            <td align="center" height="50" width="100"><br>
+                <b>Tuesday</b></br>
+            </td>
+            <td align="center" height="50" width="100"><br>
+                <b>Wednesday</b></br>
+            </td>
+            <td align="center" height="50" width="100"><br>
+                <b>Thursday</b></br>
+            </td>
+            <td align="center" height="50" width="100"><br>
+                <b>Friday</b></br>
+            </td>
+        </tr>
+        {% for period in range(3) %}
+        <tr>
+            <td align="center" height="50" widht="100">
+                <b>{{ session['different_periods'][period] }}</b>
+            </td>
+            {% for day in range(5) %}
+            <td align="center" height="50" widht="100">
+                <b>{{ session['schedule'][period][day][0] }}</b>
+                {% if session['schedule'][period][day][0] != 'free period' %}
+                    <a href={{ url_for('Class_Page', class_ID = session['schedule'][period][day][1]) }}>class page</a>
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br><br>
+
+    <form action="/Phome" method="POST">
+        First Name: <input type="text" name="new_first_name" value="{{ session['first_name'] }}">
+        <input type="submit" name="edit_first_name" value="submit changes"> <br><br>
+    </form>
+
+    <form action="/Phome" method="POST">
+        Last Name: <input type="text" name="new_last_name" value="{{ session['last_name'] }}">
+        <input type="submit" name="edit_last_name" value="submit changes"> <br><br>
+    </form>
+
+    <form action="/Phome" method="POST">
+        Current address: <input type="text" name="new_address" value="{{ session['address'] }}">
+        <input type="submit" name="edit_address" value="submit changes"> <br><br>
+    </form>
+
+    <form action="/Phome" method="POST">
+        Password: <input type="text" name="new_password" value="{{ session['password'] }}">
+        <input type="submit" name="edit_password" value="submit changes"> <br><br>
+    </form>
+
+    Univsersity ID: {{ session['uid'] }} <br><br>
+  </div>
+  </body>
+</html>
