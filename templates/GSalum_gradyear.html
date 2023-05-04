@@ -5,16 +5,14 @@
   </head>
   <body>
     {%include "navbar.html"%}
-    <h2> <center>Alumni with Master's Degree</center> </h2>
+    <h2> <center>All Alumni from {{grad_year}}</center> </h2>
 
-    {% if not alumni_info %}
-        <p> No master's alumni to be displayed. </p>
+    {% if not alumni %}
+        <p> No alumni to be displayed. </p>
     {% endif %}
 
-    {% for alumni in alumni_info: %}
-    <p> {{alumni[0]['first_name']}} {{alumni[0]['last_name']}}
-        <ul> Email: {{alumni[1][0]['email']}} </ul>
-    </p>
+    {% for x in alumni: %}
+    <p> {{x[1][0]['first_name']}} {{x[1][0]['last_name']}} &nbsp&nbsp Email: {{x[0]['email']}} </p>
     {% endfor %}
 
     <hr color=#3F000F;>

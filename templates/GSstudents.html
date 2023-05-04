@@ -6,22 +6,6 @@
   <body>
     {%include "navbar.html"%}
     <h2> <center>All Enrolled Students</center> </h2>
-    <h4> Sort By:
-      <form action="/GSenrolled_masters"> 
-        <button type="submit">Master's Students</button>
-      </form>
-      <form action="/GSenrolled_phd"> 
-        <button type="submit">PhD Students</button>
-      </form>
-      <p> Semester/Year
-          Enter semester (Fall/Spring):  
-          <input type="text" name="semester">
-          Enter Year: 
-          <input type="text" name="year">
-          <button type="submit">Submit</button>   
-      </p>
-    </h4>
-  
     <hr color=#3F000F;>
 
     {% for student in students: %}
@@ -38,6 +22,10 @@
     <form action="/GSapproved_grad"> 
       <button type="submit">Students Approved for Graduation</button>
     </form>
+
+    <form action = "/GSadvisors"> 
+      <button type="submit">Advisors</button>
+      </form>
 
     <form action="/all_suspended"> 
       <button type="submit">Suspended Students</button>

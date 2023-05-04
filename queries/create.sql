@@ -1,4 +1,4 @@
--- Active: 1681927449683@@group3phase2-taylor23.c71jatiazsww.us-east-1.rds.amazonaws.com@3306@university
+-- Active: 1681753354777@@group3phase2-taylor23.c71jatiazsww.us-east-1.rds.amazonaws.com@3306@university
 use university;
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
@@ -38,7 +38,7 @@ CREATE TABLE employee (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS reviewers;
+DROP TABLE IF EXISTS reviewer_assignments;
 CREATE TABLE reviewer_assignments (
     reviewer_uid CHAR(8),
     applicant_uid CHAR(8),
@@ -49,7 +49,7 @@ CREATE TABLE reviewer_assignments (
         REFERENCES users(uid) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS advisors;
+DROP TABLE IF EXISTS advisor_assignments;
 CREATE TABLE advisor_assignments (
     advisor_uid CHAR(8),
     student_uid CHAR(8),
@@ -65,6 +65,8 @@ CREATE TABLE applicant (
    uid CHAR(8) NOT NULL,
    appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered
    decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
+   has_accepted BOOLEAN,
+   has_paid BOOLEAN,
    PRIMARY KEY (uid),
    FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
 );
@@ -152,7 +154,8 @@ CREATE TABLE applicationForm (
    TOEFLdate VARCHAR(32),
    priorWork VARCHAR(300) NOT NULL,
    startDate VARCHAR(32) NOT NULL,
-   transcriptStatus VARCHAR(32),
+   transcriptstatus VARCHAR(32),
+   transcriptpdf BLOB,
    r1status VARCHAR(32),
    r1writer VARCHAR(32) NOT NULL,
    r1email VARCHAR(32) NOT NULL,

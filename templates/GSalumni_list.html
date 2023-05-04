@@ -13,11 +13,13 @@
       <form action="/GSalumni/phd"> 
         <button type="submit">PhD Alumni</button>
       </form>
-      <p> Admit Year 
-          &nbsp&nbsp&nbsp
-          Enter Year: 
-          <input type="text" name="year">
-          <button type="submit">Submit</button>   
+      <p> Graduation Year 
+          &nbsp
+          <form action="/GSalumni/gradyear" method="POST">
+            <input type="text" name="search" placeholder = "Search for Alumni">
+            <input type="submit" name="search_gradyear" value = "search by graduation year">
+            <input type="hidden" name="type" value="search_gradyear">
+          </form>  
       </p>
     </h4>
   
@@ -28,7 +30,8 @@
     {% endif %}
 
     {% for alumni in alumni_info: %}
-    <p> {{alumni['first_name']}} {{alumni['last_name']}}</a>
+    <p> {{alumni[0]['first_name']}} {{alumni[0]['last_name']}}
+        <ul> Email: {{alumni[1][0]['email']}} </ul>
     </p>
     {% endfor %}
 
