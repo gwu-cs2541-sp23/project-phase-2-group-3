@@ -12,7 +12,6 @@
 
     <div class="buttons">
 
-    <form action = "/updateinfo" method = "POST"> 
       <center><h3>University ID: {{ session['uid'] }}</h3> </center>
       {% if degree[0]['degree_type'] == 'MS' %}
         <center> <h3> Degree: Master's </h3> </center>
@@ -27,33 +26,37 @@
       <h3>Apply for Graduation</h3>
         {% if suspended[0]['is_suspended'] == False %}
           <form action = "/applygrad" method = "POST"> 
-          <button type="submit" class="routebutt">Apply For Graduation</button>
+          <button type="submit" class = "routebutt">Apply For Graduation</button>
           </form>
         {% endif %}
         {% if suspended[0]['is_suspended'] == True %}
-          <p>You can not apply for graduation because you are currectly suspended. </p>
+          <p class="p">You can not apply for graduation because you are currectly suspended. </p>
         {% endif %}
         </center>
+
+        <br>
 
       <hr>
 
       <center>
       <h3> Update Personal Information </h3>
 
+
       <form action = "/updateinfo" method = "POST"> 
-      <h3>Last Name: 
-        <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="searchbox">
-      </h3>
+        <h3>Last Name: 
+          <input type="text" placeholder= "{{session['last_name']}}" name = "lname" class="formbox">
+        </h3>
 
-      <h3> First Name: 
-       <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class="searchbox">
-      </h4>
+        <h3> First Name: 
+        <input type="text" placeholder= "{{session['first_name']}}" name = "fname" class="formbox">
+        </h4>
 
-      <h3>Address: 
-      <input type="text" placeholder="{{data['address']}}" name= "address" class="searchbox">
-      </h3>
+        <h3>Address: 
+        <input type="text" placeholder="{{data['address']}}" name= "address" class="formbox">
+        </h3>
 
-      <button type="submit" class="routebutt">Submit</button>
+        <button type="submit" class="loginbutt">Submit</button>
+
       </form>
       <br>
     </center>
@@ -61,6 +64,7 @@
 
     </div>
 
+    <br>
     <hr>
     <br>
 
@@ -223,17 +227,15 @@
     <br>
 
     <div class = "buttons">
-    <br>
 
     <form action = "/form1" method = "GET"> 
-    <button type="submit" class="routebutt">Form 1</button>
+    <button type="submit" class = "routebutt">Form 1</button>
     </form>
     <br>
 
-    <form action = "/coursehist/{{session['uid']}}" method = "POST"> 
-      <button type="submit" class="routebutt">View Enrollment Information</button>
+    <form action = "/coursehist/{{data['uid']}}" method = "POST"> 
+    <button type="submit" class = "routebutt">View Enrollment Information</button>
     </form>
-    <br>
 
     </div>
 

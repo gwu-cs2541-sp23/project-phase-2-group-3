@@ -2,6 +2,18 @@
   <head>
     <title>Assign Advisor/Advisee</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
+
+    <style>
+
+      body{
+
+      text-align: center;
+      font-family:Verdana, sans-serif;
+      color:#333333;
+
+      }
+
+    </style>
   </head>
 
 <body>
@@ -12,16 +24,16 @@
 </center>
 
 <center>
-<h3>Create Advisor/Advisee pairings</h3>
-
-<hr>
-<br>
+Create Advisor/Advisee pairings
+</center>
+<br><br>
+<br><br>
 
 <form action = "/assigned" method = "POST">
 
 <h3>
 <label for= "student">Select a Student:</label>
-<select name= "student" id= "student" required class="selectors">
+<select name= "student" id= "student" required class = "selectors">
     {% for s in students: %}
   <option value="{{s['uid']}}">{{s['first_name']}} {{s['last_name']}}</option>
   {% endfor %}
@@ -29,7 +41,7 @@
 <br><br>
 
 <label for= "advisor">Select an Advisor:</label>
-<select name= "advisor" id= "advisor" required class="selectors">
+<select name= "advisor" id= "advisor" required class = "selectors">
     {% for a in advisors: %}
   <option value="{{a['uid']}}">{{a['first name']}} {{a['last_name']}}</option>
   {% endfor %}
@@ -55,7 +67,9 @@
 
 {% if type == 'gradsec' %}
 <form action = "/GShome"> 
-  <button type="submit" class="routebutt">Graduate Secretary Home Page</button>
+
+<button type="submit" class = "routebutt">Graduate Secretary Home Page</button>
+
 </form>
 {% endif %}
 
