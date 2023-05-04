@@ -1223,7 +1223,7 @@ def Phome():
   if 'current_year' not in session:
     session['current_year'] = 2023
   if 'current_semester' not in session:
-    session['current_semester'] = 3
+    session['current_semester'] = 1
   session['semester_names'] = ['blank', 'spring', 'summer', 'fall'] # 'blank' becaues there is no 0 semester
 
   # Make the blank schedule
