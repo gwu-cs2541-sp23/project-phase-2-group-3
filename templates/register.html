@@ -3,26 +3,33 @@
 
 <head>
   <title> signup </title>
+  <link rel="stylesheet" href="static/style.css">
+
+  <style>
+
+    body{
+
+      text-align: center;
+
+    }
+
+  </style>
 </head>
 
 <body>
-  {% include "navbar.html" %}
 
-  <div class="main">
-
-    Thank you for applying to James Taylor University <br>
-    Please provide all of the following information <br><br>
+    <h2>Thank you for applying to James Taylor University</h2> <br>
+    <p>Please provide all of the following information</p> <br>
 
     <form action="/register" method="POST">
-      Username: <input type="text" name="username" required maxlength="64"><br><br>
-      Password: <input type="text" name="password" required minlength="8" maxlength="64"><br><br>
-      First Name: <input type="text" name="first_name" required maxlength="32"><br><br>
-      Last Name: <input type="text" name="last_name" required maxlength="32"><br><br>
-      SSN: <input type="text" name="ssn" required maxlength="16"><br><br>
-      Current Address: <input type="text" name="address" required maxlength="64"><br><br>
-      <br><br>
-      <error>{{ session['error_account_creation'] }}</error> <br><br>
-      <input type="submit" value="submit"> <br><br>
+      <p>Username:</p> <input type="text" name="username" required maxlength="64" class = "formbox"><br>
+      <p>Password:</p> <input type="text" name="password" required minlength="8" maxlength="64" class = "formbox"><br>
+      <p>First Name:</p> <input type="text" name="first_name" required maxlength="32" class = "formbox"><br>
+      <p>Last Name:</p> <input type="text" name="last_name" required maxlength="32" class = "formbox"><br>
+      <p>SSN:</p> <input type="text" name="ssn" required maxlength="16" class = "formbox"><br>
+      <p>Current Address:</p> <input type="text" name="address" required maxlength="64" class = "formbox"><br>
+      <error>{{ session['error_account_creation'] }}</error> <br>
+      <input type="submit" value="submit" class = "loginbutt"> <br>
     </form>
     
   </div>

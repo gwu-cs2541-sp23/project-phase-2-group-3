@@ -64,7 +64,7 @@ CREATE TABLE advisor_assignments (
 DROP TABLE IF EXISTS applicant;
 CREATE TABLE applicant (   
    uid CHAR(8) NOT NULL,
-   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered
+   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered, Matriculated
    decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
    has_accepted BOOLEAN,
    has_paid BOOLEAN,

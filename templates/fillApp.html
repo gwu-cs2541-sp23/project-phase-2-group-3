@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Application Form</title>
+        <link rel="stylesheet" href="static/style.css">
     </head>
     <body>
         {%include "navbar.html"%}
@@ -9,11 +10,18 @@
 
         <p>Please fill out the form below, your work will not be saved when leaving this page. <br><br> All submissions are final. <br><br> A * denotes a required field. <br><br> In keeping with most other competitive universities we are now test optional, but we would prefer you to submit a score if you have one <br><br> Please mail us your transcript and once recieved along with your letters of reccomendation (available on the status page) your application will be reviewed.</p>
 
+        <br>
+        <hr width="100%" 
+        size="10" 
+        align="right" 
+        color=#AEC6CF>
+        <br>
+
         <form action="/postSubmittingApp" method="POST">
 
-            <g1> Your universityID*: </g1><input type="text" name="studentID" minlength = "1" required> <br>
+            <g1> Your universityID*: </g1><input type="text" name="studentID" minlength = "1" required class = "niceformbox"> <br>
 
-            <g1> Degree you intend to seek*: </g1><select id="degreeSeeking" name="degreeSeeking">
+            <g1> Degree you intend to seek*: </g1><select id="degreeSeeking" name="degreeSeeking" class = "selectors">
 
                 <option value="MS">MS</option>
                 <option value="PHD">PHD</option>
@@ -23,7 +31,7 @@
             <br>
             <br>
 
-            <g1> Have you completed your masters?: </g1><select id="MScheck" name="MScheck">
+            <g1> Have you completed your masters?: </g1><select id="MScheck" name="MScheck" class = "selectors">
 
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -36,87 +44,87 @@
 
             <br>
 
-            <g1> What was your major: </g1><input type="text" name="MSmajor"><br>
+            <g1> What was your major: </g1><input type="text" name="MSmajor" class = "niceformbox"><br>
 
-            <g1> What year did you graduate: </g1><input type="text" name="MSyear"><br>
+            <g1> What year did you graduate: </g1><input type="text" name="MSyear" class = "niceformbox"><br>
 
-            <g1> What university did you complete your masters at?: </g1><input type="text" name="MSuniversity"><br>
+            <g1> What university did you complete your masters at?: </g1><input type="text" name="MSuniversity" class = "niceformbox"><br>
 
-            <g1> What was your GPA?: </g1><input type="text" name="MSgpa"><br>
+            <g1> What was your GPA?: </g1><input type="text" name="MSgpa" class = "niceformbox"><br>
 
             <br>
             <br>
 
-            <g1> Have you completed your bachelors (undergrad)? (Your answer to this question must be yes)*: </g1><select id="BAcheck" name="BAcheck">
+            <g1> Have you completed your bachelors (undergrad)? (Your answer to this question must be yes)*: </g1><select id="BAcheck" name="BAcheck" class = "selectors">
 
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
 
               </select><br>
 
-            <g1> What was your major? *: </g1><input type="text" name="BAmajor" minlength = "1" required><br>
+            <g1> What was your major? *: </g1><input type="text" name="BAmajor" minlength = "1" required class = "niceformbox"><br>
 
-            <g1> What year did you graduate? *: </g1><input type="text" name="BAyear" minlength = "1" required><br>
+            <g1> What year did you graduate? *: </g1><input type="text" name="BAyear" minlength = "1" required class = "niceformbox"><br>
 
-            <g1> What university did you complete your undergrad at? *: </g1><input type="text" name="BAuniversity" minlength = "1" required><br>
+            <g1> What university did you complete your undergrad at? *: </g1><input type="text" name="BAuniversity" minlength = "1" required class = "niceformbox"><br>
 
-            <g1> What was your GPA? *: </g1><input type="text" name="BAgpa" minlength = "1" required><br>
-
-            <br>
-            <br>
-
-            <g1> What was your score on the GRE verbal section?: </g1><input type="text" name="GREverbal"><br>
-
-            <g1> What was your score on the GRE quantitative section?: </g1><input type="text" name="GREquantitative"><br>
-
-            <g1> What year did you take the GRE exam?: </g1><input type="text" name="GREyear"><br>
-
-            <g1> What was your score on the GRE advanced section?: </g1><input type="text" name="GREadvancedScore"><br>
-
-            <g1> What subject was your GRE advanced section?: </g1><input type="text" name="GREadvancedSubject"><br>
+            <g1> What was your GPA? *: </g1><input type="text" name="BAgpa" minlength = "1" required class = "niceformbox"><br>
 
             <br>
             <br>
 
-            <g1> What was your score on the TOEFL exam?: </g1><input type="text" name="TOEFLscore"><br>
+            <g1> What was your score on the GRE verbal section?: </g1><input type="text" name="GREverbal" class = "niceformbox"><br>
 
-            <g1> What year did you take the TOEFL exam?: </g1><input type="text" name="TOEFLdata"><br>
+            <g1> What was your score on the GRE quantitative section?: </g1><input type="text" name="GREquantitative" class = "niceformbox"><br>
+
+            <g1> What year did you take the GRE exam?: </g1><input type="text" name="GREyear" class = "niceformbox"><br>
+
+            <g1> What was your score on the GRE advanced section?: </g1><input type="text" name="GREadvancedScore" class = "niceformbox"><br>
+
+            <g1> What subject was your GRE advanced section?: </g1><input type="text" name="GREadvancedSubject" class = "niceformbox"><br>
 
             <br>
             <br>
 
-            <g1> For what start date are you applying to our university?*: </g1><select id="semester" name="semester">
+            <g1> What was your score on the TOEFL exam?: </g1><input type="text" name="TOEFLscore" class = "niceformbox"><br>
+
+            <g1> What year did you take the TOEFL exam?: </g1><input type="text" name="TOEFLdata" class = "niceformbox"><br>
+
+            <br>
+            <br>
+
+            <g1> For what start date are you applying to our university?*: </g1><select id="semester" name="semester" class = "selectors">
 
                 <option value="Fall">Fall</option>
                 <option value="Spring">Spring</option>
 
-              </select><select id="year" name="year">
+              </select><select id="year" name="year" class = "selectors">
 
                 <option value="2023">2023</option>
                 <option value="2024">2024</option>
 
               </select><br>
 
-            <g1> If you have any prior work experince that may provide us more context into you outside the classroom, please enter it here *: </g1><input type="text" name="priorWork" minlength = "1" required><br>
+            <g1> If you have any prior work experince that may provide us more context into you outside the classroom, please enter it here *: </g1><input type="text" name="priorWork" minlength = "1" required class = "niceformbox"><br>
 
             <br>
             <br>
 
             <p> Please upload your transcript below, if you choose to mail your transcript, leave this blank and the graduate secretary will update these fields once it is recieved.</p>
-            <input type="file" id="transcriptdoc" name="transcriptdoc">
+            <input type="file" id="transcriptdoc" name="transcriptdoc" class = "uploader">
 
             <br>
             <br>
 
-            <g1> Who is writing your 1st reccomendation letter? *: </g1><input type="text" name="r1writer" minlength = "1" required><br>
+            <g1> Who is writing your 1st reccomendation letter? *: </g1><input type="text" name="r1writer" minlength = "1" required class = "niceformbox"><br>
 
-            <g1> What is their email? *: </g1><input type="text" name="r1email" minlength = "1" required><br>
+            <g1> What is their email? *: </g1><input type="text" name="r1email" minlength = "1" required class = "niceformbox"><br>
 
             <a href ="/email/r1"> View the email we will send to your recommender</a> <br>
 
-            <g1> What is their title at their institution? *: </g1><input type="text" name="r1title" minlength = "1" required><br>
+            <g1> What is their title at their institution? *: </g1><input type="text" name="r1title" minlength = "1" required class = "niceformbox"><br>
 
-            <g1> What is their affiliation to you? *: </g1><input type="text" name="r1affiliation" minlength = "1" required><br>
+            <g1> What is their affiliation to you? *: </g1><input type="text" name="r1affiliation" minlength = "1" required class = "niceformbox"><br>
 
             <br>
             <br>
@@ -126,33 +134,33 @@
             <br>
             <br>
 
-            <g1> Who is writing your 2nd reccomendation letter?: </g1><input type="text" name="r2writer"><br>
+            <g1> Who is writing your 2nd reccomendation letter?: </g1><input type="text" name="r2writer" class = "niceformbox"><br>
 
-            <g1> What is their email?: </g1><input type="text" name="r2email"><br>
+            <g1> What is their email?: </g1><input type="text" name="r2email" class = "niceformbox"><br>
 
             <a href ="/email/r2"> View the email we will send to your recommender</a> <br>
 
-            <g1> What is their title at their institution?: </g1><input type="text" name="r2title"><br>
+            <g1> What is their title at their institution?: </g1><input type="text" name="r2title" class = "niceformbox"><br>
 
-            <g1> What is their affiliation to you?: </g1><input type="text" name="r2affiliation"><br>
+            <g1> What is their affiliation to you?: </g1><input type="text" name="r2affiliation" class = "niceformbox"><br>
 
             <br>
             <br>
 
-            <g1> Who is writing your 3rd reccomendation letter?: </g1><input type="text" name="r3writer"><br>
+            <g1> Who is writing your 3rd reccomendation letter?: </g1><input type="text" name="r3writer" class = "niceformbox"><br>
 
-            <g1> What is their email?: </g1><input type="text" name="r3email"><br>
+            <g1> What is their email?: </g1><input type="text" name="r3email" class = "niceformbox"><br>
 
             <a href ="/email/r3"> View the email we will send to your recommender</a> <br>
 
-            <g1> What is their title at their institution?: </g1><input type="text" name="r3title"><br>
+            <g1> What is their title at their institution?: </g1><input type="text" name="r3title" class = "niceformbox"><br>
 
-            <g1> What is their affiliation to you?: </g1><input type="text" name="r3affiliation"><br>
+            <g1> What is their affiliation to you?: </g1><input type="text" name="r3affiliation" class = "niceformbox"><br>
 
             <br>
             <br>
 
-            <br><input type="submit" name="submit"><br>
+            <br><input type="submit" name="submit" class = "loginbutt"><br>
 
          </form>
 

@@ -1,11 +1,16 @@
 <html>
     <head>
         <title>Status</title>
+        <link rel="stylesheet" href="static/style.css">
     </head>
     <body>
         {%include "navbar.html"%}
         <h1> Welcome, {{ session['first_name'] }} {{ session['last_name'] }}</h1>
         <h2> universityID: {{session['uid'] }}</h2>
+
+        <br>
+        <br>
+        <br>
 
         {% if status['appStatus'] == "Application Incomplete" %}
 

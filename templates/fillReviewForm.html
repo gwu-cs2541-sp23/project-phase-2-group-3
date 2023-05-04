@@ -1,6 +1,9 @@
 <html>
     <head>
+
         <title>Fillout Review Form</title>
+        <link rel="stylesheet" href="static/style.css">
+
     </head>
 
     <body>
@@ -18,14 +21,14 @@
         <br>
 
         <form action="/submitReviewForm" method="POST">
-        <p>University ID of the applicant*: <input type="text" name="studentID" minlength = "1" required></p>
-        <p>University ID of the reviewer (you) *: <input type="text" name="reviewer" minlength = "1" required></p> 
-        <p>Semester the applicant is applying for*: <select id="semester" name="semester">
+        <p>University ID of the applicant*: <input type="text" name="studentID" minlength = "1" required class = "niceformbox"></p>
+        <p>University ID of the reviewer (you) *: <input type="text" name="reviewer" minlength = "1" required class = "niceformbox"></p> 
+        <p>Semester the applicant is applying for*: <select id="semester" name="semester" class = "selectors">
 
             <option value="Fall">Fall</option>
             <option value="Spring">Spring</option>
 
-          </select><select id="year" name="year">
+          </select><select id="year" name="year" class = "selectors">
 
             <option value="2023">2023</option>
             <option value="2024">2024</option>
@@ -35,7 +38,7 @@
         <br>
         <br>
 
-        <p>Rate the applicant's 1st reccomendation letter out of 10*: <select id="r1rating" name="r1rating">
+        <p>Rate the applicant's 1st reccomendation letter out of 10*: <select id="r1rating" name="r1rating" class = "selectors">
 
             <option value="1">1</option>
             <option value="2">2</option>
@@ -49,19 +52,19 @@
             <option value="10">10</option>
 
           </select></p> 
-        <p>Is the applicant's 1st reccomendation letter generic*: <select id="r1generic" name="r1generic">
+        <p>Is the applicant's 1st reccomendation letter generic*: <select id="r1generic" name="r1generic" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Is the applicant's 1st reccomendation letter credible*: <select id="r1credible" name="r1credible">
+        <p>Is the applicant's 1st reccomendation letter credible*: <select id="r1credible" name="r1credible" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Who is the applicant's 1st reccomendation letter from*: <input type="text" name="r1from" minlength = "1" required></p> 
+        <p>Who is the applicant's 1st reccomendation letter from*: <input type="text" name="r1from" minlength = "1" required class = "niceformbox"></p> 
 
         <br>
         <br>
@@ -71,7 +74,7 @@
         <br>
         <br>
 
-        <p>Rate the applicant's 2nd reccomendation letter out of 10: <select id="r2rating" name="r2rating">
+        <p>Rate the applicant's 2nd reccomendation letter out of 10: <select id="r2rating" name="r2rating" class = "selectors">
 
             <option value="1">1</option>
             <option value="2">2</option>
@@ -85,24 +88,24 @@
             <option value="10">10</option>
 
           </select></p> 
-        <p>Is the applicant's 2nd reccomendation letter generic: <select id="r2generic" name="r2generic">
+        <p>Is the applicant's 2nd reccomendation letter generic: <select id="r2generic" name="r2generic" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Is the applicant's 2nd reccomendation letter credible: <select id="r2credible" name="r2credible">
+        <p>Is the applicant's 2nd reccomendation letter credible: <select id="r2credible" name="r2credible" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Who is the applicant's 2nd reccomendation letter from: <input type="text" name="r2from"></p> 
+        <p>Who is the applicant's 2nd reccomendation letter from: <input type="text" name="r2from" class = "niceformbox"></p> 
 
         <br>
         <br>
 
-        <p>Rate the applicant's 3rd reccomendation letter out of 10: <select id="r3rating" name="r3rating">
+        <p>Rate the applicant's 3rd reccomendation letter out of 10: <select id="r3rating" name="r3rating" class = "selectors">
 
             <option value="1">1</option>
             <option value="2">2</option>
@@ -116,44 +119,44 @@
             <option value="10">10</option>
 
           </select></p> 
-        <p>Is the applicant's 3rd reccomendation letter generic: <select id="r3generic" name="r3generic">
+        <p>Is the applicant's 3rd reccomendation letter generic: <select id="r3generic" name="r3generic" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Is the applicant's 3rd reccomendation letter credible: <select id="r3credible" name="r3credible">
+        <p>Is the applicant's 3rd reccomendation letter credible: <select id="r3credible" name="r3credible" class = "selectors">
 
             <option value="Yes">Yes</option>
             <option value="No">No</option>
 
           </select></p> 
-        <p>Who is the applicant's 3rd reccomendation letter from: <input type="text" name="r3from"></p> 
+        <p>Who is the applicant's 3rd reccomendation letter from: <input type="text" name="r3from" class = "niceformbox"></p> 
 
         <br>
         <br>
 
-        <p>Your rating (0 = reject, 1 = admit, 2 = admit with aid)*: <select id="GASrating" name="GASrating">
+        <p>Your rating (0 = reject, 1 = admit, 2 = admit with aid)*: <select id="GASrating" name="GASrating" class = "selectors">
 
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>
 
           </select></p> 
-        <p>Other thoughts: <input type="text" name="thoughts"></p> 
+        <p>Other thoughts: <input type="text" name="thoughts" class = "bigformbox"></p> 
 
         <br>
         <br>
 
         <p>Fill the following only if the rating is 0 for reject.</p>
 
-        <p>Difficiences of the applicant: <input type="text" name="deficiencies"></p> 
-        <p>Reason for rejection of the applicant: <input type="text" name="rejectReason"></p> 
+        <p>Deficiences of the applicant: <input type="text" name="deficiencies" class = "bigformbox"></p> 
+        <p>Reason for rejection of the applicant: <input type="text" name="rejectReason" class = "bigformbox"></p> 
 
         <br>
         <br>
 
-        <p>Submit: <input type="submit" name="submit"></p> <br>
+        <input type="submit" name="submit" class = "loginbutt"> <br>
 
         </form> 
     </body>
