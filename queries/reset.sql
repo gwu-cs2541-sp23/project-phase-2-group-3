@@ -5,20 +5,20 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     uid CHAR(8),
-    username varchar(64) NOT NULL UNIQUE, --only used for login, uid for everything else
+    username varchar(64) NOT NULL UNIQUE, 
     password VARCHAR(64) NOT NULL,
     first_name varchar(32) NOT NULL,
     last_name varchar(32) NOT NULL,
     ssn varchar(16) NOT NULL UNIQUE,
     address varchar(64) NOT NULL,
-    user_type varchar(16) NOT NULL, --possible choices: sysadmin, gradsec, employee, student, applicant, recommender
+    user_type varchar(16) NOT NULL,
     PRIMARY KEY(uid)
 );
 
 DROP TABLE IF EXISTS students;
 CREATE TABLE students (
     uid CHAR(8),
-    degree_type varchar(4) NOT NULL, --possible choices: PHD or MS (hardcode those options into form, don't make a query)
+    degree_type varchar(4) NOT NULL,
     is_suspended BOOLEAN,
     thesis_approved BOOLEAN,
     applied_grad BOOLEAN,
@@ -54,8 +54,8 @@ CREATE TABLE advisor_assignments (
 DROP TABLE IF EXISTS applicant;
 CREATE TABLE applicant (   
    uid CHAR(8) NOT NULL,
-   appStatus VARCHAR(32) NOT NULL, --Application Incomplete, Application Awaiting Materials, Application Under Review, Decision Pending, Decision Delivered
-   decision VARCHAR(32) NOT NULL, -- Pending, Admit, Admit With Aid, Reject
+   appStatus VARCHAR(32) NOT NULL, 
+   decision VARCHAR(32) NOT NULL, 
    has_accepted BOOLEAN,
    has_paid BOOLEAN,
    PRIMARY KEY (uid),
@@ -63,7 +63,7 @@ CREATE TABLE applicant (
 );
 
 DROP TABLE IF EXISTS alumni;
-CREATE TABLE alumni ( --student is deleted from students when they become an alum
+CREATE TABLE alumni ( 
 	uid CHAR(8),
 	grad_year int(4) NOT NULL,
     degree_type varchar(4) NOT NULL,
@@ -305,6 +305,7 @@ INSERT INTO students ( uid, degree_type, is_suspended, thesis_approved, applied_
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '77777777', 'eclapton', 'password', 'Eric', 'Clapton', '013-14-0015', 'Ripley, UK', 'alumni' );
 INSERT INTO alumni (uid, grad_year, degree_type, email) VALUES ('77777777', 'Spring 2014', 'MS', 'eclapton@jtu.edu');
 -- add classes, grades, thesis stuff?
+INSERT INTO students ( uid, degree_type, is_suspended, thesis_approved, applied_grad, start_date ) VALUES ('77777777', 'MS', FALSE, TRUE, TRUE, 'Fall 2012' );
 
 
 INSERT INTO users ( uid, username, password, first_name, last_name, ssn, address, user_type ) VALUES ( '00000008', 'gparmer', 'password', 'Gabriel', 'Parmer', '015-16-0017', 'The SEAS CS Department', 'employee' );
@@ -483,8 +484,8 @@ INSERT INTO current_sections VALUES (18,'2024-3-18-1','00000002',2024,3,'R',2);
 
 -- student classes
 -- Billie Holiday
-INSERT INTO student_classes VALUES ('88888888','2','2023-2-2-1','IP',0);
-INSERT INTO student_classes VALUES ('88888888','3','2023-2-3-1','IP',0);
+INSERT INTO student_classes VALUES ('88888888','2','2023-1-2-1','IP',0);
+INSERT INTO student_classes VALUES ('88888888','3','2023-1-3-1','IP',0);
 
 -- Paul McCartney 
 INSERT INTO student_classes VALUES ('55555555','1','2023-1-1-1','A',1);
@@ -499,7 +500,7 @@ INSERT INTO student_classes VALUES ('55555555','14','2023-1-14-1','B',1);
 INSERT INTO student_classes VALUES ('55555555','8','2023-1-8-1','B',1);
 
 --George Harrison
-INSERT INTO student_classes VALUES ('66666667','21','2023-1-21-1','C',1);
+-- INSERT INTO student_classes VALUES ('66666667','21','2023-1-21-1','C',1);
 INSERT INTO student_classes VALUES ('66666667','1','2023-1-1-1','B',1);
 INSERT INTO student_classes VALUES ('66666667','2','2023-1-2-1','B',1);
 INSERT INTO student_classes VALUES ('66666667','3','2023-1-3-1','B',1);
