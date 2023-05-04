@@ -8,14 +8,29 @@
     <h2> <center>All Alumni from {{grad_year}}</center> </h2>
 
     {% if not alumni %}
-        <p> No alumni to be displayed. </p>
+    <p> <center> No alumni to be displayed. </center> </p>
     {% endif %}
 
-    {% for x in alumni: %}
-    <p> {{x[1][0]['first_name']}} {{x[1][0]['last_name']}} &nbsp&nbsp Email: {{x[0]['email']}} </p>
-    {% endfor %}
+    {% if alumni %}
+    <table border="5" cellspacing="0" align="center">
+      <tr>
+        <b>
+          <td align="center" height="50" width="100"> First Name <br></td>
+          <td align="center" height="50" width="100"> Last Name <br></td>
+          <td align="center" height="50" width="100"> Email <br></td>
+        </b>
+      </tr>
+      {% for x in alumni: %}
+      <tr>
+        <td> {{x[1][0]['first_name']}} <br></td>
+        <td> {{x[1][0]['last_name']}} </td>
+        <td> {{x[0]['email']}} </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
 
-    <hr color=#3F000F;>
+    <hr>
 
       <form action = "/GShome"> 
         <button type="submit">Graduate Secretary Home Page</button>

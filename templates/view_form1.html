@@ -11,31 +11,35 @@
 
 <ul>
     {% if not data %}
-      <p>Student did not submit form 1</p>
-      {% else %}
-      Classes Selected in Form 1: 
-      {% for p in data: %}
-        <p> 
-        <li>Course ID: {{p["cid"]}} 
-          <br>Course:
-          {% for i in classes: %}
-              {% if p["cid"] == i["cid"]: %}
-                  {{i["title"]}} {{i["class_number"]}} 
-                  <br>
-                  Credits: {{i["credit_hours"]}} 
-              {% endif %}
-          {% endfor %}
-          <br>
-    
-        </li>
-       </p>
-  {% endfor %}
-  {% endif %}
+      <p>Student did not submit Form 1.</p>
+      {% endif %}
+      {% if data %}
+      <center>
+        <table border="5" cellspacing="0" align="center">
+            <tr>
+              <b>
+                <td align="center" height="50" width="100"> Class ID <br></td>
+                <td align="center" height="50" width="100"> Class Title <br></td>
+                <td align="center" height="50" width="100"> Class Number <br></td>
+                <td align="center" height="50" width="100"> Credit Hours <br></td>
+              </b>
+            </tr>
+            {% for p in data: %}
+            <tr>
+              <td> {{ p["cid"] }} </td>
+              {% for i in classes: %}
+                {% if p["cid"] == i["cid"]: %}
+                  <td> {{ i["title"] }} <br></td>
+                  <td> {{ i["class_number"] }} </td>
+                  <td> {{ i["credit_hours"] }} </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+        </center>
+      {% endif %}
   </ul>
-
- <form action = "/SAhomr"> 
-    <button type="submit">System Admin Home Page</button>
-    </form>
         
 </body>
  </html>

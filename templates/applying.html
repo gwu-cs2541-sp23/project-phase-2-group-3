@@ -1,0 +1,30 @@
+<html>
+  <head>
+     <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <title>Apply for Graduation</title>
+ 
+  </head>
+
+  <body>
+    {% include "navbar.html" %}
+<center>
+    <h1 class = "sameen"> One Step Away! </h1>
+    </center>
+
+    <form action = "/applygrad" method = "POST"> 
+    <label for="dates">Please select the degree you're applying for: MS or a PhD?</label>
+    <select name="dates" id="dates" required>
+    <option value="MS">MS </option>
+    <option value="PHD">PhD </option>
+    </select>
+    <br>
+    <button type="submit">Submit</button>
+    </form>
+
+    <form action = "/Shome"> 
+    <button type="submit">Student Home Page</button>
+    </form>
+
+</body>
+
+</html>
