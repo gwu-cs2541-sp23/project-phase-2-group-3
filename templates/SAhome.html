@@ -3,6 +3,7 @@
 
 <head>
   <title> sysadmin portal </title>
+  <link rel="stylesheet" href="static/style.css">
 </head>
 
 <body>
@@ -10,9 +11,9 @@
 
   <div class="main">
 
-    <h1> Welcome Sysadmin </h1><br><br>
+    <h2> Welcome Sysadmin </h2><br><br>
 
-    <h1> Lookup Users and Edit Info: </h1>
+    <h3> Lookup Users and Edit Info: </h3>
 
     <table border="5" cellspacing="0" align="center">
       <tr>
@@ -105,7 +106,7 @@
     </table>
 
     <br><br><br><br>
-    <h1> Add a New User:</h1>
+    <h3> Add a New User:</h3>
     <error>{{session["error"]}}</error>
     <form action="/SAhome" method="POST">
       Username: <input type="text" name="username"> <br>
@@ -121,6 +122,7 @@
         <option value="employee"> employee </option>
         <option value="student"> student </option>
         <option value="applicant"> applicant </option>
+        <option value="recommender"> recommender </option>
       </select>
       <br><input type="submit" name="Form_Type" value="Add User">
     </form>

@@ -856,6 +856,12 @@ def Chome():
     
     cursor = mydb.cursor(dictionary = True)
     
+    cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cursor.fetchone()
+
+    if booleans['is_review_chair'] == False:
+      return redirect('/')
+    
     if request.method == "POST":
       if request.form["type"] == "updatedecision":
         cursor.execute("UPDATE applicant SET decision = %s WHERE uid = %s", (request.form["decision"],request.form["id"]))
@@ -873,15 +879,53 @@ def Chome():
         name = request.form["search"]
         cursor.execute("SELECT * FROM applicant INNER JOIN users ON applicant.uid = users.uid WHERE applicant.uid LIKE %s AND applicant.appStatus = %s", ('%' + name + '%',"Application Under Review"))
         applicants = cursor.fetchall()
-        return render_template("Chome.html", applicants=applicants)
+        averages = {}
+
+        for applicant in applicants:
+          avg = 0
+          ctr = 0
+
+          cursor.execute("SELECT * FROM review_form WHERE student_uid = %s", (applicant["uid"],))
+          reviews = cursor.fetchall()
+
+          for review in reviews:
+              ctr += 1
+              avg += review["GASrating"]
+
+          if ctr != 0:
+              avg = avg/ctr
+
+          averages[applicant["uid"]] = avg
+
+
+        return render_template("Chome.html", applicants = applicants, averages=averages)
         
       if request.form["type"] == "searchlname":
         name = request.form["search"]
         cursor.execute("SELECT * FROM applicant INNER JOIN users ON applicant.uid = users.uid WHERE users.last_name LIKE %s AND applicant.appStatus = %s", ('%' + name + '%',"Application Under Review"))
         applicants = cursor.fetchall()
-        return render_template("Chome.html", applicants=applicants)
+        averages = {}
 
-    cursor.execute("SELECT * FROM applicant WHERE appStatus = %s", ("Application Under Review",))
+        for applicant in applicants:
+          avg = 0
+          ctr = 0
+
+          cursor.execute("SELECT * FROM review_form WHERE student_uid = %s", (applicant["uid"],))
+          reviews = cursor.fetchall()
+
+          for review in reviews:
+              ctr += 1
+              avg += review["GASrating"]
+
+          if ctr != 0:
+              avg = avg/ctr
+
+          averages[applicant["uid"]] = avg
+
+
+        return render_template("Chome.html", applicants = applicants, averages=averages)
+
+    cursor.execute("SELECT * FROM applicant INNER JOIN users ON applicant.uid = users.uid WHERE appStatus = %s", ("Application Under Review",))
     applicants = cursor.fetchall()
 
     averages = {}
@@ -910,8 +954,15 @@ def FRhome():
 
     if(session['user_type'] != "employee"):
         return redirect("/")
-
+    
     cursor = mydb.cursor(dictionary = True)
+    
+    cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+    booleans = cursor.fetchone()
+
+    if booleans['is_reviewer'] == False:
+      return redirect('/')
+
 
     if request.method == 'POST':
       if request.form["type"] == "searchuid":
@@ -933,7 +984,7 @@ def FRhome():
         id = request.form['id']
         return redirect(url_for('viewApplication',studentID = id))
 
-    cursor.execute("SELECT * FROM applicant WHERE appStatus = %s", ("Application Under Review",))
+    cursor.execute("SELECT * FROM applicant INNER JOIN users ON applicant.uid = users.uid WHERE appStatus = %s", ("Application Under Review",))
     applicants = cursor.fetchall()
 
     return render_template("FRhome.html", applicants = applicants)
@@ -941,13 +992,20 @@ def FRhome():
 @app.route('/viewApplication/<studentID>', methods=['GET','POST'])
 def viewApplication(studentID):
 
+
     if(session['user_type'] == "employee"):
 
-        cursor = mydb.cursor(dictionary = True)
-        cursor.execute("SELECT * FROM applicationForm WHERE uid = %s", (studentID,))
-        app = cursor.fetchone()
-        return render_template("viewApplication.html", app = app)
-    
+      cursor = mydb.cursor(dictionary = True)
+          
+      cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+      booleans = cursor.fetchone()
+
+      if booleans['is_reviewer'] == True or booleans['is_review_chair'] == True:
+
+          cursor.execute("SELECT * FROM applicationForm WHERE uid = %s", (studentID,))
+          app = cursor.fetchone()
+          return render_template("viewApplication.html", app = app)
+      
     else:
         return redirect("/")
 
@@ -955,8 +1013,15 @@ def viewApplication(studentID):
 def fillReviewForm():
 
     if(session['user_type'] == "employee"):
+        
+        cursor = mydb.cursor(dictionary = True)
+        
+        cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+        booleans = cursor.fetchone()
+
+        if booleans['is_reviewer'] == True or booleans['is_review_chair'] == True:
     
-        return render_template("fillReviewForm.html")
+          return render_template("fillReviewForm.html")
     
     else:
         return redirect("/")
@@ -967,39 +1032,45 @@ def submitReviewForm():
     if(session['user_type'] == "employee"):
 
         cursor = mydb.cursor(dictionary = True)
-        studentID = request.form["studentID"]
-        reviewer = request.form["reviewer"]
-        r1rating = request.form["r1rating"]
-        r1generic = request.form["r1generic"]
-        r1credible = request.form["r1credible"]
-        r1from = request.form["r1from"]
-        r2rating = request.form["r2rating"]
-        r2generic = request.form["r2generic"]
-        r2credible = request.form["r2credible"]
-        r2from = request.form["r2from"]
-        r3rating = request.form["r3rating"]
-        r3generic = request.form["r3generic"]
-        r3credible = request.form["r3credible"]
-        r3from = request.form["r3from"]
-        GASrating = request.form["GASrating"]
-        deficiencies = request.form["deficiencies"]
-        rejectReason = request.form["rejectReason"]
-        thoughts = request.form["thoughts"]
-        semesterApplied = request.form["semester"] + " " + request.form["year"]
-        decision = "pending"
-
-        cursor.execute("INSERT INTO review_form (student_uid,reviewer_uid,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
-        mydb.commit()
-
-        # cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", ("Decision Pending",studentID))
-        # mydb.commit()
+        
         cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
         booleans = cursor.fetchone()
 
-        if booleans['is_review_chair'] == True:
-           return redirect('/Chome')
+        if booleans['is_reviewer'] == True or booleans['is_review_chair'] == True:
+           
+          studentID = request.form["studentID"]
+          reviewer = request.form["reviewer"]
+          r1rating = request.form["r1rating"]
+          r1generic = request.form["r1generic"]
+          r1credible = request.form["r1credible"]
+          r1from = request.form["r1from"]
+          r2rating = request.form["r2rating"]
+          r2generic = request.form["r2generic"]
+          r2credible = request.form["r2credible"]
+          r2from = request.form["r2from"]
+          r3rating = request.form["r3rating"]
+          r3generic = request.form["r3generic"]
+          r3credible = request.form["r3credible"]
+          r3from = request.form["r3from"]
+          GASrating = request.form["GASrating"]
+          deficiencies = request.form["deficiencies"]
+          rejectReason = request.form["rejectReason"]
+          thoughts = request.form["thoughts"]
+          semesterApplied = request.form["semester"] + " " + request.form["year"]
+          decision = "pending"
 
-        return redirect('/FRhome')
+          cursor.execute("INSERT INTO review_form (student_uid,reviewer_uid,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (studentID,reviewer,r1rating,r1generic,r1credible,r1from,r2rating,r2generic,r2credible,r2from,r3rating,r3generic,r3credible,r3from,GASrating,deficiencies,rejectReason,thoughts,semesterApplied,decision,))
+          mydb.commit()
+
+          # cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", ("Decision Pending",studentID))
+          # mydb.commit()
+          cursor.execute("SELECT * FROM employee WHERE uid = %s", (session["uid"],))
+          booleans = cursor.fetchone()
+
+          if booleans['is_review_chair'] == True:
+            return redirect('/Chome')
+
+          return redirect('/FRhome')
     
     else:
         return redirect("/")
@@ -1345,11 +1416,13 @@ def Ahome():
     if request.form['button'] == "accept":
       cursor.execute("SELECT degreeSeeking FROM applicationForm WHERE uid = %s", (session["uid"],))
       degree = cursor.fetchone()
-      # cursor.execute("DELETE FROM applicant WHERE uid = %s", (session["uid"],))
+      cursor.execute("SELECT startDate FROM applicationForm WHERE uid = %s", (session["uid"],))
+      date = cursor.fetchone()
       cursor.execute("UPDATE users SET user_type = %s WHERE uid = %s", ("student",session["uid"]))
       cursor.execute("UPDATE applicant SET has_paid = %s WHERE uid = %s", (True,session["uid"]))
       cursor.execute("UPDATE applicant SET has_paid = %s WHERE uid = %s", (True,session["uid"]))
-      cursor.execute("INSERT INTO students VALUES (%s, %s, %s, %s, %s)", (session["uid"],degree['degreeSeeking'], False, False, False))
+      cursor.execute("UPDATE applicant SET appStatus = %s WHERE uid = %s", ("Matriculated",session["uid"]))
+      cursor.execute("INSERT INTO students VALUES (%s, %s, %s, %s, %s, %s)", (session["uid"],degree['degreeSeeking'], False, False, False,date['startDate']))
       mydb.commit()
       return redirect(url_for('logout'))
     

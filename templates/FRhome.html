@@ -2,7 +2,9 @@
   
     <head>
     
-    <title>Faculty Reviewer</title>
+        <title>Faculty Reviewer</title>
+        <link rel="stylesheet" href="static/style.css">
+        
     </head>
 
     <body>
@@ -15,7 +17,7 @@
 
         <form action = "/FRhome" method = "POST">
 
-            <input type="submit" value="Fill Out A Review Form">
+            <input type="submit" value="Fill Out A Review Form" class = "routebutt">
             <input type="hidden" name="type" value="fill">
         
         
@@ -25,15 +27,15 @@
 
         <form action="/FRhome" method="POST">
       
-            <input type="text" name="search" placeholder = "Search For Applicants">
-            <input type="submit" name="searchuid" value = "search by uid">
+            <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+            <input type="submit" name="searchuid" value = "search by uid" class = "searchbutt">
             <input type="hidden" name="type" value="searchuid">
             
           </form>
           <form action="/FRhome" method="POST">
             
-            <input type="text" name="search" placeholder = "Search For Applicants">
-            <input type="submit" name="searchlname" value = "search by last name">
+            <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+            <input type="submit" name="searchlname" value = "search by last name" class = "searchbutt">
             <input type="hidden" name="type" value="searchlname">
             
           </form>
@@ -42,14 +44,20 @@
 
         {% for n in applicants %}
 
+        <div>
+
             <form action = "/FRhome" method = "POST">
 
-                <input type="submit" value="View {{n.uid}}'s Application">
+                <input type="submit" value="View {{n.first_name}} {{n.last_name}}'s Application" class = "routebutt">
                 <input type="hidden" name="id" value="{{n.uid}}">
                 <input type="hidden" name="type" value="view">
             
-            
             </form>
+
+        </div>
+
+        <br>
+        <br>
 
         {% endfor %}
         

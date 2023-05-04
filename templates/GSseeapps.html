@@ -3,6 +3,7 @@
   <head>
     
     <title>Viewing Applicantion</title>
+    <link rel="stylesheet" href="static/style.css">
     
   </head>
 
@@ -71,8 +72,8 @@
         <p>Status of their transcript: {{app.transcriptStatus}}</p>
         <form action = "/GSupdateapp" method = "POST">
 
-            <input type="file" id="transcriptdoc" name="transcriptdoc">
-            <input type="submit" name="Transcript Recieved" value = "Transcript Recieved">
+            <input type="file" id="transcriptdoc" name="transcriptdoc" class = "uploader">
+            <input type="submit" name="Transcript Recieved" value = "Transcript Recieved" class = "selectorbox">
             <input type="hidden" name="id" value="{{app.studentID}}">
             <input type="hidden" name="type" value="transcript">
 

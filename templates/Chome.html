@@ -1,6 +1,8 @@
 <html>
   <head>
     <title> Welcome Chair of the Applications Committee! </title>
+    <link rel="stylesheet" href="static/style.css">
+    
   </head>
   <body>
         
@@ -13,7 +15,7 @@
 
         <form action = "/Chome" method = "POST">
 
-            <input type="submit" value="Fill Out A Review Form">
+            <input type="submit" value="Fill Out A Review Form" class = "routebutt">
             <input type="hidden" name="type" value="fill">
         
         
@@ -23,15 +25,15 @@
 
         <form action="/Chome" method="POST">
       
-            <input type="text" name="search" placeholder = "Search For Applicants">
-            <input type="submit" name="searchuid" value = "search by uid">
+            <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+            <input type="submit" name="searchuid" value = "search by uid" class = "searchbutt">
             <input type="hidden" name="type" value="searchuid">
             
           </form>
           <form action="/Chome" method="POST">
             
-            <input type="text" name="search" placeholder = "Search For Applicants">
-            <input type="submit" name="searchlname" value = "search by last name">
+            <input type="text" name="search" placeholder = "Search For Applicants" class = "searchbox">
+            <input type="submit" name="searchlname" value = "search by last name" class = "searchbutt">
             <input type="hidden" name="type" value="searchlname">
             
           </form>
@@ -40,20 +42,28 @@
 
         {% for n in applicants %}
 
+          <div>
+
             <form action = "/Chome" method = "POST">
 
-                <input type="submit" value="View {{n.uid}}'s Application">
+                <input type="submit" value="View {{n.first_name}} {{n.last_name}}'s Application" class = "routebutt">
                 <input type="hidden" name="id" value="{{n.uid}}">
                 <input type="hidden" name="type" value="view">
             
             
             </form>
 
-            <p> Their average score (0 = reject, 1 = admit, 2 = admit with aid): {{averages[n['uid']]}}</p>
+            <br>
+            <br>
 
-            <li>Update Decision: <form action = "/Chome" method = "POST">
+            <p class = "centeredtext"> Their average score (0 = reject, 1 = admit, 2 = admit with aid): {{averages[n['uid']]}}</p>
 
-                <select id="decision" name="decision">
+            <br>
+            <br>
+
+            <li class = "centeredtext">Update Decision: <form action = "/Chome" method = "POST">
+
+                <select id="decision" name="decision" class = "selectors">
   
                   <option value="Pending">Pending</option>
                   <option value="Admit">Admit</option>
@@ -62,11 +72,17 @@
   
                 </select>
   
-                <input type="submit" name="Update" value = "Update">
+                <input type="submit" name="Update" value = "Update" class = "selectorbox">
                 <input type="hidden" name="id" value="{{n.uid}}">
                 <input type="hidden" name="type" value="updatedecision">
   
               </form></li>
+
+            </div>
+
+            <br>
+            <br>
+            <br>
           {% endfor %}
   </body>
 </html>
